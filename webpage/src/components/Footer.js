@@ -76,7 +76,7 @@ function Footer() {
                 Don&apos;t Wait - transform your business <span className='accent-color'>today!</span>
                 </div>
             </div>
-            <div className='w-full lg:w-1/3 h-fit my-6 lg:my-10 md:pr-10 flex flex-col justify-center items-center md:items-start'>
+            {/* <div className='w-full lg:w-1/3 h-fit my-6 lg:my-10 md:pr-10 flex flex-col justify-center items-center md:items-start'>
                 <span className='text-lg lg:text-xl w-full px-6'>Leave your email or phone, we will contact you</span>
                 <form onSubmit={handleSubmit} className='flex flex-col gap-3 px-6 w-full mt-4'>
                     <div className='flex gap-3 w-full'>
@@ -110,7 +110,7 @@ function Footer() {
                       </div>
                     )}
                 </form>
-            </div>
+            </div> */}
         </motion.div>
         <motion.div 
         initial={{opacity: 0, y: 50}}
