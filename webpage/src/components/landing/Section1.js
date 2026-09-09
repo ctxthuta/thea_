@@ -59,7 +59,7 @@ function Section1() {
                 At Thea Solutions, we specialize in bespoke software development, enterprise-grade AI, and automation solutions engineered specifically for SMEs to streamline operations and scale with confidence.
                 </span>
             </div>
-            {/* <div className='w-full lg:w-1/3 h-fit my-6 lg:my-10 md:pr-10 flex flex-col justify-center items-center md:items-start'>
+            <div className='w-full lg:w-1/3 h-fit my-6 lg:my-10 md:pr-10 flex flex-col justify-center items-center md:items-start'>
                 <span className='text-lg lg:text-xl w-full px-6'>Leave your email or phone, we will contact you</span>
                 <form onSubmit={handleSubmit} className='flex flex-col gap-3 px-6 w-full mt-4'>
                     <div className='flex gap-3 w-full'>
@@ -93,7 +93,7 @@ function Section1() {
                       </div>
                     )}
                 </form>
-            </div> */}
+            </div>
         </div>
     </div>
   )
