@@ -11,6 +11,7 @@ export interface Employee {
   contact?: ContactInfo;
   socialLinks?: SocialLinks;
   projects?: Project[];
+  publications?: Publication[];
 }
 
 export interface Education {
@@ -59,6 +60,15 @@ export interface Project {
   url?: string;
 }
 
+export interface Publication {
+  title: string;
+  type: string;
+  date: string;
+  authors: string[];
+  description: string;
+  url: string;
+}
+
 export const employees: Employee[] = [
   {
     id: "dr-ohnmar-than",
@@ -68,12 +78,28 @@ export const employees: Employee[] = [
     bio: "Experienced Chief Financial Officer with expertise in financial strategy, operations, business development, and healthcare information technology. Proven track record in driving financial growth and operational efficiency.",
     education: [
       {
-        degree: "PhD in Medical Technology",
+        degree: "PhD in Medical Laboratory Technology",
         institution: "University of Medical Technology, Yangon",
         location: "Yangon, Myanmar",
         startDate: "2020",
         endDate: "2023",
-        description: "Focused on Cancer Research."
+        description: "Focused on Molecular Diagnostics, Immunology, and Clinical Laboratory Management."
+      },
+      {
+        degree: "Master of Science in Medical Technology",
+        institution: "University of Medical Technology, Yangon",
+        location: "Yangon, Myanmar",
+        startDate: "2006",
+        endDate: "2008",
+        description: "Specialized in Clinical Laboratory Science, with research on advanced diagnostic techniques and laboratory management."
+      },
+      {
+        degree: "Bachelor of Science in Medical Technology",
+        institution: "University of Medical Technology, Yangon",
+        location: "Yangon, Myanmar",
+        startDate: "2001",
+        endDate: "2005",
+        description: "Focused on Basic Medical Laboratory Techniques, Clinical Chemistry, Hematology, Microbiology, and Immunology."
       }
     ],
     experience: [
@@ -91,18 +117,140 @@ export const employees: Employee[] = [
           "Advise on Healthcare Information Technology solutions and investments"
         ]
       },
+      {
+        position: "Advisory Director",
+        company: "MediTrust Laboratory, Yangon",
+        location: "Yangon, Myanmar",
+        startDate: "2022",
+        endDate: "2024",
+        current: false,
+        description: [
+          "Provide strategic guidance on laboratory operations and financial management",
+          "Advise on business development and growth strategies",
+          "Support implementation of advanced diagnostic techniques and laboratory management practices",
+          "ISO Implementation and Accreditation for Laboratory Operations"
+        ]
+      },
+      {
+        position: "Laboratory Manager",
+        company: "Central Lab, Yangon",
+        location: "Yangon, Myanmar",
+        startDate: "2016",
+        endDate: "Present",
+        current: true,
+        description: [
+          "Financial management and budgeting for laboratory operations",
+          "Executive oversight of laboratory operations and quality control",
+          "Manage laboratory operations and quality control",
+          "Implement advanced diagnostic techniques and laboratory management practices",
+          "Train and supervise laboratory staff",
+          "Inventory management and procurement of laboratory equipment and supplies",
+
+        ]
+      },
+      {
+        position: "Laboratory Officer",
+        company: "ORLHNS Hospital, Yangon",
+        location: "Yangon, Myanmar",
+        startDate: "2016",
+        endDate: "Present",
+        current: true,
+        description: [
+          "Financial management and budgeting for laboratory operations",
+          "Develop and implement laboratory protocols and procedures",
+          "Manage laboratory operations and quality control",
+          "Implement advanced diagnostic techniques and laboratory management practices",
+          "Train and supervise laboratory staff",
+          "Ensure compliance with healthcare regulations and standards",
+        ]
+      },
+      {
+        position: "Laboratory Supervisor",
+        company: "Top Team",
+        location: "Mandalay, Myanmar",
+        startDate: "2013",
+        endDate: "2016",
+        current: false,
+        description: [
+          "Managed laboratory operations and quality control",
+          "Assign duties and shifts to laboratory staff and technicians",
+          "Provide training and mentorship to laboratory staff",
+          "Ensure compliance with healthcare regulations and standards",
+          "Implement advanced diagnostic techniques and laboratory management practices"
+        ]
+      },
+      {
+        position: "Laboratory Officer",
+        company: "300 Bedded Teaching Hospital, Mandalay",
+        location: "Mandalay, Myanmar",
+        startDate: "2013",
+        endDate: "2016",
+        current: false,
+        description: [
+          "Managed laboratory operations and quality control",
+          "Compliance financial reporting and budgeting for laboratory operations",
+          "Led a team of laboratory technicians and staff",
+          "Implemented advanced diagnostic techniques and laboratory management practices",
+          "Ensured compliance with healthcare regulations and standards"
+        ]
+      },
+      {
+        position: "Medical Technologist",
+        company: "Ghandi Hospital, Yangon",
+        location: "Yangon, Myanmar",
+        startDate: "2009",
+        endDate: "2013",
+        current: false,
+        description: [
+          "Conducted laboratory tests and analyses",
+          "Patient sample collection and processing",
+          "Maintained laboratory equipment and inventory",
+          "Ensured compliance with healthcare regulations and standards"
+        ]
+      },
+      {
+        position: "Medical Technologist",
+        company: "Central Lab, Yangon",
+        location: "Yangon, Myanmar",
+        startDate: "2000",
+        endDate: "2013",
+        current: false,
+        description: [
+          "Conducted laboratory tests and analyses",
+          "Patient sample collection and processing",
+          "Patient care and communication regarding test results",
+        ]
+      },
     ],
     skills: [
       "Healthcare Industry Expertise", "Financial Strategy", "Business Development",
       "Financial Planning", "Risk Management", "Strategic Planning", 
       "Investor Relations", "Budget Management", "Financial Analysis"
     ],
+    publications: [
+      {
+        title: "Immunoexpression and Mutation Status of BRAF V600E in Papillary Thyroid Carcinoma",
+        type: "Article",
+        date: "October 2023",
+        authors: ["Ohnmar Than", "Mie Mie Than", "Shwe Le", "May Thyn"],
+        description: "A study describing the diagnostic performance of immunohistochemistry compared with ARMS-PCR for detecting the BRAF V600E mutation in papillary thyroid carcinoma.",
+        url: "https://www.researchgate.net/publication/375062514_Immunoexpression_and_Mutation_Status_of_BRAF_V600E_in_Papillary_Thyroid_Carcinoma"
+      },
+      {
+        title: "Immunoexpression of Mutated BRAF V600E Protein in Papillary Thyroid Carcinoma",
+        type: "Article",
+        date: "January 2023",
+        authors: ["Mie Mie Than", "Ohnmar Than", "Shwe Zin", "May Thyn"],
+        description: "A study evaluating immunohistochemistry as a rapid and accessible method for detecting the BRAF V600E mutation in papillary thyroid carcinoma.",
+        url: "https://www.researchgate.net/publication/367412584_Immunoexpression_of_Mutated_BRAF_V600E_Protein_in_Papillary_Thyroid_Carcinoma"
+      }
+    ],
     contact: {
       email: "ohnmarthan@theasolutions.co",
       location: "Yangon, Myanmar"
     },
     socialLinks: {
-      linkedin: "https://www.linkedin.com/in/ohnmarthan"
+      // linkedin: "https://www.linkedin.com/in/ohnmarthan"
     }
   },
   {

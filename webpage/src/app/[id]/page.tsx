@@ -303,6 +303,34 @@ export default function EmployeePortfolio({ params }: { params: Promise<{ id: st
             </div>
           )}
 
+          {/* Publications - Minimal */}
+          {employee.publications && employee.publications.length > 0 && (
+            <div className="mb-16">
+              <h2 className="text-sm paragraph-color opacity-40 mb-8 uppercase tracking-wider">Publication</h2>
+              <div className="space-y-8">
+                {employee.publications.map((publication, index) => (
+                  <div key={index}>
+                    <div className="flex justify-between items-baseline gap-4 mb-1">
+                      <h3 className="text-lg paragraph-color">{publication.title}</h3>
+                      <span className="text-sm paragraph-color opacity-40 whitespace-nowrap">{publication.date}</span>
+                    </div>
+                    <p className="text-sm accent-color mb-2">{publication.type}</p>
+                    <p className="text-sm paragraph-color opacity-60 leading-relaxed mb-2">{publication.description}</p>
+                    <p className="text-sm paragraph-color opacity-50 mb-2">{publication.authors.join(', ')}</p>
+                    <a
+                      href={publication.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm accent-color hover:opacity-80 transition-opacity"
+                    >
+                      View publication <ExternalLink size={14} className="inline-block ml-1" />
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Contact - Minimal */}
           {employee.contact && (
             <div className="mb-16">
