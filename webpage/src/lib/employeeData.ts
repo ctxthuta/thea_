@@ -116,8 +116,8 @@ export const employees: Employee[] = [
         degree: "B.S. Computer Science",
         institution: "University of Computer Studies",
         location: "Yangon, Myanmar",
-        startDate: "2010",
-        endDate: "2014",
+        startDate: "2018",
+        endDate: "2025",
         description: "Focused on software engineering and management."
       }
     ],
