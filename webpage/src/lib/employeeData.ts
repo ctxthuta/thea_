@@ -64,7 +64,7 @@ export const employees: Employee[] = [
     id: "dr-ohnmar-than",
     name: "Dr. Ohnmar Than",
     title: "Chief Financial Officer",
-    profileImage: "",
+    profileImage: "https://westernfinance.org/wp-content/uploads/speaker-3-v2.jpg",
     bio: "Experienced Chief Financial Officer with expertise in financial strategy, operations, business development, and healthcare information technology. Proven track record in driving financial growth and operational efficiency.",
     education: [
       {
@@ -102,14 +102,14 @@ export const employees: Employee[] = [
       location: "Yangon, Myanmar"
     },
     socialLinks: {
-      linkedin: "https://linkedin.com/in/ohnmarthan"
+      linkedin: "https://www.linkedin.com/in/ohnmarthan"
     }
   },
   {
     id: "thiri-chan-nyein",
     name: "Thiri Chan Nyein",
     title: "Client Aquisition & Solutions Lead",
-    profileImage: "",
+    profileImage: "https://westernfinance.org/wp-content/uploads/speaker-3-v2.jpg",
     bio: "A seasoned professional in client acquisition and solutions delivery, with a strong background in project management and software development.",
     education: [
       {
@@ -144,7 +144,7 @@ export const employees: Employee[] = [
       location: "Yangon, Myanmar"
     },
     socialLinks: {
-      linkedin: "https://linkedin.com/in/thirichannyein"
+      linkedin: "https://www.linkedin.com/in/thiri-chan-nyein/"
     }
   }
 ];
