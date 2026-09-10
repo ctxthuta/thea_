@@ -1,35 +1,128 @@
 {
-  "name": "[Internal] Thea Web",
+  "name": "[Internal] [Web] Get Email, Quote Request, Request for Demo",
   "nodes": [
     {
       "parameters": {
-        "httpMethod": "POST",
-        "path": "contact/d946599b-734c-4fbe-8753-0f7b903a5d57",
-        "authentication": "jwtAuth",
-        "options": {
-          "ignoreBots": false,
-          "rawBody": true,
-          "responseCode": {
-            "values": {
-              "responseCode": 201
-            }
-          },
-          "responseData": "={ \"status\": \"success\" }"
-        }
+        "sendTo": "thirichannyein04@gmail.com",
+        "subject": "=New Contact Submission Via Web Bby - {{ $json.Date }}",
+        "emailType": "text",
+        "message": "=A new lead has submitted their contact information:\n\n📅 Date: {{ $json.Date }}\n⏰ Time: {{ $json.Time }}\n📧 Email: {{ $json.Email }}\n📱 Phone: {{ $json.Phone }}\n\nPlease check the Google Sheet for the full record bby<3.",
+        "options": {}
       },
-      "type": "n8n-nodes-base.webhook",
-      "typeVersion": 2.1,
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
       "position": [
-        -2720,
-        -832
+        720,
+        48
       ],
-      "id": "2a41aebb-eb71-4ed7-8a05-be76cf00328c",
-      "name": "Webhook",
-      "webhookId": "d946599b-734c-4fbe-8753-0f7b903a5d57",
+      "id": "179831e0-d438-41da-947f-d07ad860771a",
+      "name": "Send a message",
+      "webhookId": "e1794062-6054-4c3c-ab87-4edb48b8c919",
       "credentials": {
-        "jwtAuth": {
-          "id": "6F5pOjptSdm3eF1H",
-          "name": "JWT Auth account"
+        "gmailOAuth2": {
+          "id": "tvE7o2Bp4XodF4Yx",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "1593405260",
+        "text": "=❤️ *New Contact Submission Bby!*\n\n📅 *Date:* {{ $json.Date }}\n⏰ *Time:* {{ $json.Time }}\n📧 *Email:* {{ $json.Email }}\n📱 *Phone:* {{ $json.Phone }}\nPlease check the Google Sheet for the full record Bby ❤️.",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        720,
+        240
+      ],
+      "id": "90059b1f-3204-43c8-93d9-2d1fa3563fba",
+      "name": "Send a text message",
+      "webhookId": "3673c659-c5f1-4318-aedd-fd8c7cbbb9f3",
+      "credentials": {
+        "telegramApi": {
+          "id": "bcAMRdA7jD27JDxL",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "\n### Record Emails to Contact in Emails_to_Contact\n",
+        "height": 416,
+        "width": 944,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "bc90f15b-0a1e-4bd2-9608-64e6340582d5",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "### Get a Quote\n",
+        "height": 400,
+        "width": 928,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        208,
+        608
+      ],
+      "typeVersion": 1,
+      "id": "aff93836-ade8-41b0-b3de-88053d3cfb1d",
+      "name": "Sticky Note1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "chatId": "=1593405260",
+        "text": "=*❤️ New Contact Submission Bby!*\n\n📅 *Date:* {{ $json.Date }}\n⏰ *Time:* {{ $json.Time }}\n🏢 *Company:* {{ $json['Company Name'] }}\n👤 *Contact:* {{ $json['Contact Name'] }}\n📧 *Email:* {{ $json['Email Address'] }}\n📱 *Phone:* {{ $json[\"Mobile Phone\"] }}\n🛠 *Service:* {{ $json['Service Type'] }}\n📝 *Description:* {{ $json['Project Description'] }}\n💰 *Budget:* {{ $json['Budget Range '] }}\n📆 *Timeline:* {{ $json.Timeline }}\n\nPlease check the Get Quote sheet for the full record Bby ❤️.",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        928,
+        832
+      ],
+      "id": "d69370be-015b-45ae-b4bb-e87b60c2ebeb",
+      "name": "Send a text message1",
+      "webhookId": "3673c659-c5f1-4318-aedd-fd8c7cbbb9f3",
+      "credentials": {
+        "telegramApi": {
+          "id": "9rxEXYmFcX0Ub0Du",
+          "name": "Testing"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "thirichannyein04@gmail.com",
+        "subject": "=New Quote Request Via Web Bby - {{ $json.Date }}",
+        "emailType": "text",
+        "message": "=A new potential client has requested a quote:\n\n📅 Date: {{ $json.Date }}\n⏰ Time: {{ $json.Time }}\n🏢 Company Name: {{ $json['Company Name'] }}\n👤 Contact Name: {{ $json['Contact Name'] }}\n📧 Email Address: {{ $json['Email Address'] }}\n📱 Mobile Phone: {{ $json[\"Mobile Phone\"] }}\n🛠 Service Type: {{ $json['Service Type'] }}\n📝 Project Description: {{ $json['Project Description'] }}\n💰 Budget Range: {{ $json['Budget Range '] }}\n📆 Timeline: {{ $json.Timeline }}\n\nPlease check the Get Quote Sheet for the full record bby<3.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        928,
+        640
+      ],
+      "id": "54e6dbe1-fc89-4be8-bb0e-8fe4cf4e26f7",
+      "name": "Send a message1",
+      "webhookId": "e1794062-6054-4c3c-ab87-4edb48b8c919",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ibGCHe5mzYGSPqbO",
+          "name": "Gmail account"
         }
       }
     },
@@ -43,26 +136,33 @@
         },
         "sheetName": {
           "__rl": true,
-          "value": "gid=0",
+          "value": 1776889329,
           "mode": "list",
-          "cachedResultName": "Emails_to_Contact",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1sD2VUVTKTC0SucePM1V_249Eoj4n0M-jvDR2ZUmPy7E/edit#gid=0"
+          "cachedResultName": "Requests_for_Demo",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1sD2VUVTKTC0SucePM1V_249Eoj4n0M-jvDR2ZUmPy7E/edit#gid=1776889329"
         },
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "Date": "={{ $json.date }}",
-            "Time": "={{ $json.time }}",
+            "Requested Date": "={{ $json.requestedDate }}",
+            "Requested Time": "={{ $json.requestedTime }}",
             "Email": "={{ $json.email }}",
-            "Phone": "={{ $json.phone }}"
+            "Phone": "={{ $json.phone }}",
+            "Scheduled Date": "={{ $json.scheduledDate }}",
+            "Scheduled Time": "={{ $json.scheduledTime }}",
+            "Scheduled Product ID": "={{ $json.productId }}",
+            "Referrer": "={{ $json.referrer }}",
+            "Name": "={{ $json.name }}",
+            "Business Domain": "={{ $json.businessDomain }}",
+            "Business Description": "={{ $json.businessDescription }}"
           },
           "matchingColumns": [
-            "Date"
+            "Requested Date"
           ],
           "schema": [
             {
-              "id": "Date",
-              "displayName": "Date",
+              "id": "Requested Date",
+              "displayName": "Requested Date",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -71,8 +171,38 @@
               "removed": false
             },
             {
-              "id": "Time",
-              "displayName": "Time",
+              "id": "Requested Time",
+              "displayName": "Requested Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Business Domain",
+              "displayName": "Business Domain",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Business Description",
+              "displayName": "Business Description",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -99,6 +229,46 @@
               "type": "string",
               "canBeUsedToMatch": true,
               "removed": false
+            },
+            {
+              "id": "Scheduled Date",
+              "displayName": "Scheduled Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Scheduled Time",
+              "displayName": "Scheduled Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Scheduled Product ID",
+              "displayName": "Scheduled Product ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Referrer",
+              "displayName": "Referrer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
             }
           ],
           "attemptToConvertTypes": false,
@@ -109,155 +279,187 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -2272,
-        -832
+        432,
+        1280
       ],
-      "id": "abcdb1e1-f84f-4221-9c45-cc8526de4b99",
-      "name": "Append row in sheet",
+      "id": "68cd0ecf-9058-4f58-8ea4-69c42e066f51",
+      "name": "Append Demo Request to Sheet",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "iAOscujZh0tKviT5",
-          "name": "Google Sheets OAuth2 API"
+          "id": "J1p4DB2fBkr6N1JD",
+          "name": "Google Sheets account"
         }
       }
     },
     {
       "parameters": {
-        "jsCode": "const email = $input.first().json.email;\n\nconst now = new Date();\n\nconst date = now.toLocaleDateString('en-CA', { \n    timeZone: 'Asia/Yangon' \n});\n\nconst time = now.toLocaleTimeString('en-US', { \n    timeZone: 'Asia/Yangon',\n    hour: '2-digit', \n    minute: '2-digit', \n    hour12: true \n});\n\nreturn [{\n  json: {\n    date: date,  \n    time: time, \n    email: $input.first().json.body[0].email,\n    phone: $input.first().json.body[0].phone\n  }\n}];"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -2496,
-        -832
-      ],
-      "id": "ffba4ccd-192f-41d8-a62a-22445047799b",
-      "name": "Code in JavaScript"
-    },
-    {
-      "parameters": {
-        "sendTo": "thirichannyein04@gmail.com",
-        "subject": "=New Contact Submission Via Web Bby - {{ $json.Date }}",
+        "sendTo": "=thirichannyein04@gmail.com",
+        "subject": "=New Demo Request - {{ $json.productName }} - {{ $json.scheduledDate }}",
         "emailType": "text",
-        "message": "=A new lead has submitted their contact information:\n\n📅 Date: {{ $json.Date }}\n⏰ Time: {{ $json.Time }}\n📧 Email: {{ $json.Email }}\n📱 Phone: {{ $json.Phone }}\n\nPlease check the Google Sheet for the full record bby<3.",
+        "message": "=A new demo has been requested:\n\n📅 Requested Date: {{ $json.requestedDate }}\n⏰ Requested Time: {{ $json.requestedTime }}\n📧 Email: {{ $json.email }}\n📱 Phone: {{ $json.phone }}\n📅 Scheduled Date: {{ $json.scheduledDate }}\n⏰ Scheduled Time: {{ $json.scheduledTime }}\n🏢 Product: {{ $json.productName }}\n📋 Product ID: {{ $json.productId }}\n🔗 Referrer: {{ $json.referrer }}\n\nPlease check the Demo Requests sheet for the full record.",
         "options": {}
       },
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        -2048,
-        -928
+        656,
+        1280
       ],
-      "id": "59543f7f-866e-4bb5-a7ed-d797e12ae112",
-      "name": "Send a message",
+      "id": "81061f0e-7e24-4086-92fd-c8a1abbf61d2",
+      "name": "Send Demo Request Email",
       "webhookId": "e1794062-6054-4c3c-ab87-4edb48b8c919",
       "credentials": {
         "gmailOAuth2": {
-          "id": "9TrLEYy5jdcpN1fI",
-          "name": "Gmail OAuth2 API"
+          "id": "tvE7o2Bp4XodF4Yx",
+          "name": "Gmail account 2"
         }
       }
     },
     {
       "parameters": {
         "chatId": "1593405260",
-        "text": "=❤️ *New Contact Submission Bby!*\n\n📅 *Date:* {{ $json.Date }}\n⏰ *Time:* {{ $json.Time }}\n📧 *Email:* {{ $json.Email }}\n📱 *Phone:* {{ $json.Phone }}\nPlease check the Google Sheet for the full record Bby ❤️.",
+        "text": "=❤️ *New Demo Request!*\n\n📅 *Requested Date:* {{ $json.requestedDate }}\n⏰ *Requested Time:* {{ $json.requestedTime }}\n📧 *Email:* {{ $json.email }}\n📱 *Phone:* {{ $json.phone }}\n📅 *Scheduled Date:* {{ $json.scheduledDate }}\n⏰ *Scheduled Time:* {{ $json.scheduledTime }}\n🏢 *Product:* {{ $json.productName }}\n📋 *Product ID:* {{ $json.productId }}\n🔗 *Referrer:* {{ $json.referrer }}\n\nPlease check the Demo Requests sheet Bby ❤️.",
         "additionalFields": {}
       },
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        -2048,
-        -736
+        656,
+        1472
       ],
-      "id": "167ffef7-f076-4299-b1e1-766612329d95",
-      "name": "Send a text message",
+      "id": "24e4694d-5b8b-40a9-8a36-9f6a1c61d876",
+      "name": "Send Demo Request Telegram",
       "webhookId": "3673c659-c5f1-4318-aedd-fd8c7cbbb9f3",
       "credentials": {
         "telegramApi": {
-          "id": "HjKD5gZ1pob7YDfd",
-          "name": "@Thea_Noti_bot"
+          "id": "bcAMRdA7jD27JDxL",
+          "name": "Telegram account 2"
         }
       }
     },
     {
       "parameters": {
-        "content": "\n### Record Emails to Contact in Emails_to_Contact\n",
-        "height": 416,
-        "width": 944,
-        "color": 4
+        "content": "### Request a Demo\n",
+        "height": 512,
+        "width": 896
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -2768,
-        -976
+        -48,
+        1152
       ],
       "typeVersion": 1,
-      "id": "5bd3ac5c-c80d-4ffa-b80d-246740939f9c",
-      "name": "Sticky Note"
+      "id": "0127d874-ff66-43ae-bfbf-a1bf4f16b304",
+      "name": "Sticky Note2"
     },
     {
       "parameters": {
-        "content": "### Get a Quote\n",
-        "height": 400,
-        "width": 928,
-        "color": 3
+        "httpMethod": "POST",
+        "path": "get-a-quote/c1515c6a-b773-41b7-a2e0-de3adab0b4e5",
+        "authentication": "jwtAuth",
+        "options": {
+          "ignoreBots": false,
+          "rawBody": true,
+          "responseCode": {
+            "values": {
+              "responseCode": 201
+            }
+          },
+          "responseData": "success"
+        }
       },
-      "type": "n8n-nodes-base.stickyNote",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
       "position": [
-        -2560,
-        -368
+        288,
+        736
       ],
-      "typeVersion": 1,
-      "id": "aab142b8-8a86-4abc-9e54-1ae15496ab8c",
-      "name": "Sticky Note1",
-      "disabled": true
-    },
-    {
-      "parameters": {
-        "chatId": "=1593405260",
-        "text": "=*❤️ New Contact Submission Bby!*\n\n📅 *Date:* {{ $json.Date }}\n⏰ *Time:* {{ $json.Time }}\n🏢 *Company:* {{ $json['Company Name'] }}\n👤 *Contact:* {{ $json['Contact Name'] }}\n📧 *Email:* {{ $json['Email Address'] }}\n📱 *Phone:* {{ $json[\"Mobile Phone\"] }}\n🛠 *Service:* {{ $json['Service Type'] }}\n📝 *Description:* {{ $json['Project Description'] }}\n💰 *Budget:* {{ $json['Budget Range '] }}\n📆 *Timeline:* {{ $json.Timeline }}\n\nPlease check the Get Quote sheet for the full record Bby ❤️.",
-        "additionalFields": {}
-      },
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1.2,
-      "position": [
-        -1840,
-        -144
-      ],
-      "id": "2d828be6-f9f9-4ff9-8c25-6bbda271476d",
-      "name": "Send a text message1",
-      "webhookId": "3673c659-c5f1-4318-aedd-fd8c7cbbb9f3",
+      "id": "1725d910-4498-432c-9536-009d31c20310",
+      "name": "Webhook1",
+      "webhookId": "c1515c6a-b773-41b7-a2e0-de3adab0b4e5",
       "credentials": {
-        "telegramApi": {
-          "id": "HjKD5gZ1pob7YDfd",
-          "name": "@Thea_Noti_bot"
+        "jwtAuth": {
+          "id": "yOdfO5OjSW8U9mHY",
+          "name": "JWT Auth account"
         }
       }
     },
     {
       "parameters": {
-        "sendTo": "thirichannyein04@gmail.com",
-        "subject": "=New Quote Request Via Web Bby - {{ $json.Date }}",
-        "emailType": "text",
-        "message": "=A new potential client has requested a quote:\n\n📅 Date: {{ $json.Date }}\n⏰ Time: {{ $json.Time }}\n🏢 Company Name: {{ $json['Company Name'] }}\n👤 Contact Name: {{ $json['Contact Name'] }}\n📧 Email Address: {{ $json['Email Address'] }}\n📱 Mobile Phone: {{ $json[\"Mobile Phone\"] }}\n🛠 Service Type: {{ $json['Service Type'] }}\n📝 Project Description: {{ $json['Project Description'] }}\n💰 Budget Range: {{ $json['Budget Range '] }}\n📆 Timeline: {{ $json.Timeline }}\n\nPlease check the Get Quote Sheet for the full record bby<3.",
-        "options": {}
+        "httpMethod": "POST",
+        "path": "req-a-demo/204e6ef0-63d1-4c51-b89d-ea9fb2417cea",
+        "authentication": "jwtAuth",
+        "options": {
+          "ignoreBots": false,
+          "rawBody": "={ \"status\": \"success\" }",
+          "responseCode": {
+            "values": {
+              "responseCode": 201
+            }
+          }
+        }
       },
-      "type": "n8n-nodes-base.gmail",
-      "typeVersion": 2.2,
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
       "position": [
-        -1840,
-        -336
+        32,
+        1280
       ],
-      "id": "585fd50b-cc70-448e-abbd-62b511ac789d",
-      "name": "Send a message1",
-      "webhookId": "e1794062-6054-4c3c-ab87-4edb48b8c919",
+      "id": "5ba4c8f4-5b85-478e-aa89-ada2c7103a56",
+      "name": "Webhook2",
+      "webhookId": "204e6ef0-63d1-4c51-b89d-ea9fb2417cea",
+      "executeOnce": false,
       "credentials": {
-        "gmailOAuth2": {
-          "id": "9TrLEYy5jdcpN1fI",
-          "name": "Gmail OAuth2 API"
+        "jwtAuth": {
+          "id": "yOdfO5OjSW8U9mHY",
+          "name": "JWT Auth account"
         }
       }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "contact/d946599b-734c-4fbe-8753-0f7b903a5d57",
+        "authentication": "jwtAuth",
+        "options": {
+          "ignoreBots": false,
+          "rawBody": true,
+          "responseCode": {
+            "values": {
+              "responseCode": 201
+            }
+          },
+          "responseData": "={ \"status\": \"success\" }"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        48,
+        144
+      ],
+      "id": "d9368afc-aa1d-466c-907e-18a995c9723e",
+      "name": "Webhook",
+      "webhookId": "d946599b-734c-4fbe-8753-0f7b903a5d57",
+      "credentials": {
+        "jwtAuth": {
+          "id": "yOdfO5OjSW8U9mHY",
+          "name": "JWT Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nconst contact = Array.isArray(input.body) ? input.body[0] : (input.body ?? input);\n\nconst now = new Date();\n\nreturn [{\n  json: {\n    date: now.toLocaleDateString('en-CA', { timeZone: 'Asia/Yangon' }),\n    time: now.toLocaleTimeString('en-US', {\n      timeZone: 'Asia/Yangon',\n      hour: '2-digit',\n      minute: '2-digit',\n      hour12: true,\n    }),\n    email: contact.email ?? '',\n    phone: contact.phone ? `'${contact.phone}` : '',\n  },\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        272,
+        144
+      ],
+      "id": "455cbabd-6f46-42ea-a3dd-f4bf9130b9e8",
+      "name": "Parser"
     },
     {
       "parameters": {
@@ -266,11 +468,24 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -2288,
-        -240
+        480,
+        736
       ],
-      "id": "4c50e4b5-f2a5-4769-9328-c45aa24f411d",
-      "name": "Code in JavaScript1"
+      "id": "c32aaf07-1228-44eb-9753-3bea11e0e609",
+      "name": "Parser1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const now = new Date();\nconst date = now.toLocaleDateString('en-CA', { timeZone: 'Asia/Yangon' }); \nconst time = now.toLocaleTimeString('en-US', { timeZone: 'Asia/Yangon', hour: '2-digit', minute: '2-digit', hour12: true });\n\nconst item = $input.first().json;\nconst d = item.body ?? item;\n\nreturn [{\n  json: {\n    requestedDate:  d.requestedDate  || date,\n    requestedTime:  d.requestedTime  || time,\n    name:           d.name           || '',\n    email:          d.email          || '',\n    phone:          d.phone != null ? `'${String(d.phone)}` : '',\n    businessDomain: d.businessDomain || '',\n    businessDescription: d.businessDescription || '',\n    scheduledDate:  d.scheduledDate  || '',\n    scheduledTime:  d.scheduledTime  || '',\n    productId:      d.productId      || '',\n    productName:    d.productName    || '',\n    productCategory:d.productCategory|| '',\n    referrer:       d.referrer || d.utm_source || 'direct',\n    utm_source:     d.utm_source    || '',\n    utm_medium:     d.utm_medium    || '',\n    utm_campaign:   d.utm_campaign  || ''\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        1280
+      ],
+      "id": "d3e4d8f8-6e9a-4c90-bb42-3fbe277df84f",
+      "name": "Parser2"
     },
     {
       "parameters": {
@@ -414,108 +629,201 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -2064,
-        -240
+        704,
+        736
       ],
-      "id": "262ed30a-903b-4a0c-80e9-50cbaae0117c",
-      "name": "Append row in sheet1",
+      "id": "4a05aed5-e66f-434e-85cd-55df3aea9a37",
+      "name": "Append row in Get a Quote Sheet",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "iAOscujZh0tKviT5",
-          "name": "Google Sheets OAuth2 API"
+          "id": "J1p4DB2fBkr6N1JD",
+          "name": "Google Sheets account"
         }
       }
     },
     {
       "parameters": {
-        "httpMethod": "POST",
-        "path": "get-a-quote/d946599b-734c-4fbe-8753-0f7b903a5d57",
-        "authentication": "jwtAuth",
-        "options": {
-          "ignoreBots": false,
-          "rawBody": true,
-          "responseCode": {
-            "values": {
-              "responseCode": 201
-            }
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1sD2VUVTKTC0SucePM1V_249Eoj4n0M-jvDR2ZUmPy7E",
+          "mode": "list",
+          "cachedResultName": "01_Leads_Landing_Page",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1sD2VUVTKTC0SucePM1V_249Eoj4n0M-jvDR2ZUmPy7E/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Emails_to_Contact",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1sD2VUVTKTC0SucePM1V_249Eoj4n0M-jvDR2ZUmPy7E/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date": "={{ $json.date }}",
+            "Time": "={{ $json.time }}",
+            "Email": "={{ $json.email }}",
+            "Phone": "={{ String($json.phone ?? '') }}"
           },
-          "responseData": "={ \"status\": \"success\" }"
-        }
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
       },
-      "type": "n8n-nodes-base.webhook",
-      "typeVersion": 2.1,
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
       "position": [
-        -2512,
-        -240
+        496,
+        144
       ],
-      "id": "dd19a1f4-42aa-4a78-bd3d-c5e1dfff2685",
-      "name": "Webhook1",
-      "webhookId": "d946599b-734c-4fbe-8753-0f7b903a5d57",
+      "id": "4001e149-3859-43f1-82e5-c3d668e4f434",
+      "name": "Append row in Email to Contact Sheet",
       "credentials": {
-        "jwtAuth": {
-          "id": "6F5pOjptSdm3eF1H",
-          "name": "JWT Auth account"
+        "googleSheetsOAuth2Api": {
+          "id": "J1p4DB2fBkr6N1JD",
+          "name": "Google Sheets account"
         }
       }
     }
   ],
-  "pinData": {},
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "email": "thutau87u@gmail.com",
+          "phone": "09758961223"
+        }
+      }
+    ]
+  },
   "connections": {
-    "Webhook": {
+    "Append Demo Request to Sheet": {
       "main": [
         [
           {
-            "node": "Code in JavaScript",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Code in JavaScript": {
-      "main": [
-        [
-          {
-            "node": "Append row in sheet",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Append row in sheet": {
-      "main": [
-        [
-          {
-            "node": "Send a message",
+            "node": "Send Demo Request Email",
             "type": "main",
             "index": 0
           },
           {
-            "node": "Send a text message",
+            "node": "Send Demo Request Telegram",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Send a message": {
-      "main": [
-        []
-      ]
-    },
-    "Code in JavaScript1": {
+    "Webhook1": {
       "main": [
         [
           {
-            "node": "Append row in sheet1",
+            "node": "Parser1",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Append row in sheet1": {
+    "Webhook2": {
+      "main": [
+        [
+          {
+            "node": "Parser2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Parser",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parser": {
+      "main": [
+        [
+          {
+            "node": "Append row in Email to Contact Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parser1": {
+      "main": [
+        [
+          {
+            "node": "Append row in Get a Quote Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parser2": {
+      "main": [
+        [
+          {
+            "node": "Append Demo Request to Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in Get a Quote Sheet": {
       "main": [
         [
           {
@@ -531,11 +839,16 @@
         ]
       ]
     },
-    "Webhook1": {
+    "Append row in Email to Contact Sheet": {
       "main": [
         [
           {
-            "node": "Code in JavaScript1",
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send a text message",
             "type": "main",
             "index": 0
           }
@@ -549,12 +862,12 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "a09b492e-183e-42b3-be05-165982317eaa",
+  "versionId": "d216edbe-572c-45d5-811f-e689a12c99a1",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "cdd2f5db338339b6a9a490b5ccf7232744048f43cb55fde4ea62949b01476989"
+    "instanceId": "575f4cf670cd20e0a5acdb46155ea99b388e105e1263e6487e724ac0fd7fd211"
   },
   "nodeGroups": [],
-  "id": "MXgYzl01cmpVrTaP",
+  "id": "TWtEvHGzQcJ2c9IK",
   "tags": []
 }
