@@ -74,7 +74,7 @@ export const employees: Employee[] = [
     id: "dr-ohnmar-than",
     name: "Dr. Ohnmar Than",
     title: "Chief Financial Officer",
-    profileImage: "https://westernfinance.org/wp-content/uploads/speaker-3-v2.jpg",
+    profileImage: "",
     bio: "Experienced Chief Financial Officer with expertise in financial strategy, operations, business development, and healthcare information technology. Proven track record in driving financial growth and operational efficiency.",
     education: [
       {
@@ -257,7 +257,7 @@ export const employees: Employee[] = [
     id: "thiri-chan-nyein",
     name: "Thiri Chan Nyein",
     title: "Client Aquisition & Solutions Lead",
-    profileImage: "https://westernfinance.org/wp-content/uploads/speaker-3-v2.jpg",
+    profileImage: "",
     bio: "A seasoned professional in client acquisition and solutions delivery, with a strong background in project management and software development.",
     education: [
       {
