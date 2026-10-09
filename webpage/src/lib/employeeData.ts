@@ -74,7 +74,7 @@ export const employees: Employee[] = [
     id: "dr-ohnmar-than",
     name: "Dr. Ohnmar Than",
     title: "Chief Financial Officer",
-    profileImage: "",
+    profileImage: "https://live.staticflickr.com/65535/55577607237_58d09f461e_c.jpg",
     bio: "Experienced Chief Financial Officer with expertise in financial strategy, operations, business development, and healthcare information technology. Proven track record in driving financial growth and operational efficiency.",
     education: [
       {

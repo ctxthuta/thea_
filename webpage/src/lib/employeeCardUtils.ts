@@ -14,7 +14,7 @@ export const employeeCardData: EmployeeCard[] = [
     name: "Dr. Ohnmar Than",
     department: "Finance",
     title: "Chief Financial Officer",
-    profileImage: "",
+    profileImage: "https://live.staticflickr.com/65535/55577607237_58d09f461e_c.jpg",
     cardExpirationDate: "2027-12-31",
     email: "ohnmarthan@theasolutions.co"
   },
