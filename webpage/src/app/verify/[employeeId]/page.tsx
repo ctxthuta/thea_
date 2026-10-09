@@ -10,6 +10,7 @@ export default function EmployeeVerification({ params }: { params: Promise<{ emp
   const [employee, setEmployee] = useState<EmployeeCard | null>(null);
   const [loading, setLoading] = useState(true);
   const [employeeId, setEmployeeId] = useState<string | null>(null);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
 
   useEffect(() => {
     params.then((resolvedParams) => {
@@ -159,7 +160,8 @@ export default function EmployeeVerification({ params }: { params: Promise<{ emp
                   <img
                     src={employee.profileImage}
                     alt={employee.name}
-                    className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover"
+                    className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover cursor-pointer hover:opacity-80 transition-opacity"
+                    onClick={() => setIsImageModalOpen(true)}
                   />
                 ) : (
                   <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#5F1F2F] flex items-center justify-center text-[#F1F1F0] text-2xl font-bold">
@@ -243,15 +245,51 @@ export default function EmployeeVerification({ params }: { params: Promise<{ emp
           <div className="p-6 rounded-lg bg-[#5F1F2F]/20 text-center">
             <p className="paragraph-color opacity-70 mb-2">Questions about this verification?</p>
             <a
-              href="mailto:hr@theasolutions.co"
+              href="mailto:finance@theasolutions.co"
               className="inline-flex items-center accent-color hover:opacity-80 transition-opacity font-semibold"
             >
               <Mail className="h-5 w-5 mr-2" />
-              hr@theasolutions.co
+              finance@theasolutions.co
             </a>
           </div>
         </div>
       </div>
+
+      {/* Image Modal */}
+      {isImageModalOpen && employee.profileImage && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4"
+          onClick={() => setIsImageModalOpen(false)}
+        >
+          <div className="relative max-w-4xl max-h-screen">
+            <img
+              src={employee.profileImage}
+              alt={employee.name}
+              className="max-w-full max-h-screen object-contain rounded-lg"
+              onClick={(e) => e.stopPropagation()}
+            />
+            <button
+              className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors"
+              onClick={() => setIsImageModalOpen(false)}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

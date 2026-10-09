@@ -11,6 +11,7 @@ export default function EmployeePortfolio({ params }: { params: Promise<{ id: st
   const [loading, setLoading] = useState(true);
   const [utmSource, setUtmSource] = useState<string | null>(null);
   const [employeeId, setEmployeeId] = useState<string | null>(null);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
 
   useEffect(() => {
     // Resolve the params promise
@@ -128,10 +129,11 @@ export default function EmployeePortfolio({ params }: { params: Promise<{ id: st
           <div className="mb-16">
             <div className="flex items-start gap-6 mb-8">
               {employee.profileImage ? (
-                <img 
-                  src={employee.profileImage} 
+                <img
+                  src={employee.profileImage}
                   alt={employee.name}
-                  className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover"
+                  className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover cursor-pointer hover:opacity-80 transition-opacity"
+                  onClick={() => setIsImageModalOpen(true)}
                 />
               ) : (
                 <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#5F1F2F] flex items-center justify-center text-white text-2xl font-bold">
@@ -264,7 +266,9 @@ export default function EmployeePortfolio({ params }: { params: Promise<{ id: st
                       <span className="text-sm paragraph-color opacity-40">{exp.startDate} — {exp.endDate}</span>
                     </div>
                     <p className="text-sm accent-color mb-2">{exp.company}</p>
-                    <p className="text-sm paragraph-color opacity-60 leading-relaxed">{exp.description.join(' ')}</p>
+                    <p className="text-sm paragraph-color opacity-60 leading-relaxed">
+                      {exp.description.map(desc => desc.trim().endsWith('.') ? desc : `${desc}.`).join(' ')}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -450,6 +454,42 @@ export default function EmployeePortfolio({ params }: { params: Promise<{ id: st
           </div>
         </div>
       </div>
+
+      {/* Image Modal */}
+      {isImageModalOpen && employee.profileImage && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4"
+          onClick={() => setIsImageModalOpen(false)}
+        >
+          <div className="relative max-w-4xl max-h-screen">
+            <img
+              src={employee.profileImage}
+              alt={employee.name}
+              className="max-w-full max-h-screen object-contain rounded-lg"
+              onClick={(e) => e.stopPropagation()}
+            />
+            <button
+              className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors"
+              onClick={() => setIsImageModalOpen(false)}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
