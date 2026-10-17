@@ -1,8 +1,9 @@
 'use client';
+
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { productCategories, allProducts, type ProductCategory } from '@/lib/productData';
-import { ArrowRight, ChevronDown } from 'lucide-react';
+import { ArrowRight, ChevronDown, Sparkles } from 'lucide-react';
 import mixpanel from 'mixpanel-browser';
 
 export default function ProductsSection() {
@@ -12,7 +13,6 @@ export default function ProductsSection() {
     const newExpanded = expandedCategory === category ? null : category;
     setExpandedCategory(newExpanded);
     
-    // Track category expansion
     try {
       mixpanel.track('Product Category Expanded', {
         category: category,
@@ -24,8 +24,7 @@ export default function ProductsSection() {
     }
   };
 
-  const handleDemoClick = (product: any, event: React.MouseEvent) => {
-    // Track demo request click
+  const handleDemoClick = (product: any) => {
     try {
       mixpanel.track('Demo Request Clicked', {
         product_id: product.id,
@@ -38,71 +37,101 @@ export default function ProductsSection() {
   };
 
   return (
-    <section className="py-16 md:py-24">
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="mb-12">
-          <span className="text-sm paragraph-color opacity-40">Our Products</span>
-          <h2 className="text-3xl md:text-4xl font-bold paragraph-color mt-2 mb-4">
+    <section className="py-20 sm:py-28 bg-[#1A1816] text-[#F1F1F0]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Section Header */}
+        <div className="mb-12 sm:mb-16">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#5F1F2F]/40 bg-[#5F1F2F]/15 font-ds-mono text-xs uppercase tracking-wider text-[#f3a6b7] mb-3">
+            <Sparkles size={13} className="text-[#e36a88]" />
+            <span>Autonomous Enterprise Suite · AI Agents</span>
+          </div>
+          <h2 className="font-ds-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white">
             Thea Corporate Agents
           </h2>
-          <p className="paragraph-color opacity-70 max-w-2xl">
-            AI-powered solutions designed to transform your enterprise operations across every department.
+          <p className="mt-4 text-base sm:text-lg text-gray-400 font-light max-w-2xl leading-relaxed">
+            Pre-engineered AI agents and specialized systems built to automate workflows across finance, operations, customer support, and sales.
           </p>
         </div>
 
-        <div className="space-y-6">
+        {/* Categories Stack in TanStack DS Style */}
+        <div className="space-y-4">
           {Object.entries(productCategories).map(([key, category]) => {
             const categoryKey = key as ProductCategory;
             const isExpanded = expandedCategory === categoryKey;
             const categoryProducts = allProducts.filter(p => p.category === categoryKey);
 
             return (
-              <div key={categoryKey} className="border-b border-color border-opacity-20 pb-6">
+              <div 
+                key={categoryKey} 
+                className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
+                  isExpanded 
+                    ? 'border-[#5F1F2F]/70 bg-[#181816]/95 shadow-[0_8px_32px_-4px_rgba(95,31,47,0.25)]' 
+                    : 'border-white/10 bg-[#181816]/60 hover:border-white/20 hover:bg-[#181816]/80'
+                }`}
+              >
                 <button
+                  type="button"
                   onClick={() => toggleCategory(categoryKey)}
-                  className="w-full flex items-center justify-between py-4 text-left"
+                  className="w-full flex items-center justify-between p-6 text-left cursor-pointer transition-colors"
                 >
                   <div>
-                    <h3 className="text-xl paragraph-color font-medium">{category.name}</h3>
-                    <p className="text-sm paragraph-color opacity-60 mt-1">{category.description}</p>
+                    <span className="font-ds-mono text-[11px] uppercase tracking-wider text-[#f3a6b7] block mb-1">
+                      Department Module
+                    </span>
+                    <h3 className="font-ds-display text-xl sm:text-2xl font-bold text-white">
+                      {category.name}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-gray-400 font-light mt-1">
+                      {category.description}
+                    </p>
                   </div>
-                  <ChevronDown 
-                    className={`paragraph-color opacity-60 transition-transform ${
-                      isExpanded ? 'rotate-180' : ''
-                    }`}
-                    size={20}
-                  />
+                  
+                  <div className={`h-9 w-9 rounded-full border flex items-center justify-center transition-all ${
+                    isExpanded 
+                      ? 'border-[#5F1F2F] bg-[#5F1F2F]/30 text-white rotate-180' 
+                      : 'border-white/10 bg-white/[0.04] text-gray-400'
+                  }`}>
+                    <ChevronDown size={18} />
+                  </div>
                 </button>
 
                 {isExpanded && (
-                  <div className="mt-6 space-y-4">
+                  <div className="px-6 pb-6 pt-2 border-t border-white/[0.06] space-y-4">
                     {categoryProducts.map((product) => (
-                      <div key={product.id} className="pl-4 border-l-2 border-[#5F1F2F]">
-                        <div className="flex items-start justify-between mb-2">
-                          <div>
-                            <h4 className="paragraph-color font-medium">{product.name}</h4>
-                            <p className="text-sm paragraph-color opacity-60 mt-1">
-                              {product.description}
-                            </p>
-                          </div>
-                          <Link
-                            href={`/schedule-demo?product=${product.id}`}
-                            onClick={(e) => handleDemoClick(product, e)}
-                            className="flex items-center gap-2 text-sm accent-color hover:opacity-80 transition-opacity ml-4"
-                          >
-                            Request Demo
-                            <ArrowRight size={16} />
-                          </Link>
+                      <div 
+                        key={product.id} 
+                        className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-5 hover:bg-white/[0.04] hover:border-[#5F1F2F]/40 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                      >
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-ds-display text-lg font-bold text-white">
+                            {product.name}
+                          </h4>
+                          <p className="text-xs sm:text-sm text-gray-400 font-light mt-1 max-w-2xl leading-relaxed">
+                            {product.description}
+                          </p>
+                          {product.features && product.features.length > 0 && (
+                            <div className="flex flex-wrap gap-1.5 mt-3">
+                              {product.features.slice(0, 3).map((feature, index) => (
+                                <span 
+                                  key={index} 
+                                  className="font-ds-mono text-[11px] rounded-md bg-white/[0.04] text-gray-300 border border-white/10 px-2 py-0.5"
+                                >
+                                  {feature}
+                                </span>
+                              ))}
+                            </div>
+                          )}
                         </div>
-                        {product.features && product.features.length > 0 && (
-                          <div className="flex flex-wrap gap-2 mt-3">
-                            {product.features.slice(0, 3).map((feature, index) => (
-                              <span key={index} className="text-xs paragraph-color opacity-50">
-                                {feature}
-                              </span>
-                            ))}
-                          </div>
-                        )}
+
+                        <Link
+                          href={`/schedule-demo?product=${product.id}`}
+                          onClick={() => handleDemoClick(product)}
+                          className="inline-flex items-center gap-1.5 rounded-full py-2 px-4 text-xs font-semibold bg-[#F1F1F0] text-[#1A1816] hover:bg-white transition-all shrink-0 self-start sm:self-center shadow-sm"
+                        >
+                          <span>Request Demo</span>
+                          <ArrowRight size={13} />
+                        </Link>
                       </div>
                     ))}
                   </div>
@@ -110,27 +139,6 @@ export default function ProductsSection() {
               </div>
             );
           })}
-        </div>
-
-        {/* CTA Section */}
-        <div className="mt-12 pt-8 border-t border-color border-opacity-20">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-            <div>
-              <h3 className="text-xl paragraph-color font-medium mb-2">
-                Ready to transform your operations?
-              </h3>
-              <p className="text-sm paragraph-color opacity-60">
-                Schedule a personalized demo to see how Thea solutions can benefit your organization.
-              </p>
-            </div>
-            <Link
-              href="/schedule-demo"
-              className="px-6 py-3 bg-[#5F1F2F] text-white rounded-lg hover:bg-[#8B2F4F] transition-colors flex items-center gap-2"
-            >
-              Schedule Demo
-              <ArrowRight size={20} />
-            </Link>
-          </div>
         </div>
       </div>
     </section>

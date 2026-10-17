@@ -1,8 +1,10 @@
 'use client';
+
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import { getEmployeeById, getEmployeeByUtmSource, Employee } from '@/lib/employeeData';
-import { Calendar, MapPin, Mail, Phone, Linkedin, Github, Twitter, Globe, ExternalLink, Award, Briefcase, GraduationCap, Code } from 'lucide-react';
+import { ExternalLink, X } from 'lucide-react';
 import mixpanel from 'mixpanel-browser';
 
 export default function EmployeePortfolio({ params }: { params: Promise<{ id: string }> }) {
@@ -14,7 +16,6 @@ export default function EmployeePortfolio({ params }: { params: Promise<{ id: st
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
 
   useEffect(() => {
-    // Resolve the params promise
     params.then((resolvedParams) => {
       setEmployeeId(resolvedParams.id);
     });
@@ -68,10 +69,8 @@ export default function EmployeePortfolio({ params }: { params: Promise<{ id: st
             timestamp: new Date().toISOString(),
           };
 
-          // Track portfolio view event
           mixpanel.track('Employee Portfolio Viewed', eventProperties);
 
-          // Track QR scan specifically if from business card
           if (utmMedium === 'business-card') {
             mixpanel.track('QR Code Scanned', {
               ...eventProperties,
@@ -80,23 +79,19 @@ export default function EmployeePortfolio({ params }: { params: Promise<{ id: st
               employee_name: foundEmployee.name,
             });
           }
-
-          console.log('Mixpanel events tracked:', eventProperties);
         } catch (error) {
           console.error('Mixpanel tracking error:', error);
         }
-      } else {
-        console.log('Mixpanel token not found, skipping analytics');
       }
     }
   }, [employeeId, searchParams]);
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-color">
+      <div className="min-h-screen flex items-center justify-center bg-[#1A1816]">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#5F1F2F] mx-auto"></div>
-          <p className="mt-4 paragraph-color">Loading portfolio...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#5F1F2F] border-t-transparent mx-auto"></div>
+          <p className="mt-4 font-ds-mono text-xs uppercase tracking-wider text-gray-400">Loading portfolio...</p>
         </div>
       </div>
     );
@@ -104,148 +99,184 @@ export default function EmployeePortfolio({ params }: { params: Promise<{ id: st
 
   if (!employee) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-color">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold paragraph-color mb-2">Employee Not Found</h1>
-          <p className="paragraph-color opacity-70">The requested portfolio could not be found.</p>
+      <div className="min-h-screen flex items-center justify-center bg-[#1A1816] px-6">
+        <div className="text-center max-w-md">
+          <h1 className="font-ds-display text-2xl font-bold text-white mb-2">Employee Not Found</h1>
+          <p className="text-sm text-gray-400 mb-6">The requested portfolio could not be found.</p>
+          <Link 
+            href="/"
+            className="font-ds-mono text-xs uppercase tracking-wider text-[#f3a6b7] hover:underline"
+          >
+            ← Return to home
+          </Link>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-color">
-      {/* Minimal Header */}
-      <div className="px-6 py-8 md:px-12 md:py-16">
+    <div className="min-h-screen bg-[#1A1816] text-[#F1F1F0] selection:bg-[#5F1F2F] selection:text-white">
+      <div className="px-6 py-10 md:px-12 md:py-16">
         <div className="max-w-2xl mx-auto">
-          <div className="flex items-center justify-between mb-12">
-            <span className="text-sm paragraph-color opacity-40">Thea Solutions</span>
+          
+          {/* Minimal Header */}
+          <div className="flex items-center justify-between mb-12 sm:mb-16">
+            <Link 
+              href="/" 
+              className="font-ds-mono text-xs uppercase tracking-wider text-gray-400 hover:text-white transition-colors"
+            >
+              Thea Solutions
+            </Link>
             {utmSource && (
-              <span className="text-xs accent-color opacity-60">via business card</span>
+              <span className="font-ds-mono text-xs uppercase tracking-wider text-[#f3a6b7]">
+                via business card
+              </span>
             )}
           </div>
 
-          {/* Profile Section */}
+          {/* Profile Section (Unboxed, Typography-led) */}
           <div className="mb-16">
-            <div className="flex items-start gap-6 mb-8">
+            <div className="flex items-start gap-6 sm:gap-8 mb-8">
               {employee.profileImage ? (
                 <img
                   src={employee.profileImage}
                   alt={employee.name}
-                  className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover cursor-pointer hover:opacity-80 transition-opacity"
+                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover cursor-pointer hover:opacity-80 transition-opacity ring-2 ring-[#5F1F2F]/40 shrink-0"
                   onClick={() => setIsImageModalOpen(true)}
                 />
               ) : (
-                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#5F1F2F] flex items-center justify-center text-white text-2xl font-bold">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#5F1F2F] flex items-center justify-center text-white text-2xl font-bold shrink-0 font-ds-display">
                   {employee.name.split(' ').map(n => n[0]).join('')}
                 </div>
               )}
+
               <div>
-                <h1 className="text-3xl md:text-4xl font-bold paragraph-color mb-2">{employee.name}</h1>
-                <p className="text-lg accent-color mb-4">{employee.title}</p>
-                <p className="paragraph-color opacity-70 leading-relaxed max-w-lg">{employee.bio}</p>
+                <h1 className="font-ds-display text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-1">
+                  {employee.name}
+                </h1>
+                <p className="font-ds-mono text-xs uppercase tracking-wider text-[#f3a6b7] mb-4">
+                  {employee.title}
+                </p>
+                <p className="text-sm sm:text-base text-gray-300 font-light leading-relaxed max-w-lg">
+                  {employee.bio}
+                </p>
               </div>
             </div>
 
-            {/* Social Links - Minimal */}
+            {/* Social Links - Clean typography, no blocks */}
             {employee.socialLinks && (
-              <div className="flex flex-wrap gap-6 text-sm paragraph-color opacity-60">
+              <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs sm:text-sm font-ds-mono uppercase tracking-wider text-gray-400">
                 {employee.socialLinks.linkedin && (() => {
                   const url = employee.socialLinks!.linkedin;
                   return (
-                    <a href={url} target="_blank" rel="noopener noreferrer" 
-                       className="hover:opacity-100 transition-opacity"
-                       onClick={(e) => {
-                         e.preventDefault();
-                         try {
-                           mixpanel.track('Social Link Clicked', {
-                             employee_id: employee.id,
-                             employee_name: employee.name,
-                             platform: 'linkedin',
-                             url: url,
-                             utm_source: utmSource,
-                           });
-                           window.open(url, '_blank');
-                         } catch (error) {
-                           console.error('Mixpanel tracking error:', error);
-                           window.open(url, '_blank');
-                         }
-                       }}>
+                    <a 
+                      href={url} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="hover:text-white transition-colors"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        try {
+                          mixpanel.track('Social Link Clicked', {
+                            employee_id: employee.id,
+                            employee_name: employee.name,
+                            platform: 'linkedin',
+                            url: url,
+                            utm_source: utmSource,
+                          });
+                        } catch (err) {
+                          console.error(err);
+                        }
+                        window.open(url, '_blank');
+                      }}
+                    >
                       LinkedIn
                     </a>
                   );
                 })()}
+
                 {employee.socialLinks.github && (() => {
                   const url = employee.socialLinks!.github;
                   return (
-                    <a href={url} target="_blank" rel="noopener noreferrer"
-                       className="hover:opacity-100 transition-opacity"
-                       onClick={(e) => {
-                         e.preventDefault();
-                         try {
-                           mixpanel.track('Social Link Clicked', {
-                             employee_id: employee.id,
-                             employee_name: employee.name,
-                             platform: 'github',
-                             url: url,
-                             utm_source: utmSource,
-                           });
-                           window.open(url, '_blank');
-                         } catch (error) {
-                           console.error('Mixpanel tracking error:', error);
-                           window.open(url, '_blank');
-                         }
-                       }}>
+                    <a 
+                      href={url} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="hover:text-white transition-colors"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        try {
+                          mixpanel.track('Social Link Clicked', {
+                            employee_id: employee.id,
+                            employee_name: employee.name,
+                            platform: 'github',
+                            url: url,
+                            utm_source: utmSource,
+                          });
+                        } catch (err) {
+                          console.error(err);
+                        }
+                        window.open(url, '_blank');
+                      }}
+                    >
                       GitHub
                     </a>
                   );
                 })()}
+
                 {employee.socialLinks.twitter && (() => {
                   const url = employee.socialLinks!.twitter;
                   return (
-                    <a href={url} target="_blank" rel="noopener noreferrer"
-                       className="hover:opacity-100 transition-opacity"
-                       onClick={(e) => {
-                         e.preventDefault();
-                         try {
-                           mixpanel.track('Social Link Clicked', {
-                             employee_id: employee.id,
-                             employee_name: employee.name,
-                             platform: 'twitter',
-                             url: url,
-                             utm_source: utmSource,
-                           });
-                           window.open(url, '_blank');
-                         } catch (error) {
-                           console.error('Mixpanel tracking error:', error);
-                           window.open(url, '_blank');
-                         }
-                       }}>
+                    <a 
+                      href={url} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="hover:text-white transition-colors"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        try {
+                          mixpanel.track('Social Link Clicked', {
+                            employee_id: employee.id,
+                            employee_name: employee.name,
+                            platform: 'twitter',
+                            url: url,
+                            utm_source: utmSource,
+                          });
+                        } catch (err) {
+                          console.error(err);
+                        }
+                        window.open(url, '_blank');
+                      }}
+                    >
                       Twitter
                     </a>
                   );
                 })()}
+
                 {employee.socialLinks.website && (() => {
                   const url = employee.socialLinks!.website;
                   return (
-                    <a href={url} target="_blank" rel="noopener noreferrer"
-                       className="hover:opacity-100 transition-opacity"
-                       onClick={(e) => {
-                         e.preventDefault();
-                         try {
-                           mixpanel.track('Social Link Clicked', {
-                             employee_id: employee.id,
-                             employee_name: employee.name,
-                             platform: 'website',
-                             url: url,
-                             utm_source: utmSource,
-                           });
-                           window.open(url, '_blank');
-                         } catch (error) {
-                           console.error('Mixpanel tracking error:', error);
-                           window.open(url, '_blank');
-                         }
-                       }}>
+                    <a 
+                      href={url} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="hover:text-white transition-colors"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        try {
+                          mixpanel.track('Social Link Clicked', {
+                            employee_id: employee.id,
+                            employee_name: employee.name,
+                            platform: 'website',
+                            url: url,
+                            utm_source: utmSource,
+                          });
+                        } catch (err) {
+                          console.error(err);
+                        }
+                        window.open(url, '_blank');
+                      }}
+                    >
                       Website
                     </a>
                   );
@@ -254,19 +285,21 @@ export default function EmployeePortfolio({ params }: { params: Promise<{ id: st
             )}
           </div>
 
-          {/* Experience - Minimal */}
+          {/* Experience - Clean typography, no blocks */}
           {employee.experience && employee.experience.length > 0 && (
             <div className="mb-16">
-              <h2 className="text-sm paragraph-color opacity-40 mb-8 uppercase tracking-wider">Experience</h2>
+              <h2 className="font-ds-mono text-xs uppercase tracking-wider text-gray-500 mb-8">
+                Experience
+              </h2>
               <div className="space-y-8">
                 {employee.experience.map((exp, index) => (
                   <div key={index}>
-                    <div className="flex justify-between items-baseline mb-1">
-                      <h3 className="text-lg paragraph-color">{exp.position}</h3>
-                      <span className="text-sm paragraph-color opacity-40">{exp.startDate} — {exp.endDate}</span>
+                    <div className="flex justify-between items-baseline gap-2 mb-1">
+                      <h3 className="font-ds-display text-lg font-bold text-white">{exp.position}</h3>
+                      <span className="font-ds-mono text-xs text-gray-400 shrink-0">{exp.startDate} — {exp.endDate}</span>
                     </div>
-                    <p className="text-sm accent-color mb-2">{exp.company}</p>
-                    <p className="text-sm paragraph-color opacity-60 leading-relaxed">
+                    <p className="font-ds-mono text-xs uppercase tracking-wider text-[#f3a6b7] mb-2">{exp.company}</p>
+                    <p className="text-sm text-gray-300 font-light leading-relaxed">
                       {exp.description.map(desc => desc.trim().endsWith('.') ? desc : `${desc}.`).join(' ')}
                     </p>
                   </div>
@@ -275,59 +308,66 @@ export default function EmployeePortfolio({ params }: { params: Promise<{ id: st
             </div>
           )}
 
-          {/* Education - Minimal */}
+          {/* Education - Clean typography, no blocks */}
           {employee.education && employee.education.length > 0 && (
             <div className="mb-16">
-              <h2 className="text-sm paragraph-color opacity-40 mb-8 uppercase tracking-wider">Education</h2>
-              <div className="space-y-8">
+              <h2 className="font-ds-mono text-xs uppercase tracking-wider text-gray-500 mb-8">
+                Education
+              </h2>
+              <div className="space-y-6">
                 {employee.education.map((edu, index) => (
                   <div key={index}>
-                    <div className="flex justify-between items-baseline mb-1">
-                      <h3 className="text-lg paragraph-color">{edu.degree}</h3>
-                      <span className="text-sm paragraph-color opacity-40">{edu.startDate} — {edu.endDate}</span>
+                    <div className="flex justify-between items-baseline gap-2 mb-1">
+                      <h3 className="font-ds-display text-lg font-bold text-white">{edu.degree}</h3>
+                      <span className="font-ds-mono text-xs text-gray-400 shrink-0">{edu.startDate} — {edu.endDate}</span>
                     </div>
-                    <p className="text-sm accent-color">{edu.institution}</p>
+                    <p className="font-ds-mono text-xs uppercase tracking-wider text-[#f3a6b7]">{edu.institution}</p>
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Skills - Minimal */}
+          {/* Skills - Clean inline typography, no blocks */}
           {employee.skills && employee.skills.length > 0 && (
             <div className="mb-16">
-              <h2 className="text-sm paragraph-color opacity-40 mb-8 uppercase tracking-wider">Skills</h2>
-              <div className="flex flex-wrap gap-2">
+              <h2 className="font-ds-mono text-xs uppercase tracking-wider text-gray-500 mb-6">
+                Skills
+              </h2>
+              <div className="flex flex-wrap gap-x-3 gap-y-1.5 font-ds-mono text-xs text-gray-300 leading-relaxed">
                 {employee.skills.map((skill, index) => (
-                  <span key={index} className="text-sm paragraph-color opacity-60">
-                    {skill}{index < employee.skills.length - 1 && ' · '}
+                  <span key={index}>
+                    {skill}{index < employee.skills.length - 1 && <span className="text-gray-600 ml-3">·</span>}
                   </span>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Publications - Minimal */}
+          {/* Publications - Clean typography, no blocks */}
           {employee.publications && employee.publications.length > 0 && (
             <div className="mb-16">
-              <h2 className="text-sm paragraph-color opacity-40 mb-8 uppercase tracking-wider">Publication</h2>
+              <h2 className="font-ds-mono text-xs uppercase tracking-wider text-gray-500 mb-8">
+                Publication
+              </h2>
               <div className="space-y-8">
                 {employee.publications.map((publication, index) => (
                   <div key={index}>
                     <div className="flex justify-between items-baseline gap-4 mb-1">
-                      <h3 className="text-lg paragraph-color">{publication.title}</h3>
-                      <span className="text-sm paragraph-color opacity-40 whitespace-nowrap">{publication.date}</span>
+                      <h3 className="font-ds-display text-lg font-bold text-white">{publication.title}</h3>
+                      <span className="font-ds-mono text-xs text-gray-400 whitespace-nowrap shrink-0">{publication.date}</span>
                     </div>
-                    <p className="text-sm accent-color mb-2">{publication.type}</p>
-                    <p className="text-sm paragraph-color opacity-60 leading-relaxed mb-2">{publication.description}</p>
-                    <p className="text-sm paragraph-color opacity-50 mb-2">{publication.authors.join(', ')}</p>
+                    <p className="font-ds-mono text-xs uppercase tracking-wider text-[#f3a6b7] mb-2">{publication.type}</p>
+                    <p className="text-sm text-gray-300 font-light leading-relaxed mb-2">{publication.description}</p>
+                    <p className="font-ds-mono text-xs text-gray-500 mb-2">{publication.authors.join(', ')}</p>
                     <a
                       href={publication.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm accent-color hover:opacity-80 transition-opacity"
+                      className="font-ds-mono text-xs uppercase tracking-wider text-[#f3a6b7] hover:underline inline-flex items-center gap-1"
                     >
-                      View publication <ExternalLink size={14} className="inline-block ml-1" />
+                      <span>View publication</span>
+                      <ExternalLink size={12} />
                     </a>
                   </div>
                 ))}
@@ -335,91 +375,106 @@ export default function EmployeePortfolio({ params }: { params: Promise<{ id: st
             </div>
           )}
 
-          {/* Contact - Minimal */}
+          {/* Contact - Clean typography, no blocks */}
           {employee.contact && (
             <div className="mb-16">
-              <h2 className="text-sm paragraph-color opacity-40 mb-8 uppercase tracking-wider">Contact</h2>
-              <div className="space-y-2">
+              <h2 className="font-ds-mono text-xs uppercase tracking-wider text-gray-500 mb-6">
+                Contact
+              </h2>
+              <div className="space-y-2.5 font-ds-mono text-xs">
                 {employee.contact.email && (() => {
                   const email = employee.contact!.email;
                   return (
-                    <a href={`mailto:${email}`} className="text-sm paragraph-color opacity-60 hover:opacity-100 transition-opacity block"
-                       onClick={(e) => {
-                         try {
-                           mixpanel.track('Contact Info Clicked', {
-                             employee_id: employee.id,
-                             employee_name: employee.name,
-                             contact_type: 'email',
-                             value: email,
-                             utm_source: utmSource,
-                           });
-                         } catch (error) {
-                           console.error('Mixpanel tracking error:', error);
-                         }
-                       }}>
+                    <a 
+                      href={`mailto:${email}`} 
+                      className="text-gray-300 hover:text-white transition-colors block"
+                      onClick={() => {
+                        try {
+                          mixpanel.track('Contact Info Clicked', {
+                            employee_id: employee.id,
+                            employee_name: employee.name,
+                            contact_type: 'email',
+                            value: email,
+                            utm_source: utmSource,
+                          });
+                        } catch (err) {
+                          console.error(err);
+                        }
+                      }}
+                    >
                       {email}
                     </a>
                   );
                 })()}
+
                 {employee.contact.phone && (() => {
                   const phone = employee.contact!.phone;
                   return (
-                    <a href={`tel:${phone}`} className="text-sm paragraph-color opacity-60 hover:opacity-100 transition-opacity block"
-                       onClick={(e) => {
-                         try {
-                           mixpanel.track('Contact Info Clicked', {
-                             employee_id: employee.id,
-                             employee_name: employee.name,
-                             contact_type: 'phone',
-                             value: phone,
-                             utm_source: utmSource,
-                           });
-                         } catch (error) {
-                           console.error('Mixpanel tracking error:', error);
-                         }
-                       }}>
+                    <a 
+                      href={`tel:${phone}`} 
+                      className="text-gray-300 hover:text-white transition-colors block"
+                      onClick={() => {
+                        try {
+                          mixpanel.track('Contact Info Clicked', {
+                            employee_id: employee.id,
+                            employee_name: employee.name,
+                            contact_type: 'phone',
+                            value: phone,
+                            utm_source: utmSource,
+                          });
+                        } catch (err) {
+                          console.error(err);
+                        }
+                      }}
+                    >
                       {phone}
                     </a>
                   );
                 })()}
+
                 {employee.contact.location && (
-                  <p className="text-sm paragraph-color opacity-60">{employee.contact.location}</p>
+                  <p className="text-gray-400">{employee.contact.location}</p>
                 )}
               </div>
             </div>
           )}
 
-          {/* Projects - Minimal */}
+          {/* Projects - Clean typography, no blocks */}
           {employee.projects && employee.projects.length > 0 && (
             <div className="mb-16">
-              <h2 className="text-sm paragraph-color opacity-40 mb-8 uppercase tracking-wider">Projects</h2>
+              <h2 className="font-ds-mono text-xs uppercase tracking-wider text-gray-500 mb-8">
+                Projects
+              </h2>
               <div className="space-y-6">
                 {employee.projects.map((project, index) => (
                   <div key={index}>
-                    <h3 className="text-base paragraph-color mb-1">{project.name}</h3>
-                    <p className="text-sm paragraph-color opacity-60 mb-2">{project.description}</p>
+                    <h3 className="font-ds-display text-base font-bold text-white mb-1">{project.name}</h3>
+                    <p className="text-sm text-gray-300 font-light leading-relaxed mb-2">{project.description}</p>
                     {project.url && (() => {
                       const url = project.url;
                       return (
-                        <a href={url} target="_blank" rel="noopener noreferrer"
-                           className="text-sm accent-color hover:opacity-80 transition-opacity"
-                           onClick={(e) => {
-                             e.preventDefault();
-                             try {
-                               mixpanel.track('Project Viewed', {
-                                 employee_id: employee.id,
-                                 employee_name: employee.name,
-                                 project_name: project.name,
-                                 project_url: url,
-                                 technologies: project.technologies,
-                                 utm_source: utmSource,
-                               });
-                               window.open(url, '_blank');
-                             } catch (error) {
-                               console.error('Mixpanel tracking error:', error);
-                               window.open(url, '_blank');
-                             }
-                           }}>
+                        <a 
+                          href={url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="font-ds-mono text-xs text-[#f3a6b7] hover:underline"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            try {
+                              mixpanel.track('Project Viewed', {
+                                employee_id: employee.id,
+                                employee_name: employee.name,
+                                project_name: project.name,
+                                project_url: url,
+                                technologies: project.technologies,
+                                utm_source: utmSource,
+                              });
+                            } catch (err) {
+                              console.error(err);
+                            }
+                            window.open(url, '_blank');
+                          }}
+                        >
                           {url}
                         </a>
                       );
@@ -430,18 +485,20 @@ export default function EmployeePortfolio({ params }: { params: Promise<{ id: st
             </div>
           )}
 
-          {/* Certifications - Minimal */}
+          {/* Certifications - Clean typography, no blocks */}
           {employee.certifications && employee.certifications.length > 0 && (
             <div className="mb-16">
-              <h2 className="text-sm paragraph-color opacity-40 mb-8 uppercase tracking-wider">Certifications</h2>
+              <h2 className="font-ds-mono text-xs uppercase tracking-wider text-gray-500 mb-6">
+                Certifications
+              </h2>
               <div className="space-y-4">
                 {employee.certifications.map((cert, index) => (
-                  <div key={index} className="flex justify-between items-baseline">
+                  <div key={index} className="flex justify-between items-baseline gap-2">
                     <div>
-                      <h3 className="text-base paragraph-color">{cert.name}</h3>
-                      <p className="text-sm paragraph-color opacity-60">{cert.issuer}</p>
+                      <h3 className="font-ds-display text-base font-bold text-white">{cert.name}</h3>
+                      <p className="font-ds-mono text-xs text-[#f3a6b7] mt-0.5">{cert.issuer}</p>
                     </div>
-                    <span className="text-sm paragraph-color opacity-40">{cert.date}</span>
+                    <span className="font-ds-mono text-xs text-gray-400 shrink-0">{cert.date}</span>
                   </div>
                 ))}
               </div>
@@ -449,8 +506,9 @@ export default function EmployeePortfolio({ params }: { params: Promise<{ id: st
           )}
 
           {/* Footer */}
-          <div className="pt-8 border-t border-color border-opacity-20">
-            <p className="text-xs paragraph-color opacity-30">© {new Date().getFullYear()} Thea Solutions</p>
+          <div className="pt-8 border-t border-white/10 flex items-center justify-between font-ds-mono text-xs text-gray-500">
+            <p>© {new Date().getFullYear()} Thea Solutions</p>
+            <Link href="/" className="hover:text-white transition-colors">theasolutions.co</Link>
           </div>
         </div>
       </div>
@@ -458,34 +516,21 @@ export default function EmployeePortfolio({ params }: { params: Promise<{ id: st
       {/* Image Modal */}
       {isImageModalOpen && employee.profileImage && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center z-50 p-4"
           onClick={() => setIsImageModalOpen(false)}
         >
-          <div className="relative max-w-4xl max-h-screen">
+          <div className="relative max-w-2xl max-h-[90vh]">
             <img
               src={employee.profileImage}
               alt={employee.name}
-              className="max-w-full max-h-screen object-contain rounded-lg"
+              className="max-w-full max-h-[85vh] object-contain rounded-2xl border border-white/20 shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             />
             <button
-              className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors"
+              className="absolute top-4 right-4 h-9 w-9 rounded-full bg-black/70 text-white flex items-center justify-center hover:bg-black transition-colors"
               onClick={() => setIsImageModalOpen(false)}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="32"
-                height="32"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
+              <X size={20} />
             </button>
           </div>
         </div>

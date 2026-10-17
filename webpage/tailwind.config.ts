@@ -9,12 +9,19 @@ const config: Config = {
   ],
   theme: {
   	extend: {
+      fontFamily: {
+        'ds-display': ['var(--font-ds-display)', 'Primary', 'sans-serif'],
+        'ds-mono': ['var(--font-ds-mono)', 'monospace'],
+        'sans': ['var(--font-sans)', 'Primary', 'sans-serif'],
+        'primary': ['Primary', 'sans-serif'],
+      },
   		colors: {
   			// Thea Solutions Brand Colors
   			'thea-white-smoke': '#F1F1F0',
   			'thea-carbon-black': '#1A1816',
   			'thea-carbon-black-2': '#181816',
   			'thea-wine-plum': '#5F1F2F',
+  			'thea-wine-plum-light': '#8E2E46',
   			'thea-carbon-black-3': '#1A1A17',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',

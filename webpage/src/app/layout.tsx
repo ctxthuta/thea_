@@ -1,8 +1,28 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { Bricolage_Grotesque, IBM_Plex_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { OrganizationStructuredData, WebSiteStructuredData } from '@/components/StructuredData';
 import Analytics from '@/components/Analytics';
+
+const bricolageGrotesque = Bricolage_Grotesque({
+  subsets: ["latin"],
+  variable: "--font-ds-display",
+  display: "swap",
+});
+
+const ibmPlexMono = IBM_Plex_Mono({
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+  variable: "--font-ds-mono",
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://theasolutions.co") || "http://localhost:3000",
@@ -62,8 +82,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`antialiased bg-color paragraph-color`} >
+    <html lang="en" className="dark">
+      <body className={`antialiased bg-color paragraph-color ${bricolageGrotesque.variable} ${ibmPlexMono.variable} ${inter.variable}`} >
         <OrganizationStructuredData />
         <WebSiteStructuredData />
         <Suspense fallback={null}>
