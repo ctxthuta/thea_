@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { productCategories, allProducts, type ProductCategory } from '@/lib/productData';
-import { ArrowRight, ChevronDown, Sparkles } from 'lucide-react';
+import { CustomArrowRight, CustomChevronDown, CustomSparkles } from '@/components/icons/CustomIcons';
 import mixpanel from 'mixpanel-browser';
 
 export default function ProductsSection() {
@@ -43,7 +43,7 @@ export default function ProductsSection() {
         {/* Section Header */}
         <div className="mb-12 sm:mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#5F1F2F]/40 bg-[#5F1F2F]/15 font-ds-mono text-xs uppercase tracking-wider text-[#f3a6b7] mb-3">
-            <Sparkles size={13} className="text-[#e36a88]" />
+            <CustomSparkles size={13} className="text-[#e36a88]" />
             <span>Autonomous Enterprise Suite · AI Agents</span>
           </div>
           <h2 className="font-ds-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white">
@@ -92,7 +92,7 @@ export default function ProductsSection() {
                       ? 'border-[#5F1F2F] bg-[#5F1F2F]/30 text-white rotate-180' 
                       : 'border-white/10 bg-white/[0.04] text-gray-400'
                   }`}>
-                    <ChevronDown size={18} />
+                    <CustomChevronDown size={18} />
                   </div>
                 </button>
 
@@ -130,7 +130,7 @@ export default function ProductsSection() {
                           className="inline-flex items-center gap-1.5 rounded-full py-2 px-4 text-xs font-semibold bg-[#F1F1F0] text-[#1A1816] hover:bg-white transition-all shrink-0 self-start sm:self-center shadow-sm"
                         >
                           <span>Request Demo</span>
-                          <ArrowRight size={13} />
+                          <CustomArrowRight size={13} />
                         </Link>
                       </div>
                     ))}
