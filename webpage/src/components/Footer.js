@@ -174,7 +174,7 @@ function Footer() {
                 <Linkedin size={18} />
               </Link>
               <Link 
-                href="https://www.tiktok.com/@theasolutions_?_r=1&_t=ZS-980MdkL0X9J" 
+                href="https://www.tiktok.com/@theasolutions.co?_r=1&_t=ZS-980MdkL0X9J" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 aria-label="TikTok"
