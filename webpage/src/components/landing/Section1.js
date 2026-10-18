@@ -57,8 +57,10 @@ function Section1() {
           loop 
           muted 
           playsInline
+          aria-hidden="true"
         >
           <source src="/assets/videos/LandingBG.webm" type="video/webm" />
+          <track kind="captions" src="/assets/captions.vtt" srcLang="en" label="Ambient background video" default />
         </video>
         {/* Subtle Brand Ambient Glows */}
         <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[#5F1F2F]/20 rounded-full blur-[140px] pointer-events-none" />
@@ -120,10 +122,10 @@ function Section1() {
                   <Sparkles size={13} className="text-[#e36a88]" />
                   Direct Consultation
                 </span>
-                <h3 className="font-ds-display text-xl font-bold text-white mt-1">
+                <h2 className="font-ds-display text-xl font-bold text-white mt-1">
                   Start Your Transformation
-                </h3>
-                <p className="text-xs sm:text-sm text-gray-400 mt-1">
+                </h2>
+                <p className="text-xs sm:text-sm text-gray-300 mt-1">
                   Leave your email or phone, our solution architects will contact you within 24 hours.
                 </p>
               </div>
@@ -131,13 +133,15 @@ function Section1() {
               <form onSubmit={handleSubmit} className="flex flex-col gap-3.5">
                 <div className="flex flex-col sm:flex-row gap-3">
                   <div className="flex-1">
-                    <label className="block font-ds-mono text-[11px] uppercase tracking-wider text-gray-400 mb-1.5">
+                    <label htmlFor="hero-email" className="block font-ds-mono text-[11px] uppercase tracking-wider text-gray-300 mb-1.5">
                       Email Address *
                     </label>
                     <input 
-                      className="w-full rounded-xl bg-[#121110] border border-white/10 px-3.5 py-2.5 text-sm text-[#F1F1F0] placeholder:text-gray-600 focus:outline-none focus:border-[#5F1F2F] focus:ring-2 focus:ring-[#5F1F2F]/30 transition-all" 
+                      id="hero-email"
+                      className="w-full rounded-xl bg-[#121110] border border-white/10 px-3.5 py-2.5 text-sm text-[#F1F1F0] placeholder:text-gray-400 focus:outline-none focus:border-[#5F1F2F] focus:ring-2 focus:ring-[#5F1F2F]/30 transition-all" 
                       type="email" 
                       name="email"
+                      aria-label="Email Address"
                       required
                       value={formData.email}
                       onChange={handleChange}
@@ -145,13 +149,15 @@ function Section1() {
                     />
                   </div>
                   <div className="flex-1">
-                    <label className="block font-ds-mono text-[11px] uppercase tracking-wider text-gray-400 mb-1.5">
+                    <label htmlFor="hero-phone" className="block font-ds-mono text-[11px] uppercase tracking-wider text-gray-300 mb-1.5">
                       Phone (Optional)
                     </label>
                     <input 
-                      className="w-full rounded-xl bg-[#121110] border border-white/10 px-3.5 py-2.5 text-sm text-[#F1F1F0] placeholder:text-gray-600 focus:outline-none focus:border-[#5F1F2F] focus:ring-2 focus:ring-[#5F1F2F]/30 transition-all" 
+                      id="hero-phone"
+                      className="w-full rounded-xl bg-[#121110] border border-white/10 px-3.5 py-2.5 text-sm text-[#F1F1F0] placeholder:text-gray-400 focus:outline-none focus:border-[#5F1F2F] focus:ring-2 focus:ring-[#5F1F2F]/30 transition-all" 
                       type="tel" 
                       name="phone"
+                      aria-label="Phone Number"
                       value={formData.phone}
                       onChange={handleChange}
                       placeholder="+1 (555) 000-0000" 

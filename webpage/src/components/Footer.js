@@ -102,18 +102,22 @@ function Footer() {
               <form onSubmit={handleSubmit} className="flex flex-col gap-3">
                 <div className="flex flex-col sm:flex-row gap-2.5">
                   <input 
-                    className="flex-1 rounded-xl bg-[#121110] border border-white/10 px-4 py-2.5 text-sm text-[#F1F1F0] placeholder:text-gray-600 focus:outline-none focus:border-[#5F1F2F] focus:ring-2 focus:ring-[#5F1F2F]/30 transition-all" 
+                    id="footer-email"
+                    className="flex-1 rounded-xl bg-[#121110] border border-white/10 px-4 py-2.5 text-sm text-[#F1F1F0] placeholder:text-gray-400 focus:outline-none focus:border-[#5F1F2F] focus:ring-2 focus:ring-[#5F1F2F]/30 transition-all" 
                     type="email" 
                     name="email"
+                    aria-label="Email address for updates"
                     required
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="Enter your email" 
                   />
                   <input 
-                    className="flex-1 rounded-xl bg-[#121110] border border-white/10 px-4 py-2.5 text-sm text-[#F1F1F0] placeholder:text-gray-600 focus:outline-none focus:border-[#5F1F2F] focus:ring-2 focus:ring-[#5F1F2F]/30 transition-all" 
+                    id="footer-phone"
+                    className="flex-1 rounded-xl bg-[#121110] border border-white/10 px-4 py-2.5 text-sm text-[#F1F1F0] placeholder:text-gray-400 focus:outline-none focus:border-[#5F1F2F] focus:ring-2 focus:ring-[#5F1F2F]/30 transition-all" 
                     type="tel" 
                     name="phone"
+                    aria-label="Phone number"
                     value={formData.phone}
                     onChange={handleChange}
                     placeholder="Phone (optional)" 
@@ -151,6 +155,8 @@ function Footer() {
               <img 
                 src="/dark_tranStacked_logo.png" 
                 alt="Thea Solutions" 
+                width={200}
+                height={50}
                 className="h-10 w-auto object-contain" 
               />
             </Link>
@@ -257,7 +263,7 @@ function Footer() {
                 <Mail size={16} className="text-[#f3a6b7] shrink-0" />
                 <span className="truncate">sales@theasolutions.co</span>
               </a>
-              <p className="font-ds-mono text-xs text-gray-500 pt-2">
+              <p className="font-ds-mono text-xs text-gray-400 pt-2">
                 Remote-first · Operating globally
               </p>
             </div>
@@ -265,7 +271,7 @@ function Footer() {
         </div>
 
         {/* Bottom Credits & Copyright */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-ds-mono text-gray-500">
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-ds-mono text-gray-400">
           <p>© {new Date().getFullYear()} Thea Solutions. All rights reserved.</p>
           <p className="flex items-center gap-1.5">
             <span>Engineered with precision for SMEs worldwide</span>

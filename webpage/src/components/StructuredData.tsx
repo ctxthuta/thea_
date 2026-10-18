@@ -38,7 +38,7 @@ export function OrganizationStructuredData() {
     },
     sameAs: [
       'https://www.linkedin.com/company/theasolutionss',
-      'https://www.tiktok.com/@theasolutions_?_r=1&_t=ZS-980MdkL0X9J',
+      'https://www.tiktok.com/@theasolutions.co?_r=1&_t=ZS-980MdkL0X9J',
       'https://www.instagram.com/theasolutions_?igsh=ODc3ZmFrN2tkbDYw'
     ],
     knowsAbout: [
@@ -91,13 +91,6 @@ export function WebSiteStructuredData() {
       },
       {
         '@type': 'WebPage',
-        '@id': 'https://theasolutions.co/schedule-demo',
-        name: 'Schedule Demo',
-        url: 'https://theasolutions.co/schedule-demo',
-        description: 'Book a personalized live consultation or demo session.',
-      },
-      {
-        '@type': 'WebPage',
         '@id': 'https://theasolutions.co/careers',
         name: 'Careers',
         url: 'https://theasolutions.co/careers',
@@ -145,27 +138,20 @@ export function SiteNavigationStructuredData() {
       {
         '@type': 'SiteNavigationElement',
         position: 3,
-        name: 'Schedule a Demo',
-        description: 'Book a personalized live consultation or demo session with our team.',
-        url: 'https://theasolutions.co/schedule-demo',
-      },
-      {
-        '@type': 'SiteNavigationElement',
-        position: 4,
         name: 'Careers',
         description: 'Explore remote-first engineering and product roles at Thea Solutions.',
         url: 'https://theasolutions.co/careers',
       },
       {
         '@type': 'SiteNavigationElement',
-        position: 5,
+        position: 4,
         name: 'Contact & Quote',
         description: 'Get in touch with Thea Solutions for project consultations and quotes.',
         url: 'https://theasolutions.co/#contact',
       },
       {
         '@type': 'SiteNavigationElement',
-        position: 6,
+        position: 5,
         name: 'FAQ',
         description: 'Frequently asked questions regarding our engineering, delivery model, and IP.',
         url: 'https://theasolutions.co/#faqs',

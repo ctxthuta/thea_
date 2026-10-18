@@ -31,6 +31,8 @@ function Navbar() {
             <img 
               src="/dark_tranStacked_logo.png" 
               alt="Thea Solutions" 
+              width={200}
+              height={50}
               className="h-9 sm:h-10 w-auto object-contain transition-transform group-hover:scale-[1.02]" 
             />
           </Link>
@@ -85,7 +87,7 @@ function Navbar() {
                 <Linkedin size={18} />
               </Link>
               <Link 
-                href="https://www.tiktok.com/@theasolutions_?_r=1&_t=ZS-980MdkL0X9J" 
+                href="https://www.tiktok.com/@theasolutions.co?_r=1&_t=ZS-980MdkL0X9J" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 aria-label="TikTok"
@@ -184,7 +186,7 @@ function Navbar() {
                   <Linkedin size={18} />
                 </Link>
                 <Link 
-                  href="https://www.tiktok.com/@theasolutions_?_r=1&_t=ZS-980MdkL0X9J" 
+                  href="https://www.tiktok.com/@theasolutions.co?_r=1&_t=ZS-980MdkL0X9J" 
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="h-8 w-8 rounded-lg flex items-center justify-center text-[#F1F1F0]/70 hover:text-white hover:bg-white/[0.08]"

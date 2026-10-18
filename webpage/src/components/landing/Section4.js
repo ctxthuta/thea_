@@ -41,9 +41,9 @@ function Section4() {
                   <Zap size={16} />
                 </div>
                 <div>
-                  <h4 className="font-ds-display text-base font-semibold text-white">
+                  <h3 className="font-ds-display text-base font-semibold text-white">
                     Intelligent Operational Automation
-                  </h4>
+                  </h3>
                   <p className="text-xs sm:text-sm text-gray-400 mt-0.5 leading-relaxed">
                     Eliminate error-prone spreadsheets, disconnected SaaS silos, and repetitive manual routines across your departments.
                   </p>
@@ -55,9 +55,9 @@ function Section4() {
                   <ShieldCheck size={16} />
                 </div>
                 <div>
-                  <h4 className="font-ds-display text-base font-semibold text-white">
+                  <h3 className="font-ds-display text-base font-semibold text-white">
                     Precision Tailored Architecture
-                  </h4>
+                  </h3>
                   <p className="text-xs sm:text-sm text-gray-400 mt-0.5 leading-relaxed">
                     Engineered precisely to match your unique business processes, rather than forcing you into rigid off-the-shelf software compromises.
                   </p>
@@ -69,9 +69,9 @@ function Section4() {
                   <TrendingUp size={16} />
                 </div>
                 <div>
-                  <h4 className="font-ds-display text-base font-semibold text-white">
+                  <h3 className="font-ds-display text-base font-semibold text-white">
                     Built to Scale with High Margins
-                  </h4>
+                  </h3>
                   <p className="text-xs sm:text-sm text-gray-400 mt-0.5 leading-relaxed">
                     Expand transaction volumes 10x without proportional headcount growth, unlocking superior gross margins and business valuation.
                   </p>
@@ -87,6 +87,9 @@ function Section4() {
                 <img 
                   src="/assets/images/section4.jpg" 
                   alt="Thea Solutions Technology Engineering" 
+                  width={800}
+                  height={600}
+                  loading="lazy"
                   className="w-full h-full object-cover contrast-115"
                 />
                 {/* Subtle gradient vignette */}

@@ -150,13 +150,15 @@ function Section5() {
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block font-ds-mono text-[11px] uppercase tracking-wider text-gray-400 mb-1.5">
+                      <label htmlFor="quote-company" className="block font-ds-mono text-[11px] uppercase tracking-wider text-gray-300 mb-1.5">
                         Company Name *
                       </label>
                       <input 
-                        className="w-full rounded-xl bg-[#121110] border border-white/10 px-3.5 py-2.5 text-sm text-[#F1F1F0] placeholder:text-gray-600 focus:outline-none focus:border-[#5F1F2F] focus:ring-2 focus:ring-[#5F1F2F]/30 transition-all" 
+                        id="quote-company"
+                        className="w-full rounded-xl bg-[#121110] border border-white/10 px-3.5 py-2.5 text-sm text-[#F1F1F0] placeholder:text-gray-400 focus:outline-none focus:border-[#5F1F2F] focus:ring-2 focus:ring-[#5F1F2F]/30 transition-all" 
                         type="text" 
                         name="company"
+                        aria-label="Company Name"
                         required
                         value={formData.company}
                         onChange={handleChange}
@@ -164,13 +166,15 @@ function Section5() {
                       />
                     </div>
                     <div>
-                      <label className="block font-ds-mono text-[11px] uppercase tracking-wider text-gray-400 mb-1.5">
+                      <label htmlFor="quote-contact-name" className="block font-ds-mono text-[11px] uppercase tracking-wider text-gray-300 mb-1.5">
                         Contact Name *
                       </label>
                       <input 
-                        className="w-full rounded-xl bg-[#121110] border border-white/10 px-3.5 py-2.5 text-sm text-[#F1F1F0] placeholder:text-gray-600 focus:outline-none focus:border-[#5F1F2F] focus:ring-2 focus:ring-[#5F1F2F]/30 transition-all" 
+                        id="quote-contact-name"
+                        className="w-full rounded-xl bg-[#121110] border border-white/10 px-3.5 py-2.5 text-sm text-[#F1F1F0] placeholder:text-gray-400 focus:outline-none focus:border-[#5F1F2F] focus:ring-2 focus:ring-[#5F1F2F]/30 transition-all" 
                         type="text" 
                         name="contactName"
+                        aria-label="Contact Name"
                         required
                         value={formData.contactName}
                         onChange={handleChange}
@@ -181,13 +185,15 @@ function Section5() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block font-ds-mono text-[11px] uppercase tracking-wider text-gray-400 mb-1.5">
+                      <label htmlFor="quote-email" className="block font-ds-mono text-[11px] uppercase tracking-wider text-gray-300 mb-1.5">
                         Email Address *
                       </label>
                       <input 
-                        className="w-full rounded-xl bg-[#121110] border border-white/10 px-3.5 py-2.5 text-sm text-[#F1F1F0] placeholder:text-gray-600 focus:outline-none focus:border-[#5F1F2F] focus:ring-2 focus:ring-[#5F1F2F]/30 transition-all" 
+                        id="quote-email"
+                        className="w-full rounded-xl bg-[#121110] border border-white/10 px-3.5 py-2.5 text-sm text-[#F1F1F0] placeholder:text-gray-400 focus:outline-none focus:border-[#5F1F2F] focus:ring-2 focus:ring-[#5F1F2F]/30 transition-all" 
                         type="email" 
                         name="email"
+                        aria-label="Email Address"
                         required
                         value={formData.email}
                         onChange={handleChange}
@@ -195,13 +201,15 @@ function Section5() {
                       />
                     </div>
                     <div>
-                      <label className="block font-ds-mono text-[11px] uppercase tracking-wider text-gray-400 mb-1.5">
+                      <label htmlFor="quote-phone" className="block font-ds-mono text-[11px] uppercase tracking-wider text-gray-300 mb-1.5">
                         Phone (Optional)
                       </label>
                       <input 
-                        className="w-full rounded-xl bg-[#121110] border border-white/10 px-3.5 py-2.5 text-sm text-[#F1F1F0] placeholder:text-gray-600 focus:outline-none focus:border-[#5F1F2F] focus:ring-2 focus:ring-[#5F1F2F]/30 transition-all" 
+                        id="quote-phone"
+                        className="w-full rounded-xl bg-[#121110] border border-white/10 px-3.5 py-2.5 text-sm text-[#F1F1F0] placeholder:text-gray-400 focus:outline-none focus:border-[#5F1F2F] focus:ring-2 focus:ring-[#5F1F2F]/30 transition-all" 
                         type="tel" 
                         name="phone"
+                        aria-label="Phone Number"
                         value={formData.phone}
                         onChange={handleChange}
                         placeholder="+1 (555) 123-4567" 
@@ -211,12 +219,14 @@ function Section5() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
-                      <label className="block font-ds-mono text-[11px] uppercase tracking-wider text-gray-400 mb-1.5">
+                      <label htmlFor="quote-service-type" className="block font-ds-mono text-[11px] uppercase tracking-wider text-gray-300 mb-1.5">
                         Service Category *
                       </label>
                       <select 
+                        id="quote-service-type"
                         className="w-full rounded-xl bg-[#121110] border border-white/10 px-3.5 py-2.5 text-sm text-[#F1F1F0] focus:outline-none focus:border-[#5F1F2F] focus:ring-2 focus:ring-[#5F1F2F]/30 transition-all cursor-pointer"
                         name="serviceType"
+                        aria-label="Service Category"
                         required
                         value={formData.serviceType}
                         onChange={handleChange}
@@ -230,12 +240,14 @@ function Section5() {
                     </div>
 
                     <div>
-                      <label className="block font-ds-mono text-[11px] uppercase tracking-wider text-gray-400 mb-1.5">
+                      <label htmlFor="quote-budget-range" className="block font-ds-mono text-[11px] uppercase tracking-wider text-gray-300 mb-1.5">
                         Budget Range
                       </label>
                       <select 
+                        id="quote-budget-range"
                         className="w-full rounded-xl bg-[#121110] border border-white/10 px-3.5 py-2.5 text-sm text-[#F1F1F0] focus:outline-none focus:border-[#5F1F2F] focus:ring-2 focus:ring-[#5F1F2F]/30 transition-all cursor-pointer"
                         name="budgetRange"
+                        aria-label="Budget Range"
                         value={formData.budgetRange}
                         onChange={handleChange}
                       >
@@ -249,12 +261,14 @@ function Section5() {
                     </div>
 
                     <div>
-                      <label className="block font-ds-mono text-[11px] uppercase tracking-wider text-gray-400 mb-1.5">
+                      <label htmlFor="quote-timeline" className="block font-ds-mono text-[11px] uppercase tracking-wider text-gray-300 mb-1.5">
                         Timeline
                       </label>
                       <select 
+                        id="quote-timeline"
                         className="w-full rounded-xl bg-[#121110] border border-white/10 px-3.5 py-2.5 text-sm text-[#F1F1F0] focus:outline-none focus:border-[#5F1F2F] focus:ring-2 focus:ring-[#5F1F2F]/30 transition-all cursor-pointer"
                         name="timeline"
+                        aria-label="Timeline"
                         value={formData.timeline}
                         onChange={handleChange}
                       >
@@ -268,12 +282,14 @@ function Section5() {
                   </div>
 
                   <div>
-                    <label className="block font-ds-mono text-[11px] uppercase tracking-wider text-gray-400 mb-1.5">
+                    <label htmlFor="quote-project-description" className="block font-ds-mono text-[11px] uppercase tracking-wider text-gray-300 mb-1.5">
                       Project Goals &amp; Scope *
                     </label>
                     <textarea 
-                      className="w-full rounded-xl bg-[#121110] border border-white/10 px-3.5 py-2.5 text-sm text-[#F1F1F0] placeholder:text-gray-600 focus:outline-none focus:border-[#5F1F2F] focus:ring-2 focus:ring-[#5F1F2F]/30 h-28 resize-none transition-all" 
+                      id="quote-project-description"
+                      className="w-full rounded-xl bg-[#121110] border border-white/10 px-3.5 py-2.5 text-sm text-[#F1F1F0] placeholder:text-gray-400 focus:outline-none focus:border-[#5F1F2F] focus:ring-2 focus:ring-[#5F1F2F]/30 h-28 resize-none transition-all" 
                       name="projectDescription"
+                      aria-label="Project Goals and Scope"
                       required
                       value={formData.projectDescription}
                       onChange={handleChange}
