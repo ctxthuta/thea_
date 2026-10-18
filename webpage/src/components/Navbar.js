@@ -50,12 +50,6 @@ function Navbar() {
               Services
             </Link>
             <Link 
-              href="/schedule-demo" 
-              className="px-3 py-1.5 text-[13px] font-medium text-[#F1F1F0]/75 hover:text-white hover:bg-white/[0.06] rounded-lg transition-colors"
-            >
-              Demo
-            </Link>
-            <Link 
               href="/#faqs" 
               className="px-3 py-1.5 text-[13px] font-medium text-[#F1F1F0]/75 hover:text-white hover:bg-white/[0.06] rounded-lg transition-colors"
             >
@@ -154,13 +148,6 @@ function Navbar() {
               className="block px-3 py-2 text-sm font-medium text-[#F1F1F0]/85 hover:text-white hover:bg-white/[0.06] rounded-xl transition-colors"
             >
               Services
-            </Link>
-            <Link 
-              href="/schedule-demo" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 text-sm font-medium text-[#F1F1F0]/85 hover:text-white hover:bg-white/[0.06] rounded-xl transition-colors"
-            >
-              Schedule Demo
             </Link>
             <Link 
               href="/#faqs" 
