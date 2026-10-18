@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Bricolage_Grotesque, IBM_Plex_Mono, Inter } from "next/font/google";
 import "./globals.css";
-import { OrganizationStructuredData, WebSiteStructuredData } from '@/components/StructuredData';
+import { OrganizationStructuredData, WebSiteStructuredData, SiteNavigationStructuredData } from '@/components/StructuredData';
 import Analytics from '@/components/Analytics';
 
 const bricolageGrotesque = Bricolage_Grotesque({
@@ -26,7 +26,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://theasolutions.co") || "http://localhost:3000",
-  title: "Thea Solutions",
+  title: "Thea Solutions | Bespoke Software & Enterprise AI Solutions",
   description: "Thea Solutions specializes in bespoke software development, enterprise-grade AI, and automation solutions engineered specifically for SMEs to streamline operations and scale with confidence.",
   keywords: ["bespoke software development", "enterprise AI", "automation solutions", "SME technology", "business automation", "custom software", "AI integration"],
   authors: [{ name: "Thea Solutions" }],
@@ -44,9 +44,18 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: "/logo.ico",
-    shortcut: "/logo.ico",
-    apple: "/logo.ico",
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/icon-48.png", sizes: "48x48", type: "image/png" },
+      { url: "/icon-96.png", sizes: "96x96", type: "image/png" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: [
+      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
   },
   manifest: "/manifest.json",
   openGraph: {
@@ -57,6 +66,12 @@ export const metadata: Metadata = {
     description: "Thea Solutions specializes in bespoke software development, enterprise-grade AI, and automation solutions engineered specifically for SMEs to streamline operations and scale with confidence.",
     siteName: "Thea Solutions",
     images: [
+      {
+        url: "/icon-512.png",
+        width: 512,
+        height: 512,
+        alt: "Thea Solutions Brand Icon",
+      },
       {
         url: "/dark_tranStacked_logo.png",
         width: 1200,
@@ -86,6 +101,7 @@ export default function RootLayout({
       <body className={`antialiased bg-color paragraph-color ${bricolageGrotesque.variable} ${ibmPlexMono.variable} ${inter.variable}`} >
         <OrganizationStructuredData />
         <WebSiteStructuredData />
+        <SiteNavigationStructuredData />
         <Suspense fallback={null}>
           <Analytics />
         </Suspense>

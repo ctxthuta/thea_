@@ -9,34 +9,60 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/logo.ico",
+      "src": "/icon-192.png",
       "sizes": "192x192",
-      "type": "image/x-icon",
+      "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/dark_tranStacked_logo.png",
+      "src": "/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "16x16 24x24 32x32 48x48 64x64 96x96 128x128 256x256",
+      "type": "image/x-icon"
     }
   ],
-  "categories": ["business", "consulting"],
+  "categories": ["business", "consulting", "technology", "artificial-intelligence"],
   "screenshots": [],
   "shortcuts": [
     {
+      "name": "About Us",
+      "short_name": "About",
+      "description": "Learn about Thea Solutions and our mission",
+      "url": "/#about",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
       "name": "Services",
       "short_name": "Services",
-      "description": "View our consulting services",
-      "url": "/services",
-      "icons": [{ "src": "/logo.ico", "sizes": "192x192" }]
+      "description": "View our bespoke software and enterprise AI services",
+      "url": "/#services",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Schedule Demo",
+      "short_name": "Demo",
+      "description": "Book a live product consultation or demo",
+      "url": "/schedule-demo",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Careers",
+      "short_name": "Careers",
+      "description": "Explore open roles and join our team",
+      "url": "/careers",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
     },
     {
       "name": "Contact",
       "short_name": "Contact",
-      "description": "Contact us for consultation",
-      "url": "/contact",
-      "icons": [{ "src": "/logo.ico", "sizes": "192x192" }]
+      "description": "Get in touch for bespoke project quotes",
+      "url": "/#contact",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
     }
   ]
 }

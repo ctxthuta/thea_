@@ -215,6 +215,11 @@ function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/schedule-demo" className="text-gray-400 hover:text-white transition-colors">
+                  Schedule a Demo
+                </Link>
+              </li>
+              <li>
                 <Link href="/careers" className="text-gray-400 hover:text-white transition-colors inline-flex items-center gap-1.5">
                   <span>Careers</span>
                   <span className="font-ds-mono text-[9px] px-1 py-0.2 rounded-full bg-[#5F1F2F]/40 text-[#f3a6b7]">We&apos;re Hiring</span>
