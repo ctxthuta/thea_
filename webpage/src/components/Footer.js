@@ -3,22 +3,14 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Instagram, Linkedin, Mail, ArrowRight, Send, Heart } from 'lucide-react';
-
-function TikTokIcon({ size = 20, className = '' }) {
-  return (
-    <svg 
-      width={size} 
-      height={size} 
-      viewBox="0 0 24 24" 
-      fill="currentColor" 
-      className={className}
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
-    </svg>
-  );
-}
+import { 
+  CustomInstagram, 
+  CustomLinkedIn, 
+  CustomTikTok, 
+  CustomMail, 
+  CustomArrowRight, 
+  CustomSend 
+} from '@/components/icons/CustomIcons';
 
 function Footer() {
   const [formData, setFormData] = useState({
@@ -41,8 +33,6 @@ function Footer() {
         },
         body: JSON.stringify(formData),
       });
-
-      const result = await response.json();
 
       if (response.ok) {
         setSubmitMessage('We will reach out to you soon!');
@@ -94,7 +84,7 @@ function Footer() {
                 </span>
               </h2>
               <p className="mt-3 text-sm sm:text-base text-gray-400 font-light max-w-xl">
-                Partner with an agile, remote-first team of experts committed to building technology that moves your metrics.
+                Partner with an agile, remote-first team of engineers and architects committed to building technology that moves your operational metrics.
               </p>
             </div>
 
@@ -129,7 +119,7 @@ function Footer() {
                   disabled={isSubmitting}
                   className="w-full inline-flex items-center justify-center gap-2 rounded-full py-3 px-6 text-sm font-semibold bg-[#F1F1F0] text-[#1A1816] hover:bg-white shadow-[0_1px_2px_0_rgba(0,0,0,0.2),inset_0_1px_0_0_rgba(255,255,255,0.4)] hover:-translate-y-px hover:shadow-[0_6px_20px_-4px_rgba(241,241,240,0.3)] active:translate-y-0 transition-all disabled:opacity-50 cursor-pointer"
                 >
-                  <Send size={15} />
+                  <CustomSend size={15} />
                   <span>{isSubmitting ? 'Sending...' : 'Connect With Us'}</span>
                 </button>
 
@@ -171,7 +161,7 @@ function Footer() {
                 aria-label="LinkedIn"
                 className="h-9 w-9 rounded-xl border border-white/10 bg-white/[0.03] flex items-center justify-center text-[#F1F1F0]/70 hover:text-white hover:bg-white/[0.08] hover:border-[#5F1F2F]/60 transition-colors"
               >
-                <Linkedin size={18} />
+                <CustomLinkedIn size={17} />
               </Link>
               <Link 
                 href="https://www.tiktok.com/@theasolutions.co?_r=1&_t=ZS-980MdkL0X9J" 
@@ -180,7 +170,7 @@ function Footer() {
                 aria-label="TikTok"
                 className="h-9 w-9 rounded-xl border border-white/10 bg-white/[0.03] flex items-center justify-center text-[#F1F1F0]/70 hover:text-white hover:bg-white/[0.08] hover:border-[#5F1F2F]/60 transition-colors"
               >
-                <TikTokIcon size={18} />
+                <CustomTikTok size={17} />
               </Link>
               <Link 
                 href="https://www.instagram.com/theasolutions_?igsh=ODc3ZmFrN2tkbDYw" 
@@ -189,7 +179,7 @@ function Footer() {
                 aria-label="Instagram"
                 className="h-9 w-9 rounded-xl border border-white/10 bg-white/[0.03] flex items-center justify-center text-[#F1F1F0]/70 hover:text-white hover:bg-white/[0.08] hover:border-[#5F1F2F]/60 transition-colors"
               >
-                <Instagram size={18} />
+                <CustomInstagram size={17} />
               </Link>
             </div>
           </div>
@@ -201,7 +191,7 @@ function Footer() {
             </span>
             <ul className="space-y-2.5 text-sm">
               <li>
-                <Link href="/#about" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="/about" className="text-gray-400 hover:text-white transition-colors">
                   About Firm
                 </Link>
               </li>
@@ -211,12 +201,17 @@ function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/pricing" className="text-gray-400 hover:text-white transition-colors">
+                  Pricing &amp; Models
+                </Link>
+              </li>
+              <li>
                 <Link href="/#faqs" className="text-gray-400 hover:text-white transition-colors">
                   Frequently Asked Questions
                 </Link>
               </li>
               <li>
-                <Link href="/#contact" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="/contact" className="text-gray-400 hover:text-white transition-colors">
                   Get a Quote
                 </Link>
               </li>
@@ -236,10 +231,10 @@ function Footer() {
             </span>
             <ul className="space-y-2.5 text-sm text-gray-400 font-light">
               <li>Custom Software Development</li>
+              <li>Laboratory &amp; Inventory Systems</li>
               <li>Intelligent Process Automation</li>
-              <li>Enterprise AI &amp; ML</li>
-              <li>Cloud &amp; DevOps Engineering</li>
-              <li>Legacy Modernization</li>
+              <li>Enterprise AI &amp; ML Pipelines</li>
+              <li>Legacy Modernization &amp; Migration</li>
             </ul>
           </div>
 
@@ -253,14 +248,14 @@ function Footer() {
                 href="mailto:business@theasolutions.co" 
                 className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
               >
-                <Mail size={16} className="text-[#f3a6b7] shrink-0" />
+                <CustomMail size={16} className="text-[#f3a6b7] shrink-0" />
                 <span className="truncate">business@theasolutions.co</span>
               </a>
               <a 
                 href="mailto:sales@theasolutions.co" 
                 className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
               >
-                <Mail size={16} className="text-[#f3a6b7] shrink-0" />
+                <CustomMail size={16} className="text-[#f3a6b7] shrink-0" />
                 <span className="truncate">sales@theasolutions.co</span>
               </a>
               <p className="font-ds-mono text-xs text-gray-400 pt-2">
@@ -274,7 +269,7 @@ function Footer() {
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-ds-mono text-gray-400">
           <p>© {new Date().getFullYear()} Thea Solutions. All rights reserved.</p>
           <p className="flex items-center gap-1.5">
-            <span>Engineered with precision for SMEs worldwide</span>
+            <span>Engineered with precision for growing enterprises worldwide</span>
           </p>
         </div>
       </div>

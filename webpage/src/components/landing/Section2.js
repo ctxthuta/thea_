@@ -9,37 +9,37 @@ const services = [
     tag: 'Engineering',
     title: 'Custom Software Development',
     description:
-      'We design and build bespoke web, desktop, and mobile applications that scale seamlessly as your business transaction volume and user base expand.',
+      'We architect and build tailored web, desktop, and mobile applications engineered to handle 10x spikes in transaction throughput and concurrent users without latency degradation or system downtime.',
   },
   {
     tag: 'Operations',
     title: 'Intelligent Process Automation',
     description:
-      'We automate manual and routine operational tasks, reducing human error, eliminating bottlenecks, and freeing your team to focus on high-leverage growth.',
+      'We automate repetitive operational workflows and back-office pipelines, reducing data-entry errors by over 90% and freeing your core staff for high-value client work.',
   },
   {
     tag: 'Intelligence',
     title: 'Data Analytics & Business Intelligence',
     description:
-      'We transform fragmented business data into unified, real-time dashboards and predictive insights that guide faster, confident decisions.',
+      'We aggregate data from disparate ERPs and payment processors into unified, real-time executive dashboards that provide sub-second reporting and cash-flow visibility.',
   },
   {
     tag: 'Infrastructure',
     title: 'Cloud Infrastructure & DevOps',
     description:
-      'We architect, automate, and monitor your cloud environments on GCP and AWS so your operations stay resilient, highly available, and cost-optimized.',
+      'We architect, automate, and monitor containerized cloud environments on GCP and AWS, maintaining 99.95% uptime SLA while reducing unnecessary cloud spend.',
   },
   {
     tag: 'Modernization',
     title: 'Legacy System Modernisation',
     description:
-      'We safely re-engineer aging systems and databases, unlocking modern security, speed, and API connectivity without disrupting ongoing operations.',
+      'We refactor brittle codebases and migrate on-prem databases to modern cloud architectures, slashing query times by up to 70% and exposing documented REST/GraphQL APIs with zero cutover downtime.',
   },
   {
     tag: 'AI Integration',
     title: 'AI & Machine Learning Integration',
     description:
-      'We integrate custom LLMs, intelligent document processing, and predictive algorithms directly into your existing business workflows for tangible ROI.',
+      'We embed domain-specific LLM pipelines, automated document extraction, and predictive scoring directly into your existing business tools with strict privacy guardrails.',
   },
 ];
 

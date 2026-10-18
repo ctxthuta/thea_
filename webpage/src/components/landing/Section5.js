@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Send, HelpCircle, Sparkles, MessageSquare } from 'lucide-react';
+import { CustomMail, CustomSend, CustomHelpCircle, CustomSparkles, CustomMessageSquare } from '@/components/icons/CustomIcons';
 import {
   Accordion,
   AccordionContent,
@@ -103,7 +103,7 @@ function Section5() {
               <div className="mt-8 w-full rounded-2xl border border-white/10 bg-[#181816]/75 p-5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]">
                 <div className="flex items-center gap-3.5">
                   <div className="h-11 w-11 rounded-xl bg-[#5F1F2F]/30 text-[#f3a6b7] border border-[#5F1F2F]/50 flex items-center justify-center shrink-0">
-                    <Mail size={20} />
+                    <CustomMail size={20} />
                   </div>
                   <div className="min-w-0">
                     <span className="block font-ds-mono text-[11px] uppercase tracking-wider text-gray-400">
@@ -151,18 +151,18 @@ function Section5() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label htmlFor="quote-company" className="block font-ds-mono text-[11px] uppercase tracking-wider text-gray-300 mb-1.5">
-                        Company Name *
+                        Your Organization / Company *
                       </label>
                       <input 
                         id="quote-company"
                         className="w-full rounded-xl bg-[#121110] border border-white/10 px-3.5 py-2.5 text-sm text-[#F1F1F0] placeholder:text-gray-400 focus:outline-none focus:border-[#5F1F2F] focus:ring-2 focus:ring-[#5F1F2F]/30 transition-all" 
                         type="text" 
                         name="company"
-                        aria-label="Company Name"
+                        aria-label="Company or Organization Name"
                         required
                         value={formData.company}
                         onChange={handleChange}
-                        placeholder="Acme Corp" 
+                        placeholder="Meridian Health, Apex Logistics, etc." 
                       />
                     </div>
                     <div>
@@ -197,7 +197,7 @@ function Section5() {
                         required
                         value={formData.email}
                         onChange={handleChange}
-                        placeholder="alex@acmecorp.com" 
+                        placeholder="alex@meridianhealth.com" 
                       />
                     </div>
                     <div>
@@ -313,7 +313,7 @@ function Section5() {
                       disabled={isSubmitting}
                       className="inline-flex items-center justify-center gap-2 rounded-full py-3 px-8 text-sm font-semibold bg-[#F1F1F0] text-[#1A1816] hover:bg-white shadow-[0_1px_2px_0_rgba(0,0,0,0.2),inset_0_1px_0_0_rgba(255,255,255,0.4)] hover:-translate-y-px hover:shadow-[0_6px_20px_-4px_rgba(241,241,240,0.3)] active:translate-y-0 transition-all disabled:opacity-50 cursor-pointer"
                     >
-                      <Send size={15} />
+                      <CustomSend size={15} />
                       <span>{isSubmitting ? 'Transmitting Request...' : 'Submit Proposal Request'}</span>
                     </button>
                   </div>
@@ -337,7 +337,7 @@ function Section5() {
             {/* FAQ Header Column */}
             <div className="lg:col-span-5 flex flex-col items-start">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#5F1F2F]/40 bg-[#5F1F2F]/15 font-ds-mono text-xs uppercase tracking-wider text-[#f3a6b7] mb-4">
-                <HelpCircle size={13} className="text-[#e36a88]" />
+                <CustomHelpCircle size={13} className="text-[#e36a88]" />
                 <span>Knowledge Base · FAQ</span>
               </div>
 
@@ -354,7 +354,7 @@ function Section5() {
                   href="mailto:sales@theasolutions.co" 
                   className="font-ds-mono text-xs uppercase tracking-wider text-[#f3a6b7] hover:underline inline-flex items-center gap-1.5"
                 >
-                  <MessageSquare size={13} />
+                  <CustomMessageSquare size={13} />
                   <span>Ask a question directly</span>
                 </a>
               </div>

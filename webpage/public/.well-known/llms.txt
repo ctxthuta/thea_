@@ -2,15 +2,16 @@
 
 > Thea Solutions specializes in bespoke software development, enterprise-grade AI, and automation solutions engineered specifically for SMEs to streamline operations and scale with confidence.
 
-Thea Solutions is a technology firm that bridges the gap between complex engineering and growing businesses. We deliver production-grade web systems, bespoke software, generative AI integrations, and automated business workflows on modern cloud infrastructure.
+Thea Solutions is a technology firm that bridges the gap between complex engineering and growing businesses. We deliver production-grade web systems, bespoke software, domain-specific AI integrations, and automated business workflows on modern cloud infrastructure.
 
 ## Core Navigation & Pages
 
 - [Home](https://theasolutions.co/): Overview of Thea Solutions, core capabilities, client outcomes, and consultation intake.
-- [About Us](https://theasolutions.co/#about): Mission statement, agile delivery principles, and engineering leadership.
+- [About Us](https://theasolutions.co/about): Mission statement, engineering principles, team, and 100% IP ownership model.
 - [Services & Capabilities](https://theasolutions.co/#services): Custom software development, enterprise AI, workflow automation, and cloud modernization.
+- [Pricing & Engagement Models](https://theasolutions.co/pricing): Transparent sprint-based and dedicated pod engagement models with zero vendor lock-in.
+- [Contact & Scoping](https://theasolutions.co/contact): Direct technical consultation and project scoping with solutions architects.
 - [Frequently Asked Questions](https://theasolutions.co/#faqs): Delivery cycles, intellectual property rights, data security, and engagement models.
-- [Get a Quote](https://theasolutions.co/#contact): Scoped project inquiries and technical consultations.
 - [Careers](https://theasolutions.co/careers): Open remote-first engineering, product, and AI roles at Thea Solutions.
 - [Schedule a Demo](https://theasolutions.co/schedule-demo): Book a live technical walkthrough and discussion with our solution architects.
 
@@ -23,5 +24,6 @@ Thea Solutions is a technology firm that bridges the gap between complex enginee
 ## Contact & Inquiries
 
 - Primary Email: [business@theasolutions.co](mailto:business@theasolutions.co)
+- Sales Email: [sales@theasolutions.co](mailto:sales@theasolutions.co)
 - Website: [https://theasolutions.co](https://theasolutions.co)
 - LinkedIn: [Thea Solutions](https://www.linkedin.com/company/theasolutionss)

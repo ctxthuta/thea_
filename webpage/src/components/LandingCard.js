@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight } from 'lucide-react';
+import { CustomArrowRight } from '@/components/icons/CustomIcons';
 
 function LandingCard({ 
   title, 
@@ -46,7 +46,7 @@ function LandingCard({
       <div className="mt-6 pt-4 border-t border-white/[0.06] flex items-center justify-between">
         <span className="font-ds-mono text-xs uppercase tracking-wider text-[#f3a6b7] inline-flex items-center gap-1.5 transition-colors">
           <span>{actionText}</span>
-          <ArrowRight size={13} className="transition-transform duration-200 group-hover:translate-x-1" />
+          <CustomArrowRight size={13} className="transition-transform duration-200 group-hover:translate-x-1" />
         </span>
         <span className="size-1.5 rounded-full bg-[#5F1F2F] opacity-40 group-hover:opacity-100 group-hover:scale-125 transition-all" />
       </div>

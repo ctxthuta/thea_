@@ -26,7 +26,7 @@ export async function GET() {
       "Data analytics solutions",
       "Cloud integration"
     ],
-    valueProposition: "Thea Solutions combines cutting-edge technology with practical implementation to deliver customized technical solutions that help businesses achieve operational excellence and competitive advantage through automation and AI."
+    valueProposition: "Thea Solutions engineers bespoke distributed software architectures, domain-tuned AI models, and automated back-office workflows that deliver measurable cost reductions, zero vendor lock-in, and reliable operational scale for growing businesses."
   };
 
   return NextResponse.json(summary, {

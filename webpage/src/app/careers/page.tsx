@@ -62,7 +62,7 @@ const jobOpenings: Array<{
     team: "Engineering",
     location: "Remote / APAC",
     type: "Full-time",
-    description: "Ship dependable cross-platform mobile products with shared business logic, native-quality experiences, and seamless backend connectivity.",
+    description: "Ship dependable cross-platform mobile products with shared business logic, offline-first synchronization, sub-100ms API response handling, and native 60fps UI performance.",
     skills: ["Kotlin Multiplatform", "Flutter", "Android", "iOS", "GitLab"],
     focus: [
       "Build and maintain reusable mobile architecture and platform integrations",

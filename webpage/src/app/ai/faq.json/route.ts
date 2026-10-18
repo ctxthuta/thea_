@@ -15,7 +15,7 @@ export async function GET() {
       },
       {
         question: "How does Thea Solutions approach software development?",
-        answer: "We combine cutting-edge technology with practical implementation to deliver customized technical solutions. Our methodology includes thorough requirements analysis, agile development, rigorous testing, and continuous optimization to ensure robust, scalable software that drives operational excellence."
+        answer: "We pair production-proven open standards (Go, Next.js, PostgreSQL, GCP/AWS) with rapid 2-week agile delivery cycles. Our methodology combines deep stakeholder discovery, bi-weekly live demos, rigorous automated testing, and client IP ownership from day one."
       },
       {
         question: "What makes Thea Solutions different from other tech companies?",

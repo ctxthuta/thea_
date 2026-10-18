@@ -77,9 +77,9 @@ export function WebSiteStructuredData() {
     hasPart: [
       {
         '@type': 'WebPage',
-        '@id': 'https://theasolutions.co/#about',
+        '@id': 'https://theasolutions.co/about',
         name: 'About Us',
-        url: 'https://theasolutions.co/#about',
+        url: 'https://theasolutions.co/about',
         description: 'About Thea Solutions, our mission, and engineering philosophy.',
       },
       {
@@ -91,6 +91,13 @@ export function WebSiteStructuredData() {
       },
       {
         '@type': 'WebPage',
+        '@id': 'https://theasolutions.co/pricing',
+        name: 'Pricing & Engagement Models',
+        url: 'https://theasolutions.co/pricing',
+        description: 'Transparent milestone and sprint-based engagement models with 100% IP ownership.',
+      },
+      {
+        '@type': 'WebPage',
         '@id': 'https://theasolutions.co/careers',
         name: 'Careers',
         url: 'https://theasolutions.co/careers',
@@ -98,9 +105,9 @@ export function WebSiteStructuredData() {
       },
       {
         '@type': 'WebPage',
-        '@id': 'https://theasolutions.co/#contact',
+        '@id': 'https://theasolutions.co/contact',
         name: 'Contact Us',
-        url: 'https://theasolutions.co/#contact',
+        url: 'https://theasolutions.co/contact',
         description: 'Get in touch for custom project estimates and consultations.',
       },
       {
@@ -126,7 +133,7 @@ export function SiteNavigationStructuredData() {
         position: 1,
         name: 'About Us',
         description: 'About Thea Solutions, our mission, and engineering philosophy.',
-        url: 'https://theasolutions.co/#about',
+        url: 'https://theasolutions.co/about',
       },
       {
         '@type': 'SiteNavigationElement',
@@ -138,20 +145,27 @@ export function SiteNavigationStructuredData() {
       {
         '@type': 'SiteNavigationElement',
         position: 3,
+        name: 'Pricing',
+        description: 'Transparent engagement models with 100% client code and IP ownership.',
+        url: 'https://theasolutions.co/pricing',
+      },
+      {
+        '@type': 'SiteNavigationElement',
+        position: 4,
         name: 'Careers',
         description: 'Explore remote-first engineering and product roles at Thea Solutions.',
         url: 'https://theasolutions.co/careers',
       },
       {
         '@type': 'SiteNavigationElement',
-        position: 4,
+        position: 5,
         name: 'Contact & Quote',
         description: 'Get in touch with Thea Solutions for project consultations and quotes.',
-        url: 'https://theasolutions.co/#contact',
+        url: 'https://theasolutions.co/contact',
       },
       {
         '@type': 'SiteNavigationElement',
-        position: 5,
+        position: 6,
         name: 'FAQ',
         description: 'Frequently asked questions regarding our engineering, delivery model, and IP.',
         url: 'https://theasolutions.co/#faqs',

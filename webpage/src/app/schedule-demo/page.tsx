@@ -479,7 +479,7 @@ function ScheduleDemoContent() {
                       onChange={(e) => setEmail(e.target.value)}
                       required
                       className="w-full px-3.5 py-2.5 bg-[#121110] border border-white/10 rounded-xl text-sm text-[#F1F1F0] placeholder:text-gray-600 focus:outline-none focus:border-[#5F1F2F] focus:ring-2 focus:ring-[#5F1F2F]/30 transition-all"
-                      placeholder="jane@company.com"
+                      placeholder="jane@organization.com"
                     />
                   </div>
                 </div>
@@ -499,14 +499,14 @@ function ScheduleDemoContent() {
                   </div>
                   <div>
                     <label className="block font-ds-mono text-[11px] uppercase tracking-wider text-gray-400 mb-1.5">
-                      Company Website / Domain
+                      Organization Website / Domain
                     </label>
                     <input
                       type="text"
                       value={businessDomain}
                       onChange={(e) => setBusinessDomain(e.target.value)}
                       className="w-full px-3.5 py-2.5 bg-[#121110] border border-white/10 rounded-xl text-sm text-[#F1F1F0] placeholder:text-gray-600 focus:outline-none focus:border-[#5F1F2F] focus:ring-2 focus:ring-[#5F1F2F]/30 transition-all"
-                      placeholder="yourcompany.com"
+                      placeholder="organization.com"
                     />
                   </div>
                 </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ArrowRight, CheckCircle2, Sparkles, Send } from 'lucide-react';
+import { CustomCheckCircle, CustomSparkles, CustomSend } from '@/components/icons/CustomIcons';
 
 function Section1() {
   const [formData, setFormData] = useState({
@@ -97,15 +97,15 @@ function Section1() {
             {/* Feature Pills (TanStack DS Badges) */}
             <div className="mt-8 flex flex-wrap gap-2.5">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-ds-mono bg-white/[0.04] text-[#F1F1F0]/85 border border-white/10">
-                <CheckCircle2 size={13} className="text-[#e36a88]" />
+                <CustomCheckCircle size={13} className="text-[#e36a88]" />
                 Remote-First Elite Engineers
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-ds-mono bg-white/[0.04] text-[#F1F1F0]/85 border border-white/10">
-                <CheckCircle2 size={13} className="text-[#e36a88]" />
+                <CustomCheckCircle size={13} className="text-[#e36a88]" />
                 2-Week Agile Delivery Cycles
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-ds-mono bg-white/[0.04] text-[#F1F1F0]/85 border border-white/10">
-                <CheckCircle2 size={13} className="text-[#e36a88]" />
+                <CustomCheckCircle size={13} className="text-[#e36a88]" />
                 Full IP &amp; Code Ownership
               </span>
             </div>
@@ -119,7 +119,7 @@ function Section1() {
 
               <div className="mb-5">
                 <span className="inline-flex items-center gap-1.5 font-ds-mono text-xs uppercase tracking-wider text-[#f3a6b7]">
-                  <Sparkles size={13} className="text-[#e36a88]" />
+                  <CustomSparkles size={13} className="text-[#e36a88]" />
                   Direct Consultation
                 </span>
                 <h2 className="font-ds-display text-xl font-bold text-white mt-1">
@@ -145,7 +145,7 @@ function Section1() {
                       required
                       value={formData.email}
                       onChange={handleChange}
-                      placeholder="you@company.com" 
+                      placeholder="name@business.com" 
                     />
                   </div>
                   <div className="flex-1">
@@ -170,7 +170,7 @@ function Section1() {
                   disabled={isSubmitting}
                   className="mt-2 w-full inline-flex items-center justify-center gap-2 rounded-full py-3 px-5 text-sm font-semibold bg-[#F1F1F0] text-[#1A1816] hover:bg-white shadow-[0_1px_2px_0_rgba(0,0,0,0.2),inset_0_1px_0_0_rgba(255,255,255,0.4)] hover:-translate-y-px hover:shadow-[0_6px_20px_-4px_rgba(241,241,240,0.3)] active:translate-y-0 transition-all disabled:opacity-50 cursor-pointer"
                 >
-                  <Send size={15} />
+                  <CustomSend size={15} />
                   <span>{isSubmitting ? 'Submitting...' : 'Request Consultation'}</span>
                 </button>
 
