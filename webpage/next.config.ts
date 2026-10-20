@@ -1,6 +1,29 @@
 import type { NextConfig } from "next";
 
+const cspHeader = `
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://api-js.mixpanel.com;
+    style-src 'self' 'unsafe-inline';
+    img-src 'self' blob: data: https://live.staticflickr.com https://theasolutions.co;
+    font-src 'self' data:;
+    object-src 'none';
+    base-uri 'self';
+    form-action 'self';
+    frame-ancestors 'self';
+    connect-src 'self' https://api-js.mixpanel.com https://n8n.theasolutions.co;
+    upgrade-insecure-requests;
+`.replace(/\s{2,}/g, ' ').trim();
+
 const nextConfig: NextConfig = {
+  images: {
+    formats: ['image/avif', 'image/webp'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'live.staticflickr.com',
+      },
+    ],
+  },
   async redirects() {
     return [
       {
@@ -40,6 +63,10 @@ const nextConfig: NextConfig = {
       {
         source: '/(.*)',
         headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: cspHeader,
+          },
           {
             key: 'X-DNS-Prefetch-Control',
             value: 'on',

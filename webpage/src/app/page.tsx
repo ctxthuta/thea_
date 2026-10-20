@@ -1,12 +1,13 @@
-'use client';
 import React from 'react';
+import dynamic from 'next/dynamic';
 import Navbar from '@/components/Navbar';
 import Section1 from '@/components/landing/Section1';
-import Section2 from '@/components/landing/Section2';
-import Section3 from '@/components/landing/Section3';
-import Section4 from '@/components/landing/Section4';
-import Section5 from '@/components/landing/Section5';
-import Footer from '@/components/Footer';
+
+const Section2 = dynamic(() => import('@/components/landing/Section2'));
+const Section3 = dynamic(() => import('@/components/landing/Section3'));
+const Section4 = dynamic(() => import('@/components/landing/Section4'));
+const Section5 = dynamic(() => import('@/components/landing/Section5'));
+const Footer = dynamic(() => import('@/components/Footer'));
 
 export default function Home() {
   return (

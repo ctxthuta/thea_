@@ -57,6 +57,8 @@ function Section1() {
           loop 
           muted 
           playsInline
+          preload="none"
+          poster="/assets/images/LandingBG-Placeholder.jpg"
           aria-hidden="true"
         >
           <source src="/assets/videos/LandingBG.webm" type="video/webm" />

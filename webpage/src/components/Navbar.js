@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { 
   CustomLinkedIn, 
   CustomInstagram, 
@@ -20,11 +21,12 @@ function Navbar() {
         <div className="h-[60px] px-4 sm:px-6 flex items-center justify-between rounded-2xl bg-[#1A1816]/85 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_0_rgba(255,255,255,0.06)]">
           {/* Brand Logo */}
           <Link href="/" className="flex items-center gap-2.5 group shrink-0" aria-label="Thea Solutions Home">
-            <img 
+            <Image 
               src="/dark_tranStacked_logo.png" 
               alt="Thea Solutions" 
               width={200}
               height={50}
+              priority
               className="h-9 sm:h-10 w-auto object-contain transition-transform group-hover:scale-[1.02]" 
             />
           </Link>

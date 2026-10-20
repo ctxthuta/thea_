@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { 
   CustomInstagram, 
@@ -142,7 +143,7 @@ function Footer() {
           {/* Brand Info */}
           <div className="lg:col-span-2 flex flex-col items-start pr-6">
             <Link href="/" className="mb-4 inline-block">
-              <img 
+              <Image 
                 src="/dark_tranStacked_logo.png" 
                 alt="Thea Solutions" 
                 width={200}

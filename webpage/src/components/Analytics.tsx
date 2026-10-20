@@ -12,6 +12,9 @@ function initMixpanel() {
   mixpanel.init(MIXPANEL_TOKEN, {
     autocapture: false,
     persistence: "localStorage",
+    cross_subdomain_cookie: false,
+    secure_cookie: true,
+    cross_site_cookie: false,
     ignore_dnt: false,
     track_pageview: false,
   });

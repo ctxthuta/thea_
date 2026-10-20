@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { CustomWorkflow, CustomShield, CustomMetrics, CustomCheck } from '@/components/icons/CustomIcons';
 
@@ -196,9 +197,11 @@ function Section4() {
             <div className="lg:col-span-5 relative order-2 lg:order-1">
               <div className="relative rounded-2xl border border-white/10 bg-[#141312] p-2.5 sm:p-3 shadow-2xl overflow-hidden">
                 <div className="relative aspect-[4/3] rounded-xl overflow-hidden">
-                  <img 
+                  <Image 
                     src="/assets/images/section4.jpg" 
                     alt="Strategic Client Partnership & Handshake Agreement" 
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 40vw"
                     className="w-full h-full object-cover contrast-110"
                   />
                   {/* Subtle dark vignette matching site theme */}
