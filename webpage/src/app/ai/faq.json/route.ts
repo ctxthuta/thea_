@@ -15,7 +15,7 @@ export async function GET() {
       },
       {
         question: "How does Thea Solutions approach software development?",
-        answer: "We pair production-proven open standards (Go, Next.js, PostgreSQL, GCP/AWS) with rapid 2-week agile delivery cycles. Our methodology combines deep stakeholder discovery, bi-weekly live demos, rigorous automated testing, and client IP ownership from day one."
+        answer: "We pair production-proven open standards (Go, Next.js, PostgreSQL, GCP/AWS) with rapid 2-week agile delivery cycles. Our methodology combines deep stakeholder discovery, bi-weekly live demos, rigorous automated testing, and dedicated ongoing SLA support."
       },
       {
         question: "What makes Thea Solutions different from other tech companies?",

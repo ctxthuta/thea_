@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   description: 'Learn how Thea Solutions engineers bespoke software systems, workflow automation, and enterprise AI tailored specifically for growing small and mid-sized businesses.',
   openGraph: {
     title: 'About Thea Solutions | Bespoke Software & Enterprise AI',
-    description: 'Our engineering philosophy, IP ownership principles, and remote-first team committed to SME operational scale.',
+    description: 'Our engineering philosophy, delivery standards, and remote-first team committed to SME operational scale.',
     url: 'https://theasolutions.co/about',
     siteName: 'Thea Solutions',
   },
@@ -66,7 +66,7 @@ export default function AboutPage() {
                 <div className="text-gray-400">Headquarters: Remote-First (Operating Globally)</div>
                 <div className="text-gray-400">Primary Stack: Go, TypeScript, Next.js, Python, PostgreSQL</div>
                 <div className="text-gray-400">Delivery Cadence: 2-Week Iterative Sprints</div>
-                <div className="text-gray-400">Client IP: 100% Client-Owned Upon Handover</div>
+                <div className="text-gray-400">Support Model: Dedicated SLA &amp; Proactive Maintenance</div>
               </div>
             </div>
 
@@ -78,7 +78,7 @@ export default function AboutPage() {
                 Off-the-shelf platforms promise a fix, but they charge steep per-seat monthly subscription taxes, hide your data behind proprietary silos, and demand that your team abandon their proven workflows to fit rigid software constraints.
               </p>
               <p>
-                At <strong className="text-white font-medium">Thea Solutions</strong>, we engineer tailored software, custom AI integrations, and automated pipelines directly aligned with how your organization actually operates. We eliminate back-office friction, guarantee complete code ownership, and deliver systems that your team genuinely enjoys using.
+                At <strong className="text-white font-medium">Thea Solutions</strong>, we engineer tailored software, custom AI integrations, and automated pipelines directly aligned with how your organization actually operates. We eliminate back-office friction, provide dependable long-term support, and deliver systems that your team genuinely enjoys using.
               </p>
             </div>
 
@@ -107,14 +107,14 @@ export default function AboutPage() {
                   <CustomShield size={20} />
                 </div>
                 <h3 className="font-ds-display text-xl font-bold text-white mb-2">
-                  1. Zero Vendor Lock-In &amp; 100% IP Transfer
+                  1. Production-Grade Security &amp; Reliability
                 </h3>
                 <p className="text-sm text-gray-400 font-light leading-relaxed">
-                  Every repository, schema migration, cloud container recipe, and infrastructure config belongs entirely to you. You never pay licensing rent on your own core business systems.
+                  Every system we engineer is built with hardened cloud infrastructure, automated backups, and strict access governance so your mission-critical operations run without interruption.
                 </p>
               </div>
               <div className="mt-6 pt-4 border-t border-white/[0.08] text-xs font-ds-mono text-[#f3a6b7]">
-                Client-Owned Assets from Sprint One
+                99.95% Uptime &amp; SLA Backed
               </div>
             </div>
 

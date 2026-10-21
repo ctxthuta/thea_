@@ -183,7 +183,7 @@ function Section4() {
           </div>
         </motion.div>
 
-        {/* Strategic Partnership, Code Ownership & Ongoing SLA Retainers */}
+        {/* Strategic Partnership, Managed Operations & Ongoing SLA Retainers */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -218,25 +218,25 @@ function Section4() {
                     </span>
                   </div>
                   <p className="font-ds-display text-xs sm:text-sm font-semibold text-white leading-snug">
-                    Complete code ownership transferred to you, backed by dedicated SLA maintenance retainers.
+                    Proactive operational management backed by dedicated SLA maintenance retainers.
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* Right Column: Clear Explanations of Ownership, SLA Support, and Scalability */}
+            {/* Right Column: Clear Explanations of Managed Operations, SLA Support, and Scalability */}
             <div className="lg:col-span-7 flex flex-col items-start order-1 lg:order-2">
               <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-[#5F1F2F]/30 text-[#f3a6b7] border border-[#5F1F2F]/50 font-ds-mono text-xs uppercase tracking-wider mb-4">
                 <CustomShield size={14} className="text-[#e36a88]" />
-                <span>Strategic Partnership · Ownership &amp; SLA Retainers</span>
+                <span>Strategic Partnership · Managed Operations &amp; SLA Retainers</span>
               </div>
 
               <h3 className="font-ds-display text-2xl sm:text-3xl font-bold text-white tracking-tight leading-snug">
-                100% Client Code Ownership with Dedicated Ongoing SLA Support
+                Dedicated Ongoing SLA Support &amp; Proactive System Management
               </h3>
 
               <p className="mt-3 text-sm sm:text-base text-gray-300 font-light leading-relaxed">
-                We believe your operational software is a strategic asset that belongs exclusively to your business. You receive full intellectual property ownership of your codebase, while retaining the security of guaranteed Service Level Agreements (SLAs) for ongoing maintenance, uptime monitoring, and proactive support.
+                We believe your operational software should run with effortless reliability as your business grows. We partner with your team for the long haul—providing guaranteed Service Level Agreements (SLAs), continuous performance tuning, uptime monitoring, and proactive technical support.
               </p>
 
               {/* 3 Value Rows */}
@@ -247,10 +247,10 @@ function Section4() {
                   </div>
                   <div>
                     <h4 className="font-ds-display text-sm font-semibold text-white">
-                      100% Code &amp; IP Ownership
+                      End-to-End Managed Infrastructure &amp; Updates
                     </h4>
                     <p className="text-xs text-gray-400 mt-0.5 leading-relaxed">
-                      You own the full copyright to all source code, database architectures, and deployment configurations. Zero recurring per-seat SaaS license fees or vendor lock-in traps.
+                      We handle cloud provisioning, database backups, security patches, and seamless feature rollouts so your team never worries about technical maintenance.
                     </p>
                   </div>
                 </div>

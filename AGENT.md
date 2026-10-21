@@ -1,6 +1,6 @@
 # AGENT.md — Thea Solutions Architecture & Engineering Handbook
 
-> **Thea Solutions** is a premier technology and engineering firm that bridges the gap between complex technology and ambitious growing businesses. We architect and deliver bespoke software systems, enterprise-grade AI integrations, and intelligent process automations with 100% IP ownership and zero vendor lock-in.
+> **Thea Solutions** is a premier technology and engineering firm that bridges the gap between complex technology and ambitious growing businesses. We architect and deliver bespoke software systems, enterprise-grade AI integrations, and intelligent process automations with predictable milestones and dedicated SLA support.
 
 ---
 
@@ -12,7 +12,7 @@
 - **Engagement Philosophy**:
   - **Remote-First Elite Engineering**: Agile pod teams with deep domain discipline.
   - **2-Week Agile Delivery Cycles**: Bi-weekly working demo check-ins with zero hidden surprises.
-  - **100% IP & Code Ownership**: Clients retain full intellectual property and code repository ownership from day one.
+  - **Dedicated Ongoing SLA Support**: Proactive monitoring, maintenance, and continuous system reliability.
   - **Predictable Milestones**: Fixed-scope discovery phases transitioning into transparent retainers or sprint pods.
 
 ---

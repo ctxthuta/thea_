@@ -14,10 +14,10 @@ import {
 
 export const metadata: Metadata = {
   title: 'Pricing & Engagement Models | Thea Solutions',
-  description: 'Transparent, milestone-based pricing models for bespoke software, workflow automation, and enterprise AI engineering. Zero vendor lock-in, 100% client code ownership.',
+  description: 'Transparent, milestone-based pricing models for bespoke software, workflow automation, and enterprise AI engineering. Predictable delivery and dedicated SLA support.',
   openGraph: {
     title: 'Pricing & Engagement Models | Thea Solutions',
-    description: 'Transparent software engineering pricing. 100% IP ownership, 2-week agile sprints, zero perpetual seat licensing.',
+    description: 'Transparent software engineering pricing. 2-week agile sprints, predictable milestones, and dedicated SLA support.',
     url: 'https://theasolutions.co/pricing',
     siteName: 'Thea Solutions',
   },
@@ -34,7 +34,7 @@ const engagementModels = [
       'End-to-end engineering in 2-week focused sprint blocks',
       'Automated data validation and document extraction pipelines',
       'Complete cloud deployment on your GCP, AWS, or VPS environment',
-      '100% source code repository and IP transfer',
+      'Comprehensive user training and operational documentation',
       '30 days of post-launch bug warranty and operational monitoring'
     ],
     actionText: 'Scope a Targeted Sprint',
@@ -94,7 +94,7 @@ export default function PricingPage() {
           </h1>
 
           <p className="mt-6 text-lg text-gray-300 font-light leading-relaxed">
-            We don&apos;t charge per-user monthly SaaS fees or hold your software hostage. You pay for engineering velocity and complete intellectual property ownership.
+            Transparent milestone and retainer models tailored to your operational goals—so you invest directly in engineering velocity, measurable outcomes, and dependable long-term support.
           </p>
         </div>
       </section>
@@ -188,10 +188,10 @@ export default function PricingPage() {
                 <CustomShield size={18} />
               </div>
               <h3 className="font-ds-display text-lg font-bold text-white mb-2">
-                100% Code &amp; IP Ownership
+                Enterprise Security &amp; Data Privacy
               </h3>
               <p className="text-xs sm:text-sm text-gray-400 font-light leading-relaxed">
-                You receive full copyright and title to all repositories, documentation, and assets upon milestone completion.
+                Strict role-based access controls, encrypted data pipelines, and mutual NDA protection from day one.
               </p>
             </div>
 
@@ -241,7 +241,7 @@ export default function PricingPage() {
                 How are milestone payments structured?
               </h3>
               <p className="text-sm text-gray-400 font-light leading-relaxed">
-                For fixed-scope sprints, payments are broken into clear milestones: typically 30% upon architecture kickoff, 30% upon midpoint prototype demo, and 40% upon final production deployment and code transfer. Retainers are billed monthly in advance.
+                For fixed-scope sprints, payments are broken into clear milestones: typically 30% upon architecture kickoff, 30% upon midpoint prototype demo, and 40% upon final production deployment and operational sign-off. Retainers are billed monthly in advance.
               </p>
             </div>
 

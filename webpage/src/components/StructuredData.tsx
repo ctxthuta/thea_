@@ -94,7 +94,7 @@ export function WebSiteStructuredData() {
         '@id': 'https://theasolutions.co/pricing',
         name: 'Pricing & Engagement Models',
         url: 'https://theasolutions.co/pricing',
-        description: 'Transparent milestone and sprint-based engagement models with 100% IP ownership.',
+        description: 'Transparent milestone and sprint-based engagement models with dedicated SLA support.',
       },
       {
         '@type': 'WebPage',
@@ -115,7 +115,7 @@ export function WebSiteStructuredData() {
         '@id': 'https://theasolutions.co/#faqs',
         name: 'Frequently Asked Questions',
         url: 'https://theasolutions.co/#faqs',
-        description: 'Answers to common questions about our delivery, pricing, and IP.',
+        description: 'Answers to common questions about our delivery, pricing, and support.',
       },
     ],
   };
@@ -146,7 +146,7 @@ export function SiteNavigationStructuredData() {
         '@type': 'SiteNavigationElement',
         position: 3,
         name: 'Pricing',
-        description: 'Transparent engagement models with 100% client code and IP ownership.',
+        description: 'Transparent milestone and retainer engagement models with dedicated SLA support.',
         url: 'https://theasolutions.co/pricing',
       },
       {
@@ -167,7 +167,7 @@ export function SiteNavigationStructuredData() {
         '@type': 'SiteNavigationElement',
         position: 6,
         name: 'FAQ',
-        description: 'Frequently asked questions regarding our engineering, delivery model, and IP.',
+        description: 'Frequently asked questions regarding our engineering, delivery model, and support.',
         url: 'https://theasolutions.co/#faqs',
       },
     ],

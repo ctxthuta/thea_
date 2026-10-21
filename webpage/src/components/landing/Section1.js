@@ -119,7 +119,7 @@ function Section1() {
               </span>
               <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full text-[11px] sm:text-xs font-ds-mono bg-white/[0.04] text-[#F1F1F0]/85 border border-white/10 max-w-full">
                 <CustomCheckCircle size={13} className="text-[#e36a88] shrink-0" />
-                <span>Full IP &amp; Code Ownership</span>
+                <span>Dedicated Ongoing SLA Support</span>
               </span>
             </div>
           </div>
@@ -222,9 +222,9 @@ function Section1() {
               <p className="text-xs text-gray-400 mt-0.5">High-ROI workflows built for scale</p>
             </div>
             <div className="flex flex-col">
-              <span className="font-ds-display text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Zero</span>
-              <span className="font-ds-mono text-xs uppercase tracking-wider text-[#f3a6b7] mt-1">Vendor Lock-In</span>
-              <p className="text-xs text-gray-400 mt-0.5">100% client-owned code &amp; IP</p>
+              <span className="font-ds-display text-2xl sm:text-3xl font-extrabold text-white tracking-tight">99.95%</span>
+              <span className="font-ds-mono text-xs uppercase tracking-wider text-[#f3a6b7] mt-1">Uptime &amp; SLA Support</span>
+              <p className="text-xs text-gray-400 mt-0.5">Dedicated monitoring &amp; maintenance</p>
             </div>
           </div>
         </div>

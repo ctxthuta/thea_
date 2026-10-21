@@ -7,11 +7,11 @@ Thea Solutions is a technology firm that bridges the gap between complex enginee
 ## Core Navigation & Pages
 
 - [Home](https://theasolutions.co/): Overview of Thea Solutions, core capabilities, client outcomes, and consultation intake.
-- [About Us](https://theasolutions.co/about): Mission statement, engineering principles, team, and 100% IP ownership model.
+- [About Us](https://theasolutions.co/about): Mission statement, engineering principles, team, and delivery standards.
 - [Services & Capabilities](https://theasolutions.co/#services): Custom software development, enterprise AI, workflow automation, and cloud modernization.
-- [Pricing & Engagement Models](https://theasolutions.co/pricing): Transparent sprint-based and dedicated pod engagement models with zero vendor lock-in.
+- [Pricing & Engagement Models](https://theasolutions.co/pricing): Transparent sprint-based and dedicated pod engagement models with predictable milestones.
 - [Contact & Scoping](https://theasolutions.co/contact): Direct technical consultation and project scoping with solutions architects.
-- [Frequently Asked Questions](https://theasolutions.co/#faqs): Delivery cycles, intellectual property rights, data security, and engagement models.
+- [Frequently Asked Questions](https://theasolutions.co/#faqs): Delivery cycles, system reliability, data security, and engagement models.
 - [Careers](https://theasolutions.co/careers): Open remote-first engineering, product, and AI roles at Thea Solutions.
 - [Schedule a Demo](https://theasolutions.co/schedule-demo): Book a live technical walkthrough and discussion with our solution architects.
 
