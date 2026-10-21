@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { productCategories, allProducts, type ProductCategory } from '@/lib/productData';
 import { CustomArrowRight, CustomChevronDown, CustomSparkles } from '@/components/icons/CustomIcons';
-import mixpanel from 'mixpanel-browser';
+import { trackEvent } from '@/components/Analytics';
 
 export default function ProductsSection() {
   const [expandedCategory, setExpandedCategory] = useState<ProductCategory | null>(null);
@@ -14,7 +14,7 @@ export default function ProductsSection() {
     setExpandedCategory(newExpanded);
     
     try {
-      mixpanel.track('Product Category Expanded', {
+      trackEvent('Product Category Expanded', {
         category: category,
         category_name: productCategories[category].name,
         expanded: newExpanded !== null,
@@ -26,7 +26,7 @@ export default function ProductsSection() {
 
   const handleDemoClick = (product: any) => {
     try {
-      mixpanel.track('Demo Request Clicked', {
+      trackEvent('Demo Request Clicked', {
         product_id: product.id,
         product_name: product.name,
         product_category: product.category,

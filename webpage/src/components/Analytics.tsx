@@ -2,23 +2,58 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
-import mixpanel from "mixpanel-browser";
 
 const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN || "";
-let initialized = false;
+type MixpanelInstance = typeof import("mixpanel-browser").default;
+let mpInstance: MixpanelInstance | null = null;
+const trackQueue: Array<{ event: string; properties: Record<string, unknown> }> = [];
+let isImporting = false;
 
-function initMixpanel() {
-  if (initialized || typeof window === "undefined") return;
-  mixpanel.init(MIXPANEL_TOKEN, {
-    autocapture: false,
-    persistence: "localStorage",
-    cross_subdomain_cookie: false,
-    secure_cookie: true,
-    cross_site_cookie: false,
-    ignore_dnt: false,
-    track_pageview: false,
-  });
-  initialized = true;
+function loadMixpanel(callback?: (mp: MixpanelInstance) => void) {
+  if (typeof window === "undefined" || !MIXPANEL_TOKEN) return;
+  if (mpInstance) {
+    callback?.(mpInstance);
+    return;
+  }
+  if (!isImporting) {
+    isImporting = true;
+    import("mixpanel-browser")
+      .then((mod) => {
+        const mp = (mod.default || mod) as MixpanelInstance;
+        mp.init(MIXPANEL_TOKEN, {
+          autocapture: false,
+          persistence: "localStorage",
+          cross_subdomain_cookie: false,
+          secure_cookie: true,
+          cross_site_cookie: false,
+          ignore_dnt: false,
+          track_pageview: false,
+        });
+        mpInstance = mp;
+        while (trackQueue.length > 0) {
+          const item = trackQueue.shift();
+          if (item) mp.track(item.event, item.properties);
+        }
+        callback?.(mp);
+      })
+      .catch((err) => {
+        console.error("Mixpanel dynamic load error:", err);
+      })
+      .finally(() => {
+        isImporting = false;
+      });
+  }
+}
+
+function safeTrack(event: string, properties: Record<string, unknown> = {}) {
+  if (typeof window === "undefined") return;
+  const merged = { ...pageProperties(), ...properties };
+  if (mpInstance) {
+    mpInstance.track(event, merged);
+  } else {
+    trackQueue.push({ event, properties: merged });
+    loadMixpanel();
+  }
 }
 
 function pageProperties() {
@@ -69,9 +104,7 @@ function elementProperties(element: HTMLElement) {
 }
 
 export function trackEvent(event: string, properties: Record<string, unknown> = {}) {
-  if (typeof window === "undefined") return;
-  initMixpanel();
-  mixpanel.track(event, { ...pageProperties(), ...properties });
+  safeTrack(event, properties);
 }
 
 export default function Analytics() {
@@ -80,29 +113,36 @@ export default function Analytics() {
   const lastPage = useRef<string | null>(null);
 
   useEffect(() => {
-    initMixpanel();
+    // Schedule mixpanel load during idle time
+    if ("requestIdleCallback" in window) {
+      window.requestIdleCallback(() => loadMixpanel());
+    } else {
+      setTimeout(() => loadMixpanel(), 1500);
+    }
+  }, []);
+
+  useEffect(() => {
     const pageKey = `${pathname}?${searchParams.toString()}${window.location.hash}`;
     if (lastPage.current === pageKey) return;
     lastPage.current = pageKey;
-    mixpanel.track("SV", { ...pageProperties(), event_description: "Site visit / page view" });
+    safeTrack("SV", { event_description: "Site visit / page view" });
   }, [pathname, searchParams]);
 
   useEffect(() => {
     const trackHashNavigation = () => {
-      mixpanel.track("SV", { ...pageProperties(), event_description: "Site visit / page view", navigation_type: "hash" });
+      safeTrack("SV", { event_description: "Site visit / page view", navigation_type: "hash" });
     };
     const trackClick = (event: MouseEvent) => {
       const interactive = (event.target as Element | null)?.closest(
         "button, a, [role='button'], input[type='button'], input[type='submit']",
       ) as HTMLElement | null;
       if (!interactive) return;
-      mixpanel.track("BTC", { ...elementProperties(interactive), event_description: "Button or link click" });
+      safeTrack("BTC", { ...elementProperties(interactive), event_description: "Button or link click" });
     };
     const trackSubmit = (event: SubmitEvent) => {
       const form = event.target as HTMLFormElement;
       const fields = Array.from(form.elements).map((field) => (field as HTMLInputElement).name).filter(Boolean);
-      mixpanel.track("Form Submitted", {
-        ...pageProperties(),
+      safeTrack("Form Submitted", {
         form_id: form.id || undefined,
         form_section: form.closest("[id]")?.id || undefined,
         form_type: fields.includes("projectDescription") ? "quote_request" : "contact_request",
@@ -117,8 +157,7 @@ export default function Analytics() {
       try {
         const response = await originalFetch(...args);
         if (trackedForm) {
-          mixpanel.track(response.ok ? "Form Submission Succeeded" : "Form Submission Failed", {
-            ...pageProperties(),
+          safeTrack(response.ok ? "Form Submission Succeeded" : "Form Submission Failed", {
             form_type: requestUrl.includes("/api/quote") ? "quote_request" : "contact_request",
             response_status: response.status,
           });
@@ -126,8 +165,7 @@ export default function Analytics() {
         return response;
       } catch (error) {
         if (trackedForm) {
-          mixpanel.track("Form Submission Failed", {
-            ...pageProperties(),
+          safeTrack("Form Submission Failed", {
             form_type: requestUrl.includes("/api/quote") ? "quote_request" : "contact_request",
             failure_type: "network_error",
           });
@@ -143,7 +181,7 @@ export default function Analytics() {
       [25, 50, 75, 90, 100].forEach((depth) => {
         if (percentage >= depth && !reached.has(depth)) {
           reached.add(depth);
-          mixpanel.track("Scroll Depth Reached", { ...pageProperties(), scroll_depth_percent: depth });
+          safeTrack("Scroll Depth Reached", { scroll_depth_percent: depth });
         }
       });
     };
@@ -153,8 +191,7 @@ export default function Analytics() {
         if (!entry.isIntersecting || visibleSections.has(entry.target)) return;
         visibleSections.add(entry.target);
         const element = entry.target as HTMLElement;
-        mixpanel.track("Section Viewed", {
-          ...pageProperties(),
+        safeTrack("Section Viewed", {
           section_id: element.id,
           section_heading: cleanText(element.querySelector("h1, h2, h3")?.textContent),
         });

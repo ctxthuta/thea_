@@ -1,15 +1,24 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CustomCheckCircle, CustomSparkles, CustomSend } from '@/components/icons/CustomIcons';
 
 function Section1() {
+  const [loadVideo, setLoadVideo] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     phone: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
+
+  useEffect(() => {
+    // Defer loading heavy 5MB background video until after initial render & hydration
+    const timer = setTimeout(() => {
+      setLoadVideo(true);
+    }, 1200);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -61,7 +70,9 @@ function Section1() {
           poster="/assets/images/LandingBG-Placeholder.webp"
           aria-hidden="true"
         >
-          <source src="/assets/videos/LandingBG.webm" type="video/webm" />
+          {loadVideo && (
+            <source src="/assets/videos/LandingBG.webm" type="video/webm" />
+          )}
           <track kind="captions" src="/assets/captions.vtt" srcLang="en" label="Ambient background video" default />
         </video>
         {/* Subtle Brand Ambient Glows */}

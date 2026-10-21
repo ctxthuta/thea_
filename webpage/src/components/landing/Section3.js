@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Compass,
   Layers,
@@ -14,7 +14,6 @@ import {
   Clock,
   Sparkles,
   Workflow,
-  ChevronDown,
   ArrowRight,
 } from 'lucide-react';
 import { CustomArrowRight } from '@/components/icons/CustomIcons';
@@ -120,258 +119,228 @@ const phases = [
 
 function Section3() {
   const [activePhaseIndex, setActivePhaseIndex] = useState(0);
-  const containerRef = useRef(null);
 
-  // Scroll tracking across the pinned desktop section
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end end'],
-  });
-
-  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
-    // Slices 0.0 -> 1.0 into 6 discrete phase steps
-    const index = Math.min(Math.floor(latest * phases.length), phases.length - 1);
-    setActivePhaseIndex(index);
-  });
-
-  // Smooth jump to specific phase on click
-  const scrollToPhase = (targetIndex) => {
-    if (!containerRef.current) return;
-    const container = containerRef.current;
-    const containerTop = container.getBoundingClientRect().top + window.scrollY;
-    const scrollableDistance = container.offsetHeight - window.innerHeight;
-    const targetScroll = containerTop + (targetIndex / (phases.length - 1)) * scrollableDistance;
-
-    window.scrollTo({
-      top: targetScroll,
-      behavior: 'smooth',
-    });
+  const goToNextPhase = () => {
+    setActivePhaseIndex((prev) => (prev + 1) % phases.length);
   };
 
   const activePhase = phases[activePhaseIndex];
   const ActiveIcon = activePhase.icon;
 
   return (
-    <section id="methodology" className="relative w-full overflow-hidden bg-[#181816] border-y border-white/[0.06]">
+    <section id="methodology" className="relative w-full overflow-hidden bg-[#181816] border-y border-white/[0.06] py-16 lg:py-24">
       {/* Background ambient lighting */}
       <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] bg-[#5F1F2F]/15 rounded-full blur-[240px] pointer-events-none -z-10" />
       <div className="absolute bottom-1/4 right-1/4 translate-x-1/3 translate-y-1/3 w-[600px] h-[600px] bg-[#8E2E46]/10 rounded-full blur-[260px] pointer-events-none -z-10" />
 
       {/* =========================================================================
-          DESKTOP VIEW (lg+): SCROLL-DRIVEN STICKY STORYTELLING
-          Clean, business-friendly delivery process without intrusive lines across text.
+          DESKTOP VIEW (lg+): INTERACTIVE MILESTONE SHOWCASE
+          Seamless tabbed navigation with zero scroll-trapping or jank.
          ========================================================================= */}
-      <div ref={containerRef} className="hidden lg:block relative h-[350vh]">
-        <div className="sticky top-0 h-screen w-full flex flex-col justify-between pt-28 xl:pt-32 pb-6 px-8 xl:px-12 max-w-7xl mx-auto overflow-hidden">
-          
-          {/* Header & Section Title (positioned below fixed navbar) */}
+      <div className="hidden lg:block max-w-7xl mx-auto px-8 xl:px-12">
+        {/* Header & Section Title */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#5F1F2F]/40 bg-[#5F1F2F]/15 font-ds-mono text-xs uppercase tracking-wider text-[#f3a6b7]">
-                <span className="size-1.5 rounded-full bg-[#e36a88] animate-pulse" />
-                <span>Our Delivery Process · Predictable Milestones</span>
-              </div>
-
-              {/* High-visibility phase counter */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-white/10 bg-[#1A1816]/90 font-ds-mono text-xs text-gray-300 shadow-md">
-                <span className="size-1.5 rounded-full bg-[#e36a88]" />
-                <span>Phase <strong className="text-white font-bold">{activePhase.step}</strong> of 06</span>
-              </div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#5F1F2F]/40 bg-[#5F1F2F]/15 font-ds-mono text-xs uppercase tracking-wider text-[#f3a6b7] mb-3">
+              <span className="size-1.5 rounded-full bg-[#e36a88] animate-pulse" />
+              <span>Our Delivery Process · Predictable Milestones</span>
             </div>
-
-            <h2 className="font-ds-display text-2xl xl:text-3xl font-bold tracking-tight text-white leading-tight">
+            <h2 className="font-ds-display text-3xl xl:text-4xl font-bold tracking-tight text-white leading-tight">
               A proven, predictable path from vision to production
             </h2>
+            <p className="mt-2 text-sm text-gray-400 font-light max-w-2xl">
+              Select any milestone below to review the timeline, business guarantees, and verified acceptance criteria.
+            </p>
           </div>
 
-          {/* Clean Step Navigation Strip (No lines slicing across cards) */}
-          <div className="my-3 p-1.5 rounded-2xl bg-[#1A1816]/90 border border-white/10 backdrop-blur-xl shadow-lg">
-            <div className="grid grid-cols-6 gap-2">
-              {phases.map((item, idx) => {
-                const Icon = item.icon;
-                const isActive = activePhaseIndex === idx;
-                const isPassed = activePhaseIndex > idx;
+          {/* High-visibility phase counter */}
+          <div className="flex items-center gap-3 shrink-0">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/10 bg-[#1A1816]/90 font-ds-mono text-xs text-gray-300 shadow-md">
+              <span className="size-1.5 rounded-full bg-[#e36a88]" />
+              <span>Milestone <strong className="text-white font-bold">{activePhase.step}</strong> of 06</span>
+            </div>
+          </div>
+        </div>
 
-                return (
-                  <button
-                    key={item.step}
-                    type="button"
-                    onClick={() => scrollToPhase(idx)}
-                    className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-left transition-all duration-300 ${
+        {/* Clean Step Navigation Strip */}
+        <div className="mb-6 p-1.5 rounded-2xl bg-[#1A1816]/90 border border-white/10 backdrop-blur-xl shadow-lg">
+          <div className="grid grid-cols-6 gap-2">
+            {phases.map((item, idx) => {
+              const isActive = activePhaseIndex === idx;
+              const isPassed = activePhaseIndex > idx;
+
+              return (
+                <button
+                  key={item.step}
+                  type="button"
+                  onClick={() => setActivePhaseIndex(idx)}
+                  className={`flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-left transition-all duration-300 cursor-pointer ${
+                    isActive
+                      ? 'bg-[#5F1F2F] text-white shadow-[0_0_18px_rgba(227,106,136,0.4)] ring-1 ring-[#e36a88]'
+                      : isPassed
+                      ? 'bg-white/[0.04] text-gray-300 hover:bg-white/[0.08] hover:text-white'
+                      : 'bg-transparent text-gray-400 hover:bg-white/[0.03] hover:text-gray-300'
+                  }`}
+                >
+                  <div
+                    className={`size-6 rounded-lg flex items-center justify-center font-ds-mono text-xs font-bold shrink-0 ${
                       isActive
-                        ? 'bg-[#5F1F2F] text-white shadow-[0_0_18px_rgba(227,106,136,0.4)] ring-1 ring-[#e36a88]'
+                        ? 'bg-white text-[#181816]'
                         : isPassed
-                        ? 'bg-white/[0.04] text-gray-300 hover:bg-white/[0.08] hover:text-white'
-                        : 'bg-transparent text-gray-400 hover:bg-white/[0.03] hover:text-gray-300'
+                        ? 'bg-[#e36a88]/20 text-[#f3a6b7]'
+                        : 'bg-white/[0.05] text-gray-400'
                     }`}
                   >
-                    <div
-                      className={`size-6 rounded-lg flex items-center justify-center font-ds-mono text-xs font-bold shrink-0 ${
-                        isActive
-                          ? 'bg-white text-[#181816]'
-                          : isPassed
-                          ? 'bg-[#e36a88]/20 text-[#f3a6b7]'
-                          : 'bg-white/[0.05] text-gray-400'
-                      }`}
-                    >
-                      {item.step}
+                    {item.step}
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-xs font-ds-display font-bold truncate">
+                      {item.tag}
                     </div>
-                    <div className="min-w-0">
-                      <div className="text-xs font-ds-display font-bold truncate">
-                        {item.tag}
-                      </div>
-                      <div className="text-[10px] font-ds-mono opacity-70 truncate">
-                        {item.timeframe}
-                      </div>
+                    <div className="text-[10px] font-ds-mono opacity-70 truncate">
+                      {item.timeframe}
                     </div>
-                  </button>
-                );
-              })}
-            </div>
+                  </div>
+                </button>
+              );
+            })}
           </div>
+        </div>
 
-          {/* Active Phase Spotlight Card */}
-          <div className="my-auto">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activePhase.step}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.35 }}
-                className="rounded-3xl border border-[#5F1F2F]/60 bg-gradient-to-b from-[#1F191B] to-[#181816] p-6 xl:p-8 backdrop-blur-2xl shadow-[0_20px_50px_-10px_rgba(95,31,47,0.35),inset_0_1px_0_0_rgba(255,255,255,0.12)] relative overflow-hidden"
-              >
-                {/* Decorative top hairline glow */}
-                <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#e36a88] to-transparent" />
+        {/* Active Phase Spotlight Card */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activePhase.step}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.25 }}
+            className="rounded-3xl border border-[#5F1F2F]/60 bg-gradient-to-b from-[#1F191B] to-[#181816] p-7 xl:p-9 backdrop-blur-2xl shadow-[0_20px_50px_-10px_rgba(95,31,47,0.35),inset_0_1px_0_0_rgba(255,255,255,0.12)] relative overflow-hidden"
+          >
+            {/* Decorative top hairline glow */}
+            <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#e36a88] to-transparent" />
 
-                <div className="grid grid-cols-12 gap-6 xl:gap-10 items-center">
-                  
-                  {/* Left Column: Scope & Value Story (7 cols) */}
-                  <div className="col-span-7 space-y-4">
-                    
-                    {/* Header tags */}
-                    <div className="flex items-center gap-3">
-                      <span className="font-ds-mono text-xs uppercase px-3 py-1 rounded-full bg-[#5F1F2F]/30 text-[#f3a6b7] border border-[#5F1F2F]/50 font-semibold">
-                        Phase {activePhase.step} · {activePhase.tag}
-                      </span>
-                      <span className="inline-flex items-center gap-1.5 text-xs font-ds-mono text-gray-300 bg-white/[0.05] px-3 py-1 rounded-full border border-white/10">
-                        <Clock size={12} className="text-[#f3a6b7]" />
-                        <span>{activePhase.timeframe}</span>
-                      </span>
-                    </div>
-
-                    {/* Title */}
-                    <div className="flex items-center gap-3">
-                      <div className="size-10 rounded-xl bg-[#5F1F2F]/40 border border-[#e36a88]/40 flex items-center justify-center text-[#f3a6b7] shrink-0 shadow-lg">
-                        <ActiveIcon size={20} />
-                      </div>
-                      <h3 className="font-ds-display text-2xl xl:text-3xl font-bold text-white tracking-tight">
-                        {activePhase.title}
-                      </h3>
-                    </div>
-
-                    {/* Description */}
-                    <p className="text-sm xl:text-base text-gray-300 font-light leading-relaxed">
-                      {activePhase.summary}
-                    </p>
-
-                    {/* Business Value Highlight Box */}
-                    <div className="p-3.5 rounded-2xl bg-black/40 border border-[#5F1F2F]/30 flex items-start gap-3">
-                      <div className="size-6 rounded-lg bg-[#5F1F2F]/50 text-[#f3a6b7] flex items-center justify-center shrink-0 mt-0.5">
-                        <Sparkles size={13} />
-                      </div>
-                      <div>
-                        <div className="text-[11px] font-ds-mono uppercase tracking-wider text-[#f3a6b7] font-semibold">
-                          Business Value & Guarantee
-                        </div>
-                        <div className="text-xs xl:text-sm text-gray-200 mt-0.5 font-medium">
-                          {activePhase.businessOutcome}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Client Touchpoint Pill */}
-                    <div className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.08] flex items-center gap-3">
-                      <Workflow size={14} className="text-[#f3a6b7] shrink-0" />
-                      <div className="text-xs text-gray-300">
-                        <span className="font-ds-mono text-gray-400 uppercase text-[10px] block">
-                          Client Involvement:
-                        </span>
-                        {activePhase.touchpoint}
-                      </div>
-                    </div>
-
-                  </div>
-
-                  {/* Right Column: Tangible Deliverables Checklist (5 cols) */}
-                  <div className="col-span-5 bg-black/30 rounded-2xl p-5 xl:p-6 border border-white/10 shadow-inner">
-                    <div className="flex items-center justify-between pb-3 mb-3.5 border-b border-white/[0.08]">
-                      <span className="text-xs font-ds-mono uppercase tracking-wider text-gray-300 font-semibold flex items-center gap-2">
-                        <CheckCircle2 size={15} className="text-[#e36a88]" />
-                        <span>Tangible Deliverables</span>
-                      </span>
-                      <span className="text-[10px] font-ds-mono text-[#f3a6b7]">
-                        Verified Acceptance
-                      </span>
-                    </div>
-
-                    <ul className="space-y-2.5">
-                      {activePhase.deliverables.map((deliv, dIdx) => (
-                        <li key={dIdx} className="flex items-start gap-3 group">
-                          <span className="mt-0.5 size-4 rounded-full bg-[#5F1F2F]/50 border border-[#e36a88]/60 flex items-center justify-center shrink-0">
-                            <CheckCircle2 size={11} className="text-[#f3a6b7]" />
-                          </span>
-                          <span className="text-xs xl:text-sm text-gray-200 group-hover:text-white transition-colors">
-                            {deliv}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    {/* Next step continuity prompt */}
-                    <div className="mt-5 pt-3.5 border-t border-white/[0.06] flex items-center justify-between">
-                      <span className="text-[11px] font-ds-mono text-gray-400">
-                        {activePhaseIndex < phases.length - 1 ? (
-                          <>Next: <strong className="text-white">Phase {phases[activePhaseIndex + 1].step} ({phases[activePhaseIndex + 1].tag})</strong></>
-                        ) : (
-                          <span className="text-emerald-400 font-semibold">Production Live & Supported</span>
-                        )}
-                      </span>
-
-                      <button
-                        type="button"
-                        onClick={() => scrollToPhase((activePhaseIndex + 1) % phases.length)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#5F1F2F]/40 hover:bg-[#5F1F2F] text-xs font-ds-mono text-white border border-[#e36a88]/40 transition-all cursor-pointer"
-                      >
-                        <span>{activePhaseIndex < phases.length - 1 ? 'Next Step' : 'Restart'}</span>
-                        <ArrowRight size={13} />
-                      </button>
-                    </div>
-                  </div>
-
+            <div className="grid grid-cols-12 gap-6 xl:gap-10 items-center">
+              {/* Left Column: Scope & Value Story (7 cols) */}
+              <div className="col-span-7 space-y-4">
+                {/* Header tags */}
+                <div className="flex items-center gap-3">
+                  <span className="font-ds-mono text-xs uppercase px-3 py-1 rounded-full bg-[#5F1F2F]/30 text-[#f3a6b7] border border-[#5F1F2F]/50 font-semibold">
+                    Phase {activePhase.step} · {activePhase.tag}
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 text-xs font-ds-mono text-gray-300 bg-white/[0.05] px-3 py-1 rounded-full border border-white/10">
+                    <Clock size={12} className="text-[#f3a6b7]" />
+                    <span>{activePhase.timeframe}</span>
+                  </span>
                 </div>
-              </motion.div>
-            </AnimatePresence>
+
+                {/* Title */}
+                <div className="flex items-center gap-3">
+                  <div className="size-10 rounded-xl bg-[#5F1F2F]/40 border border-[#e36a88]/40 flex items-center justify-center text-[#f3a6b7] shrink-0 shadow-lg">
+                    <ActiveIcon size={20} />
+                  </div>
+                  <h3 className="font-ds-display text-2xl xl:text-3xl font-bold text-white tracking-tight">
+                    {activePhase.title}
+                  </h3>
+                </div>
+
+                {/* Description */}
+                <p className="text-sm xl:text-base text-gray-300 font-light leading-relaxed">
+                  {activePhase.summary}
+                </p>
+
+                {/* Business Value Highlight Box */}
+                <div className="p-3.5 rounded-2xl bg-black/40 border border-[#5F1F2F]/30 flex items-start gap-3">
+                  <div className="size-6 rounded-lg bg-[#5F1F2F]/50 text-[#f3a6b7] flex items-center justify-center shrink-0 mt-0.5">
+                    <Sparkles size={13} />
+                  </div>
+                  <div>
+                    <div className="text-[11px] font-ds-mono uppercase tracking-wider text-[#f3a6b7] font-semibold">
+                      Business Value & Guarantee
+                    </div>
+                    <div className="text-xs xl:text-sm text-gray-200 mt-0.5 font-medium">
+                      {activePhase.businessOutcome}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Client Touchpoint Pill */}
+                <div className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.08] flex items-center gap-3">
+                  <Workflow size={14} className="text-[#f3a6b7] shrink-0" />
+                  <div className="text-xs text-gray-300">
+                    <span className="font-ds-mono text-gray-400 uppercase text-[10px] block">
+                      Client Involvement:
+                    </span>
+                    {activePhase.touchpoint}
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column: Tangible Deliverables Checklist (5 cols) */}
+              <div className="col-span-5 bg-black/30 rounded-2xl p-5 xl:p-6 border border-white/10 shadow-inner">
+                <div className="flex items-center justify-between pb-3 mb-3.5 border-b border-white/[0.08]">
+                  <span className="text-xs font-ds-mono uppercase tracking-wider text-gray-300 font-semibold flex items-center gap-2">
+                    <CheckCircle2 size={15} className="text-[#e36a88]" />
+                    <span>Tangible Deliverables</span>
+                  </span>
+                  <span className="text-[10px] font-ds-mono text-[#f3a6b7]">
+                    Verified Acceptance
+                  </span>
+                </div>
+
+                <ul className="space-y-2.5">
+                  {activePhase.deliverables.map((deliv, dIdx) => (
+                    <li key={dIdx} className="flex items-start gap-3 group">
+                      <span className="mt-0.5 size-4 rounded-full bg-[#5F1F2F]/50 border border-[#e36a88]/60 flex items-center justify-center shrink-0">
+                        <CheckCircle2 size={11} className="text-[#f3a6b7]" />
+                      </span>
+                      <span className="text-xs xl:text-sm text-gray-200 group-hover:text-white transition-colors">
+                        {deliv}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Next step continuity prompt */}
+                <div className="mt-5 pt-3.5 border-t border-white/[0.06] flex items-center justify-between">
+                  <span className="text-[11px] font-ds-mono text-gray-400">
+                    {activePhaseIndex < phases.length - 1 ? (
+                      <>Next: <strong className="text-white">Phase {phases[activePhaseIndex + 1].step} ({phases[activePhaseIndex + 1].tag})</strong></>
+                    ) : (
+                      <span className="text-emerald-400 font-semibold">Production Live & Supported</span>
+                    )}
+                  </span>
+
+                  <button
+                    type="button"
+                    onClick={goToNextPhase}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#5F1F2F]/40 hover:bg-[#5F1F2F] text-xs font-ds-mono text-white border border-[#e36a88]/40 transition-all cursor-pointer"
+                  >
+                    <span>{activePhaseIndex < phases.length - 1 ? 'Next Step' : 'Restart'}</span>
+                    <ArrowRight size={13} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Bottom Bar: Action & Summary */}
+        <div className="flex items-center justify-between border-t border-white/[0.08] mt-6 pt-4">
+          <div className="flex items-center gap-2 text-xs font-ds-mono text-gray-400">
+            <span className="size-1.5 rounded-full bg-[#e36a88]" />
+            <span>Interactive delivery overview — select any milestone above or use Next Step to navigate</span>
           </div>
 
-          {/* Bottom Bar: Scroll Indicator + CTA */}
-          <div className="flex items-center justify-between border-t border-white/[0.08] pt-3">
-            <div className="flex items-center gap-2 text-xs font-ds-mono text-gray-400">
-              <ChevronDown size={14} className="text-[#f3a6b7] animate-bounce" />
-              <span>Scroll down to advance through all delivery phases ({activePhaseIndex + 1} of 6)</span>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <Link
-                href="/schedule-demo"
-                className="text-xs font-ds-mono text-[#f3a6b7] hover:text-white transition-colors flex items-center gap-1.5"
-              >
-                <span>Schedule Discovery Call</span>
-                <CustomArrowRight size={12} />
-              </Link>
-            </div>
+          <div className="flex items-center gap-4">
+            <Link
+              href="/schedule-demo"
+              className="text-xs font-ds-mono text-[#f3a6b7] hover:text-white transition-colors flex items-center gap-1.5"
+            >
+              <span>Schedule Discovery Call</span>
+              <CustomArrowRight size={12} />
+            </Link>
           </div>
-
         </div>
       </div>
 
