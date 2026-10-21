@@ -3,8 +3,16 @@
 import React, { Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { getProductById, allProducts } from '@/lib/productData';
-import { Calendar as CalendarIcon, Clock, Mail, Phone, ArrowRight, ArrowLeft, Check, Sparkles } from 'lucide-react';
+import {
+  Calendar as CalendarIcon,
+  Clock,
+  ArrowRight,
+  ArrowLeft,
+  Sparkles,
+  Video,
+  CheckCircle2,
+  Globe,
+} from 'lucide-react';
 import mixpanel from 'mixpanel-browser';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -22,12 +30,10 @@ interface CalendarDay {
 
 function ScheduleDemoContent() {
   const searchParams = useSearchParams();
-  const productId = searchParams.get('product');
   const utmSource = searchParams.get('utm_source');
   const utmMedium = searchParams.get('utm_medium');
   const utmCampaign = searchParams.get('utm_campaign');
 
-  const [selectedProduct, setSelectedProduct] = useState(allProducts[0]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string>('');
   const [name, setName] = useState('');
@@ -58,24 +64,14 @@ function ScheduleDemoContent() {
     }
   }, []);
 
-  // Set product from URL parameter
-  useEffect(() => {
-    if (productId) {
-      const product = getProductById(productId);
-      if (product) {
-        setSelectedProduct(product);
-      }
-    }
-  }, [productId]);
-
   // Track page view with UTM parameters
   useEffect(() => {
     if (typeof window !== 'undefined') {
       try {
         mixpanel.track('Demo Scheduling Page Viewed', {
-          product_id: selectedProduct.id,
-          product_name: selectedProduct.name,
-          product_category: selectedProduct.category,
+          product_id: '',
+          product_name: '',
+          product_category: '',
           utm_source: utmSource,
           utm_medium: utmMedium,
           utm_campaign: utmCampaign,
@@ -86,7 +82,7 @@ function ScheduleDemoContent() {
         console.error('Mixpanel tracking error:', error);
       }
     }
-  }, [selectedProduct, utmSource, utmMedium, utmCampaign]);
+  }, [utmSource, utmMedium, utmCampaign]);
 
   // Generate calendar with busy dates
   useEffect(() => {
@@ -156,30 +152,13 @@ function ScheduleDemoContent() {
     setTimeSlots(slots);
   };
 
-  const handleProductChange = (newProductId: string) => {
-    const product = getProductById(newProductId);
-    if (product) {
-      setSelectedProduct(product);
-      try {
-        mixpanel.track('Demo Product Selected', {
-          product_id: product.id,
-          product_name: product.name,
-          product_category: product.category,
-          utm_source: utmSource,
-        });
-      } catch (error) {
-        console.error('Mixpanel tracking error:', error);
-      }
-    }
-  };
-
   const handleDateSelect = (date: Date) => {
     setSelectedDate(date);
     setSelectedTime('');
     try {
       mixpanel.track('Demo Date Selected', {
         selected_date: date.toISOString(),
-        product_id: selectedProduct.id,
+        product_id: '',
         utm_source: utmSource,
       });
     } catch (error) {
@@ -190,7 +169,7 @@ function ScheduleDemoContent() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedDate || !selectedTime) {
-      setSubmitMessage('Please select a date and time.');
+      setSubmitMessage('Please select a date and time slot.');
       return;
     }
 
@@ -199,12 +178,11 @@ function ScheduleDemoContent() {
 
     try {
       const scheduledDate = selectedDate.toISOString().split('T')[0];
-      const generatedProductId = `thea-${selectedProduct.id}-demo`;
 
       mixpanel.track('Demo Request Submitted', {
-        product_id: selectedProduct.id,
-        product_name: selectedProduct.name,
-        product_category: selectedProduct.category,
+        product_id: '',
+        product_name: '',
+        product_category: '',
         scheduled_date: scheduledDate,
         scheduled_time: selectedTime,
         user_name: name,
@@ -212,11 +190,11 @@ function ScheduleDemoContent() {
         phone: phone || '',
         business_domain: businessDomain || '',
         business_description: businessDescription || '',
-        generated_product_id: generatedProductId,
+        generated_product_id: '',
         utm_source: utmSource,
         utm_medium: utmMedium,
         utm_campaign: utmCampaign,
-        referrer: utmSource || document.referrer || 'direct',
+        referrer: utmSource || (typeof document !== 'undefined' ? document.referrer : '') || 'direct',
         timestamp: new Date().toISOString(),
       });
 
@@ -239,13 +217,13 @@ function ScheduleDemoContent() {
           businessDescription,
           scheduledDate,
           scheduledTime: selectedTime,
-          productId: generatedProductId,
-          productName: selectedProduct.name,
-          productCategory: selectedProduct.category,
-          referrer: utmSource || document.referrer || 'direct',
-          utm_source: utmSource,
-          utm_medium: utmMedium,
-          utm_campaign: utmCampaign
+          productId: '',
+          productName: '',
+          productCategory: '',
+          referrer: utmSource || (typeof document !== 'undefined' ? document.referrer : '') || 'direct',
+          utm_source: utmSource || '',
+          utm_medium: utmMedium || '',
+          utm_campaign: utmCampaign || ''
         }),
       });
 
@@ -301,67 +279,34 @@ function ScheduleDemoContent() {
         <div className="mb-12">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#5F1F2F]/40 bg-[#5F1F2F]/15 font-ds-mono text-xs uppercase tracking-wider text-[#f3a6b7] mb-3">
             <Sparkles size={13} className="text-[#e36a88]" />
-            <span>Product Walkthrough · Live Demo Session</span>
+            <span>Consultation & Walkthrough · Live Session</span>
           </div>
           <h1 className="font-ds-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white">
-            Schedule a Product Demo
+            Schedule a Demo & Discovery Call
           </h1>
           <p className="mt-3 font-light text-base sm:text-lg text-gray-400 max-w-2xl leading-relaxed">
-            Select an enterprise solution and book a personalized 1-on-1 walkthrough with our senior engineers.
+            Select a convenient date and time on the calendar below to book a 1-on-1 technical consultation with our engineering leads.
           </p>
         </div>
 
+        {/* 2-Column Responsive Layout: Left Calendar & Slots, Right Attendee Form */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          {/* Left Column - Product Selection */}
-          <div className="lg:col-span-5 space-y-4">
-            <span className="font-ds-mono text-xs uppercase tracking-wider text-gray-400 block font-semibold">
-              01. Choose Solution
-            </span>
-
-            <div className="space-y-3">
-              {allProducts.map((product) => (
-                <button
-                  key={product.id}
-                  onClick={() => handleProductChange(product.id)}
-                  type="button"
-                  className={`w-full text-left p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer backdrop-blur-md ${
-                    selectedProduct.id === product.id
-                      ? 'border-[#5F1F2F] bg-[#5F1F2F]/25 shadow-[0_8px_24px_-4px_rgba(95,31,47,0.35),inset_0_1px_0_0_rgba(255,255,255,0.12)]'
-                      : 'border-white/10 bg-[#181816]/70 hover:border-white/20 hover:bg-[#181816]'
-                  }`}
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <span className="font-ds-mono text-[10px] uppercase tracking-wider text-[#f3a6b7]">
-                        {product.category}
-                      </span>
-                      <h3 className="font-ds-display text-base sm:text-lg font-bold text-white mt-0.5">
-                        {product.name}
-                      </h3>
-                      <p className="text-xs sm:text-sm text-gray-400 font-light mt-1.5 leading-relaxed">
-                        {product.description}
-                      </p>
-                    </div>
-                    {selectedProduct.id === product.id && (
-                      <div className="h-6 w-6 rounded-full bg-[#5F1F2F] text-white flex items-center justify-center shrink-0 mt-1">
-                        <Check size={14} />
-                      </div>
-                    )}
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Right Column - Calendar, Time Slots & Form */}
-          <div className="lg:col-span-7 space-y-8">
+          {/* Left Column - Calendar & Time Slots (7 cols) */}
+          <div className="lg:col-span-7 space-y-6">
             
-            {/* Calendar Card in TanStack DS Style */}
+            {/* Calendar Card */}
             <div className="rounded-2xl border border-white/10 bg-[#181816]/85 backdrop-blur-xl p-6 sm:p-7 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]">
-              <span className="font-ds-mono text-xs uppercase tracking-wider text-gray-400 block font-semibold mb-4">
-                02. Select Date
-              </span>
+              <div className="flex items-center justify-between mb-4">
+                <span className="font-ds-mono text-xs uppercase tracking-wider text-gray-400 font-semibold flex items-center gap-2">
+                  <CalendarIcon size={14} className="text-[#e36a88]" />
+                  <span>01. Select Date</span>
+                </span>
+                <span className="font-ds-mono text-[11px] text-[#f3a6b7] flex items-center gap-1">
+                  <Globe size={11} />
+                  <span>APAC / UTC+6:30</span>
+                </span>
+              </div>
 
               {/* Month Navigation */}
               <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/10">
@@ -369,6 +314,7 @@ function ScheduleDemoContent() {
                   type="button"
                   onClick={() => navigateMonth('prev')}
                   className="h-8 w-8 rounded-lg border border-white/10 bg-white/[0.04] text-gray-300 hover:text-white hover:bg-white/[0.08] flex items-center justify-center transition-colors"
+                  aria-label="Previous month"
                 >
                   ←
                 </button>
@@ -379,6 +325,7 @@ function ScheduleDemoContent() {
                   type="button"
                   onClick={() => navigateMonth('next')}
                   className="h-8 w-8 rounded-lg border border-white/10 bg-white/[0.04] text-gray-300 hover:text-white hover:bg-white/[0.08] flex items-center justify-center transition-colors"
+                  aria-label="Next month"
                 >
                   →
                 </button>
@@ -420,11 +367,18 @@ function ScheduleDemoContent() {
             </div>
 
             {/* Time Slot Picker */}
-            {selectedDate && (
-              <div className="rounded-2xl border border-white/10 bg-[#181816]/85 backdrop-blur-xl p-6 sm:p-7">
-                <span className="font-ds-mono text-xs uppercase tracking-wider text-gray-400 block font-semibold mb-4">
-                  03. Select Time Slot (APAC / UTC+6:30)
+            <div className="rounded-2xl border border-white/10 bg-[#181816]/85 backdrop-blur-xl p-6 sm:p-7 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]">
+              <div className="flex items-center justify-between mb-4">
+                <span className="font-ds-mono text-xs uppercase tracking-wider text-gray-400 font-semibold flex items-center gap-2">
+                  <Clock size={14} className="text-[#e36a88]" />
+                  <span>02. Select Time Slot</span>
                 </span>
+                <span className="font-ds-mono text-[11px] text-gray-500">
+                  30-Minute Session
+                </span>
+              </div>
+
+              {selectedDate ? (
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                   {timeSlots.map((slot) => (
                     <button
@@ -436,7 +390,7 @@ function ScheduleDemoContent() {
                         !slot.available
                           ? 'border-white/5 text-gray-600 opacity-30 cursor-not-allowed'
                           : selectedTime === slot.time
-                          ? 'border-[#5F1F2F] bg-[#5F1F2F]/30 text-white font-bold'
+                          ? 'border-[#5F1F2F] bg-[#5F1F2F]/40 text-white font-bold ring-2 ring-[#e36a88]/60 shadow-md'
                           : 'border-white/10 bg-white/[0.02] text-gray-300 hover:border-white/25 hover:bg-white/[0.06]'
                       }`}
                     >
@@ -445,43 +399,49 @@ function ScheduleDemoContent() {
                     </button>
                   ))}
                 </div>
-              </div>
-            )}
+              ) : (
+                <div className="py-8 text-center rounded-xl border border-dashed border-white/10 bg-black/20 text-xs font-ds-mono text-gray-400">
+                  Please pick a date on the calendar above to view open slots
+                </div>
+              )}
+            </div>
 
-            {/* Attendee Information Form */}
+          </div>
+
+          {/* Right Column - Attendee Information & Confirmation Form (5 cols) */}
+          <div className="lg:col-span-5 space-y-6">
             <div className="rounded-2xl border border-white/10 bg-[#181816]/85 backdrop-blur-xl p-6 sm:p-7 shadow-[0_20px_50px_rgba(0,0,0,0.4)]">
               <span className="font-ds-mono text-xs uppercase tracking-wider text-gray-400 block font-semibold mb-4">
-                04. Attendee Information
+                03. Attendee Details
               </span>
 
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block font-ds-mono text-[11px] uppercase tracking-wider text-gray-400 mb-1.5">
-                      Your Name *
-                    </label>
-                    <input
-                      type="text"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      required
-                      className="w-full px-3.5 py-2.5 bg-[#121110] border border-white/10 rounded-xl text-sm text-[#F1F1F0] placeholder:text-gray-600 focus:outline-none focus:border-[#5F1F2F] focus:ring-2 focus:ring-[#5F1F2F]/30 transition-all"
-                      placeholder="Jane Doe"
-                    />
-                  </div>
-                  <div>
-                    <label className="block font-ds-mono text-[11px] uppercase tracking-wider text-gray-400 mb-1.5">
-                      Business Email *
-                    </label>
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      className="w-full px-3.5 py-2.5 bg-[#121110] border border-white/10 rounded-xl text-sm text-[#F1F1F0] placeholder:text-gray-600 focus:outline-none focus:border-[#5F1F2F] focus:ring-2 focus:ring-[#5F1F2F]/30 transition-all"
-                      placeholder="jane@organization.com"
-                    />
-                  </div>
+                <div>
+                  <label className="block font-ds-mono text-[11px] uppercase tracking-wider text-gray-400 mb-1.5">
+                    Your Name *
+                  </label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                    className="w-full px-3.5 py-2.5 bg-[#121110] border border-white/10 rounded-xl text-sm text-[#F1F1F0] placeholder:text-gray-600 focus:outline-none focus:border-[#5F1F2F] focus:ring-2 focus:ring-[#5F1F2F]/30 transition-all"
+                    placeholder="Jane Doe"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-ds-mono text-[11px] uppercase tracking-wider text-gray-400 mb-1.5">
+                    Business Email *
+                  </label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="w-full px-3.5 py-2.5 bg-[#121110] border border-white/10 rounded-xl text-sm text-[#F1F1F0] placeholder:text-gray-600 focus:outline-none focus:border-[#5F1F2F] focus:ring-2 focus:ring-[#5F1F2F]/30 transition-all"
+                    placeholder="jane@organization.com"
+                  />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -499,7 +459,7 @@ function ScheduleDemoContent() {
                   </div>
                   <div>
                     <label className="block font-ds-mono text-[11px] uppercase tracking-wider text-gray-400 mb-1.5">
-                      Organization Website / Domain
+                      Company / Domain
                     </label>
                     <input
                       type="text"
@@ -513,36 +473,41 @@ function ScheduleDemoContent() {
 
                 <div>
                   <label className="block font-ds-mono text-[11px] uppercase tracking-wider text-gray-400 mb-1.5">
-                    What would you like to explore in the demo?
+                    What would you like to explore or build?
                   </label>
                   <textarea
                     value={businessDescription}
                     onChange={(e) => setBusinessDescription(e.target.value)}
                     className="w-full px-3.5 py-2.5 bg-[#121110] border border-white/10 rounded-xl text-sm text-[#F1F1F0] placeholder:text-gray-600 focus:outline-none focus:border-[#5F1F2F] focus:ring-2 focus:ring-[#5F1F2F]/30 resize-none h-24 transition-all"
-                    placeholder="Tell us about your operational challenges or questions..."
+                    placeholder="Tell us about your project requirements, timeline, or operational goals..."
                   />
                 </div>
 
                 {/* Booking Summary Box */}
-                {selectedDate && selectedTime && (
+                {selectedDate && selectedTime ? (
                   <div className="p-4 rounded-xl border border-[#5F1F2F]/50 bg-[#5F1F2F]/15 font-ds-mono text-xs">
-                    <span className="uppercase tracking-wider text-[#f3a6b7] block font-semibold mb-2">
-                      Session Summary
+                    <span className="uppercase tracking-wider text-[#f3a6b7] block font-semibold mb-2 flex items-center gap-1.5">
+                      <CheckCircle2 size={13} />
+                      <span>Session Summary</span>
                     </span>
-                    <div className="grid grid-cols-3 gap-2 text-gray-300">
-                      <div>
-                        <span className="block text-gray-500 text-[10px] uppercase">Solution</span>
-                        <span className="font-semibold text-white truncate block">{selectedProduct.name}</span>
-                      </div>
+                    <div className="grid grid-cols-2 gap-3 text-gray-300">
                       <div>
                         <span className="block text-gray-500 text-[10px] uppercase">Date</span>
-                        <span className="font-semibold text-white">{selectedDate.toLocaleDateString()}</span>
+                        <span className="font-semibold text-white">{selectedDate.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}</span>
                       </div>
                       <div>
                         <span className="block text-gray-500 text-[10px] uppercase">Time</span>
                         <span className="font-semibold text-white">{selectedTime}</span>
                       </div>
+                      <div className="col-span-2 pt-2 border-t border-white/[0.08] flex items-center gap-2 text-gray-400 text-[11px]">
+                        <Video size={13} className="text-[#f3a6b7] shrink-0" />
+                        <span>Google Meet link will be provided upon confirmation</span>
+                      </div>
                     </div>
+                  </div>
+                ) : (
+                  <div className="p-3.5 rounded-xl border border-white/5 bg-white/[0.02] text-xs font-ds-mono text-gray-400 text-center">
+                    Select a date & time slot to review summary
                   </div>
                 )}
 
@@ -567,6 +532,7 @@ function ScheduleDemoContent() {
               </form>
             </div>
           </div>
+
         </div>
       </div>
 

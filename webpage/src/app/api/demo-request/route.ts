@@ -68,13 +68,13 @@ export async function POST(request: NextRequest) {
       businessDescription: businessDescription || '',
       scheduledDate,
       scheduledTime,
-      productId,
-      productName,
-      productCategory,
-      referrer,
-      utm_source,
-      utm_medium,
-      utm_campaign
+      productId: productId || '',
+      productName: productName || '',
+      productCategory: productCategory || '',
+      referrer: referrer || '',
+      utm_source: utm_source || '',
+      utm_medium: utm_medium || '',
+      utm_campaign: utm_campaign || ''
     };
     
     console.log('Sending data to webhook:', JSON.stringify(demoData, null, 2));
@@ -100,7 +100,7 @@ export async function POST(request: NextRequest) {
       { 
         status: 'success',
         message: 'Demo request submitted successfully',
-        bookingId: productId
+        bookingId: productId || 'demo-request'
       },
       { status: 201 }
     );

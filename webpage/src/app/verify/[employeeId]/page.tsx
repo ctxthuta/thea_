@@ -251,10 +251,10 @@ export default function EmployeeVerification({ params }: { params: Promise<{ emp
           <div className="border-t border-white/10 pt-8 pb-4">
             <p className="font-ds-mono text-xs text-gray-500 mb-1">Questions about this verification?</p>
             <a
-              href="mailto:finance@theasolutions.co"
+              href="mailto:hr@theasolutions.co"
               className="font-ds-mono text-xs uppercase tracking-wider text-[#f3a6b7] hover:underline font-semibold"
             >
-              finance@theasolutions.co
+              hr@theasolutions.co
             </a>
           </div>
 

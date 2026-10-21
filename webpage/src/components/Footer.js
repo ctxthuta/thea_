@@ -232,7 +232,7 @@ function Footer() {
             </span>
             <ul className="space-y-2.5 text-sm text-gray-400 font-light">
               <li>Custom Software Development</li>
-              <li>Laboratory &amp; Inventory Systems</li>
+              <li>LIMS, CRM, HRMS, ERP</li>
               <li>Intelligent Process Automation</li>
               <li>Enterprise AI &amp; ML Pipelines</li>
               <li>Legacy Modernization &amp; Migration</li>

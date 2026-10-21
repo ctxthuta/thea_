@@ -1,5 +1,5 @@
 {
-  "name": "[Internal] [Web] Get Email, Quote Request, Request for Demo",
+  "name": "[Internal] Thea Web",
   "nodes": [
     {
       "parameters": {
@@ -862,7 +862,7 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "d216edbe-572c-45d5-811f-e689a12c99a1",
+  "versionId": "f3ecd9e6-9f14-4901-9137-a02068847221",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "575f4cf670cd20e0a5acdb46155ea99b388e105e1263e6487e724ac0fd7fd211"
