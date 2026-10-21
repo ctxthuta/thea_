@@ -97,8 +97,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`antialiased bg-color paragraph-color ${bricolageGrotesque.variable} ${ibmPlexMono.variable} ${inter.variable}`} >
+    <html lang="en" className="dark overflow-x-hidden">
+      <body className={`antialiased bg-color paragraph-color overflow-x-hidden ${bricolageGrotesque.variable} ${ibmPlexMono.variable} ${inter.variable}`} >
         <OrganizationStructuredData />
         <WebSiteStructuredData />
         <SiteNavigationStructuredData />

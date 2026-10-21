@@ -58,7 +58,7 @@ function Section1() {
           muted 
           playsInline
           preload="none"
-          poster="/assets/images/LandingBG-Placeholder.jpg"
+          poster="/assets/images/LandingBG-Placeholder.webp"
           aria-hidden="true"
         >
           <source src="/assets/videos/LandingBG.webm" type="video/webm" />
@@ -77,13 +77,13 @@ function Section1() {
           <div className="lg:col-span-7 flex flex-col items-start">
             
             {/* TanStack DS Monospace Eyebrow Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#5F1F2F]/50 bg-[#5F1F2F]/15 font-ds-mono text-xs uppercase tracking-wider text-[#f3a6b7] mb-6 shadow-sm">
-              <span className="size-2 rounded-full bg-[#e36a88] animate-pulse" />
-              <span>Bespoke Software · Enterprise AI · Automation</span>
+            <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 rounded-full border border-[#5F1F2F]/50 bg-[#5F1F2F]/15 font-ds-mono text-[10px] sm:text-xs uppercase tracking-wide sm:tracking-wider text-[#f3a6b7] mb-6 shadow-sm max-w-full">
+              <span className="size-1.5 sm:size-2 rounded-full bg-[#e36a88] animate-pulse shrink-0" />
+              <span className="truncate">Bespoke Software · Enterprise AI · Automation</span>
             </div>
 
             {/* Display Heading with TanStack typography & highlight */}
-            <h1 className="font-ds-display text-3xl sm:text-5xl lg:text-[54px] font-extrabold tracking-[-0.03em] leading-[1.08] text-white">
+            <h1 className="font-ds-display text-3xl sm:text-5xl lg:text-[54px] font-extrabold tracking-[-0.03em] leading-[1.08] text-white break-words">
               Bridge the gap between{' '}
               <span className="relative text-white underline decoration-[#5F1F2F] decoration-[4px] underline-offset-[8px]">
                 complex technology
@@ -97,18 +97,18 @@ function Section1() {
             </p>
 
             {/* Feature Pills (TanStack DS Badges) */}
-            <div className="mt-8 flex flex-wrap gap-2.5">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-ds-mono bg-white/[0.04] text-[#F1F1F0]/85 border border-white/10">
-                <CustomCheckCircle size={13} className="text-[#e36a88]" />
-                Remote-First Elite Engineers
+            <div className="mt-8 flex flex-wrap gap-2 sm:gap-2.5">
+              <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full text-[11px] sm:text-xs font-ds-mono bg-white/[0.04] text-[#F1F1F0]/85 border border-white/10 max-w-full">
+                <CustomCheckCircle size={13} className="text-[#e36a88] shrink-0" />
+                <span>Remote-First Elite Engineers</span>
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-ds-mono bg-white/[0.04] text-[#F1F1F0]/85 border border-white/10">
-                <CustomCheckCircle size={13} className="text-[#e36a88]" />
-                2-Week Agile Delivery Cycles
+              <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full text-[11px] sm:text-xs font-ds-mono bg-white/[0.04] text-[#F1F1F0]/85 border border-white/10 max-w-full">
+                <CustomCheckCircle size={13} className="text-[#e36a88] shrink-0" />
+                <span>2-Week Agile Delivery Cycles</span>
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-ds-mono bg-white/[0.04] text-[#F1F1F0]/85 border border-white/10">
-                <CustomCheckCircle size={13} className="text-[#e36a88]" />
-                Full IP &amp; Code Ownership
+              <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full text-[11px] sm:text-xs font-ds-mono bg-white/[0.04] text-[#F1F1F0]/85 border border-white/10 max-w-full">
+                <CustomCheckCircle size={13} className="text-[#e36a88] shrink-0" />
+                <span>Full IP &amp; Code Ownership</span>
               </span>
             </div>
           </div>

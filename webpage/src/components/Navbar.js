@@ -26,6 +26,7 @@ function Navbar() {
               alt="Thea Solutions" 
               width={200}
               height={50}
+              sizes="(max-width: 640px) 140px, 180px"
               priority
               className="h-9 sm:h-10 w-auto object-contain transition-transform group-hover:scale-[1.02]" 
             />

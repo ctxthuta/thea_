@@ -148,6 +148,7 @@ function Footer() {
                 alt="Thea Solutions" 
                 width={200}
                 height={50}
+                sizes="(max-width: 640px) 140px, 180px"
                 className="h-10 w-auto object-contain" 
               />
             </Link>
@@ -212,7 +213,7 @@ function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="/#contact" className="text-gray-400 hover:text-white transition-colors">
                   Get a Quote
                 </Link>
               </li>

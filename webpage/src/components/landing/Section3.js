@@ -152,7 +152,7 @@ function Section3() {
   const ActiveIcon = activePhase.icon;
 
   return (
-    <section id="methodology" className="relative w-full bg-[#181816] border-y border-white/[0.06]">
+    <section id="methodology" className="relative w-full overflow-hidden bg-[#181816] border-y border-white/[0.06]">
       {/* Background ambient lighting */}
       <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] bg-[#5F1F2F]/15 rounded-full blur-[240px] pointer-events-none -z-10" />
       <div className="absolute bottom-1/4 right-1/4 translate-x-1/3 translate-y-1/3 w-[600px] h-[600px] bg-[#8E2E46]/10 rounded-full blur-[260px] pointer-events-none -z-10" />
@@ -438,9 +438,9 @@ function Section3() {
                       <div className="size-8 rounded-lg bg-[#5F1F2F]/30 border border-[#5F1F2F]/50 flex items-center justify-center text-[#f3a6b7] shrink-0">
                         <Icon size={15} />
                       </div>
-                      <h4 className="font-ds-display text-base sm:text-lg font-bold text-white tracking-tight">
+                      <h3 className="font-ds-display text-base sm:text-lg font-bold text-white tracking-tight">
                         {item.title}
-                      </h4>
+                      </h3>
                     </div>
 
                     <p className="text-xs sm:text-sm text-gray-300 font-light leading-relaxed mb-3">
@@ -486,9 +486,9 @@ function Section3() {
 
         {/* Mobile CTA */}
         <div className="mt-10 p-5 rounded-2xl border border-white/10 bg-[#1A1816] text-center">
-          <h4 className="font-ds-display text-lg font-bold text-white mb-1.5">
+          <h3 className="font-ds-display text-lg font-bold text-white mb-1.5">
             Ready to start Phase 01?
-          </h4>
+          </h3>
           <p className="text-xs text-gray-400 font-light mb-4">
             Book a 30-minute scoping call to map out your architecture.
           </p>
