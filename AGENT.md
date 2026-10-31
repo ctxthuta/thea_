@@ -157,3 +157,15 @@ npm run build
 # 5. Start production server for Lighthouse audits
 npm run start
 ```
+
+
+## 8. Site theme
+
+- `src/components/SiteTheme.js` wraps all pages in the root layout, defaults to light, and saves the choice under `thea-site-theme` in localStorage. The floating switch is available throughout the site.
+- Light palette rules live at the end of `src/app/globals.css`. Match full utility class tokens when adding overrides so hover utilities do not change the default state. Check both themes, forms, and mobile layouts when making changes.
+- `AGENT.md` is the project handbook and repository architecture specification. Keep it updated when architecture or workflows change.
+
+## 9. Public AI chat
+
+- `src/components/ChatWidget.tsx` is mounted in the root layout. `/api/chat` validates short visitor messages and signs requests to the n8n `CHAT_WEBHOOK_URL` with `WEBHOOK_JWT_PASSPHRASE`. Career and job inquiries automatically direct candidates to `https://theasolutions.co/careers`.
+- `automations/Thea Public AI Chat.json` contains the public-only catalog, Gemini primary, and OpenAI fallback. `automations/CHAT_SETUP.md` documents credentials, publishing, testing, privacy and rate-limit limitations. Do not add secrets or internal company information to the workflow's model context.

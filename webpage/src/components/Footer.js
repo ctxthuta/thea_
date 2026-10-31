@@ -79,10 +79,7 @@ function Footer() {
                 Ready to Accelerate?
               </span>
               <h2 className="font-ds-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-[1.1]">
-                Don&apos;t wait — transform your business{' '}
-                <span className="relative text-white underline decoration-[#5F1F2F] decoration-[3px] underline-offset-[6px]">
-                  today
-                </span>
+                Don&apos;t wait — transform your business today
               </h2>
               <p className="mt-3 text-sm sm:text-base text-gray-400 font-light max-w-xl">
                 Partner with an agile, remote-first team of engineers and architects committed to building technology that moves your operational metrics.

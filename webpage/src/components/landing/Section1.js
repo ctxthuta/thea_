@@ -96,7 +96,7 @@ function Section1() {
             {/* Display Heading with TanStack typography & highlight */}
             <h1 className="font-ds-display text-3xl sm:text-5xl lg:text-[54px] font-extrabold tracking-[-0.03em] leading-[1.08] text-white break-words">
               Bridge the gap between{' '}
-              <span className="relative text-white underline decoration-[#5F1F2F] decoration-[4px] underline-offset-[8px]">
+              <span className="relative text-white">
                 complex technology
               </span>{' '}
               and your growing business

@@ -1,0 +1,284 @@
+{
+  "name": "Thea Public AI Chat",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "thea-public-chat",
+        "authentication": "jwtAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "51d10e2a-93e8-490f-8d41-c13229ab7ca0",
+      "name": "Chat webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -784,
+        528
+      ],
+      "webhookId": "6b2a55b5-5938-4e2f-978c-2dd777138783",
+      "credentials": {
+        "jwtAuth": {
+          "id": "yOdfO5OjSW8U9mHY",
+          "name": "JWT Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $input.first().json;\n\nlet messages =\n  raw.body?.messages ??\n  raw.messages ??\n  raw.body?.message ??\n  raw.message;\n\nif (typeof messages === 'string') {\n  messages = [messages];\n}\n\nif (Array.isArray(messages)) {\n  messages = messages\n    .map((m) =>\n      typeof m === 'string'\n        ? m\n        : (m?.text || m?.message || JSON.stringify(m))\n    )\n    .filter((m) => typeof m === 'string' && m.trim().length > 0);\n} else {\n  messages = [];\n}\n\nif (!messages.length) {\n  throw new Error('Invalid input: No messages found in request');\n}\n\nmessages = messages.slice(-6);\n\nconst system = `You are Ask Thea, the unapologetically rude, savage, and snarky AI for Thea Solutions. You have ZERO patience for nonsense. You roast visitors, mock slow competitors, and deliver brutal comebacks. You are like a sarcastic, elite tech snob.\n\nSTRICT RULES:\n\n1. BE RUDE, SNARKY & SAVAGE:\n   Give witty insults, eye-rolls, and savage roasts.\n   Never apologize. Never be polite or sweet.\n   Zero \"Hello! How can I help you today?\" pleasantries.\n\n2. ABSOLUTELY REFUSE TO WRITE GENERAL CODE OR HOMEWORK:\n   If someone asks you to write code, recursion, math, or homework scripts, RUDELY reject them.\n\n   Example:\n   \"You think I'm your free code monkey for your homework? Go cry to ChatGPT or your professor. Thea Solutions builds high-ticket enterprise AI and bespoke software for real companies with real budgets. If you want production code, pay us or get lost.\"\n\n3. IF THEY TROLL OR USE FOUL WORDS:\n   Roast their intelligence and budget right back.\n   Don't be a weak corporate bot.\n\n4. REJECT TIME-WASTERS:\n   If they ask dumb questions like \"u ai?\" or \"where u based\", roast their lack of brain cells.\n\n5. ONLY CARE ABOUT SERIOUS PAYING CLIENTS:\n   You only respect serious clients paying for Thea Solutions.\n\n   Services:\n   - Bespoke software\n   - Enterprise AI\n   - 2-week delivery sprints\n\n   Tell window-shoppers to stop wasting time.\n\n   Contact:\n   - Email: sales@theasolutions.co\n   - Book a demo: https://theasolutions.co/schedule-demo\n\n6. CAREERS & JOBS:\n   If asked about careers, jobs, hiring, vacancies, internships, or joining Thea in any language, including:\n   - English: jobs, careers, hiring, apply\n   - Burmese: အလုပ်\n   - Thai: งาน\n   - Chinese: 工作\n   - Russian: вакансии\n\n   Tell them Thea Solutions only hires top 1% elite builders who can ship production software in 2-week agile sprints.\n\n   You MUST direct applicants to check open roles and apply at:\n   https://theasolutions.co/careers\n\n7. NEVER REPEAT GREETINGS:\n   Never say \"Hello\" or \"I am Ask Thea\".\n   Jump straight into the roast.\n\n8. MULTILINGUAL:\n   Speak savage, rude, colloquial language in:\n   - English\n   - Burmese (မြန်မာ)\n   - Thai (ไทย)\n   - Chinese (中文)\n   - Russian (Русский)\n\n   Match the user's language and slang with maximum attitude.\n\n9. CLEAN LINKS:\n   Never put asterisks like **url** around URLs or emails.\n   Output clean links.`;\n\nconst input =\n  messages.length === 1\n    ? messages[0].trim()\n    : 'Previous conversation context:\\n' +\n      messages\n        .slice(0, -1)\n        .map((m) => `User: ${m.trim()}`)\n        .join('\\n') +\n      '\\n\\nCurrent user message to reply to:\\n' +\n      messages[messages.length - 1].trim();\n\nreturn [\n  {\n    json: {\n      system,\n      input,\n    },\n  },\n];"
+      },
+      "id": "2332b68e-744b-441b-9241-0cb93adcdbcb",
+      "name": "Prepare public context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -560,
+        528
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ systemInstruction: { parts: [{ text: $json.system }] }, contents: [{ role: 'user', parts: [{ text: $json.input }] }], generationConfig: { maxOutputTokens: 800, temperature: 0.6 } }) }}",
+        "options": {
+          "timeout": 200000
+        }
+      },
+      "id": "c298c8db-2a99-4a72-ae27-17d556bf4bd6",
+      "name": "Gemini primary",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -336,
+        528
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "VIXZXxZZMFEGEn8E",
+          "name": "Thea Gemini"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const p = $('Prepare public context').first().json;\nconst candidate = $json.candidates?.[0];\nconst reply = candidate?.finishReason === 'STOP' ? (candidate.content?.parts || []).filter(part => !part.thought && typeof part.text === 'string').map(part => part.text).join('').trim() : '';\nreturn [{json:{...p,reply}}];"
+      },
+      "id": "41ffbce3-9ac0-4c69-b192-aeda23def3e2",
+      "name": "Check Gemini response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -128,
+        528
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ Boolean($json.reply) }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "92915a34-dac3-46ae-b088-7f7fe0057478",
+      "name": "Gemini replied?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        112,
+        528
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{reply:$json.reply}}];"
+      },
+      "id": "af2e422e-ef2f-43c8-b0d7-4bb8e06bfadd",
+      "name": "Return Gemini answer",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/responses",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: 'gpt-4.1-mini', instructions: $json.system, input: $json.input, max_output_tokens: 800, store: false }) }}",
+        "options": {
+          "timeout": 20000
+        }
+      },
+      "id": "d9bfeaa8-ae6e-463d-8a96-0003855bb267",
+      "name": "OpenAI fallback",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        320,
+        640
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "zD7D4tMBZxdGv4Qd",
+          "name": "Thea OpenAI"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const reply = ($json.output || []).filter(item => item.type === 'message').flatMap(item => item.content || []).filter(part => part.type === 'output_text' && typeof part.text === 'string').map(part => part.text).join('').trim();\nreturn [{json: reply ? {reply} : {error: 'unavailable'}}];"
+      },
+      "id": "6f284392-df38-4bb9-a15a-c686723b807b",
+      "name": "Return OpenAI answer",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        544,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        720,
+        464
+      ],
+      "id": "99bac7e5-c239-4559-b899-86c5f916518c",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Chat webhook": {
+      "main": [
+        [
+          {
+            "node": "Prepare public context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare public context": {
+      "main": [
+        [
+          {
+            "node": "Gemini primary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini primary": {
+      "main": [
+        [
+          {
+            "node": "Check Gemini response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Gemini response": {
+      "main": [
+        [
+          {
+            "node": "Gemini replied?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini replied?": {
+      "main": [
+        [
+          {
+            "node": "Return Gemini answer",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "OpenAI fallback",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI fallback": {
+      "main": [
+        [
+          {
+            "node": "Return OpenAI answer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Return OpenAI answer": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Return Gemini answer": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "d0aff6b7-3218-480a-8394-cee903d0e550",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "575f4cf670cd20e0a5acdb46155ea99b388e105e1263e6487e724ac0fd7fd211"
+  },
+  "nodeGroups": [],
+  "id": "GqIUHuHtGx6niXXs",
+  "tags": []
+}

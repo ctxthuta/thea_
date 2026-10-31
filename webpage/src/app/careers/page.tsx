@@ -196,7 +196,7 @@ export default function CareersPage() {
           {/* Back Link */}
           <Link 
             href="/" 
-            className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-ds-mono uppercase tracking-wider bg-white/[0.04] text-gray-400 border border-white/10 hover:text-white hover:bg-white/[0.08] transition-all mb-8"
+            className="flex w-fit items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-ds-mono uppercase tracking-wider bg-white/[0.04] text-gray-400 border border-white/10 hover:text-white hover:bg-white/[0.08] transition-all mb-8"
           >
             <ArrowLeft size={14} aria-hidden="true" />
             <span>Back to home</span>
@@ -210,11 +210,7 @@ export default function CareersPage() {
 
           {/* Heading */}
           <h1 className="font-ds-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-[-0.03em] leading-[1.08] text-white max-w-4xl">
-            Build{' '}
-            <span className="relative text-white underline decoration-[#5F1F2F] decoration-[4px] underline-offset-[8px]">
-              thoughtful technology
-            </span>{' '}
-            with us.
+            Build thoughtful technology with us.
           </h1>
 
           <p className="mt-6 max-w-2xl text-base sm:text-lg text-gray-400 font-light leading-relaxed">
@@ -242,7 +238,7 @@ export default function CareersPage() {
               {jobOpenings.map((job) => (
                 <article 
                   key={job.title} 
-                  className="group relative flex flex-col justify-between rounded-2xl border border-white/10 bg-[#181816]/75 backdrop-blur-xl p-6 sm:p-7 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06),0_8px_24px_rgba(0,0,0,0.4)] hover:border-[#5F1F2F]/70 hover:-translate-y-1 hover:shadow-[0_16px_36px_-6px_rgba(95,31,47,0.3)] transition-all duration-300 overflow-hidden"
+                  className="career-job-card group relative flex flex-col justify-between rounded-2xl border border-white/10 bg-[#181816]/75 backdrop-blur-xl p-6 sm:p-7 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06),0_8px_24px_rgba(0,0,0,0.4)] hover:border-[#5F1F2F]/70 hover:-translate-y-1 hover:shadow-[0_16px_36px_-6px_rgba(95,31,47,0.3)] transition-all duration-300 overflow-hidden"
                 >
                   {/* Top hairline accent */}
                   <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#5F1F2F] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -256,12 +252,12 @@ export default function CareersPage() {
                       <span className="font-ds-mono text-[11px] uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white/[0.04] text-gray-300 border border-white/10">
                         {job.team}
                       </span>
-                      <span className="font-ds-mono text-[11px] uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white/[0.04] text-gray-400 border border-white/10 ml-auto">
+                      <span className="font-ds-mono text-[11px] uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white/[0.04] text-gray-400 border border-white/10">
                         {job.location} · {job.type}
                       </span>
                     </div>
 
-                    <h3 className="font-ds-display text-xl sm:text-2xl font-bold text-white group-hover:text-white transition-colors leading-snug">
+                    <h3 className="font-ds-display text-xl sm:text-2xl font-bold text-white transition-colors leading-snug">
                       {job.title}
                     </h3>
 
@@ -298,16 +294,16 @@ export default function CareersPage() {
                   </div>
 
                   {/* Apply Button */}
-                  <div className="mt-7 pt-4 border-t border-white/[0.06] flex items-center justify-between">
+                  <div className="mt-7 pt-4 border-t border-white/[0.06] flex flex-wrap items-center justify-between gap-3">
                     <a 
                       href={`mailto:careers@theasolutions.co?subject=${encodeURIComponent(`Application: ${job.title}`)}`} 
-                      className="inline-flex items-center gap-2 rounded-full py-2.5 px-5 text-xs font-semibold bg-[#F1F1F0] text-[#1A1816] hover:bg-white shadow-[0_1px_2px_0_rgba(0,0,0,0.15),inset_0_1px_0_0_rgba(255,255,255,0.4)] hover:-translate-y-px active:translate-y-0 transition-all cursor-pointer"
+                      className="inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full py-2.5 px-5 text-xs font-semibold bg-[#F1F1F0] text-[#1A1816] hover:bg-white shadow-[0_1px_2px_0_rgba(0,0,0,0.15),inset_0_1px_0_0_rgba(255,255,255,0.4)] hover:-translate-y-px active:translate-y-0 transition-all cursor-pointer"
                     >
                       <span>Apply for this role</span>
                       <ArrowUpRight size={14} aria-hidden="true" />
                     </a>
 
-                    <span className="font-ds-mono text-[11px] text-gray-500">
+                    <span className="font-ds-mono text-[11px] text-gray-500 break-all">
                       careers@theasolutions.co
                     </span>
                   </div>

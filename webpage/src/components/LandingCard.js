@@ -32,7 +32,7 @@ function LandingCard({
         )}
 
         {/* Title in TanStack Bricolage Grotesque Display font */}
-        <h3 className="font-ds-display text-lg sm:text-xl font-bold text-white tracking-tight group-hover:text-white transition-colors">
+        <h3 className="font-ds-display text-lg sm:text-xl font-bold text-white tracking-tight transition-colors">
           {title}
         </h3>
 

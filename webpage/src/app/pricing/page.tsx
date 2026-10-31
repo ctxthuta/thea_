@@ -114,7 +114,7 @@ export default function PricingPage() {
                 }`}
               >
                 {model.popular && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-[#5F1F2F] text-[#f3a6b7] font-ds-mono text-[11px] uppercase tracking-wider border border-[#f3a6b7]/40 shadow-sm">
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-[#5F1F2F] text-white font-ds-mono text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider whitespace-nowrap border border-[#f3a6b7]/40 shadow-sm">
                     Most Popular for Growing SMEs
                   </div>
                 )}

@@ -294,7 +294,7 @@ function Section3() {
                       <span className="mt-0.5 size-4 rounded-full bg-[#5F1F2F]/50 border border-[#e36a88]/60 flex items-center justify-center shrink-0">
                         <CheckCircle2 size={11} className="text-[#f3a6b7]" />
                       </span>
-                      <span className="text-xs xl:text-sm text-gray-200 group-hover:text-white transition-colors">
+                      <span className="text-xs xl:text-sm text-gray-200 transition-colors">
                         {deliv}
                       </span>
                     </li>

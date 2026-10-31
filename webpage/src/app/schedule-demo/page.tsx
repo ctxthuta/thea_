@@ -269,7 +269,7 @@ function ScheduleDemoContent() {
         {/* Back Link */}
         <Link 
           href="/" 
-          className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-ds-mono uppercase tracking-wider bg-white/[0.04] text-gray-400 border border-white/10 hover:text-white hover:bg-white/[0.08] transition-all mb-8"
+          className="flex w-fit items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-ds-mono uppercase tracking-wider bg-white/[0.04] text-gray-400 border border-white/10 hover:text-white hover:bg-white/[0.08] transition-all mb-8"
         >
           <ArrowLeft size={14} aria-hidden="true" />
           <span>Back to home</span>
