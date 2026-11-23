@@ -5,7 +5,7 @@ import "./globals.css";
 import { OrganizationStructuredData, WebSiteStructuredData, SiteNavigationStructuredData } from '@/components/StructuredData';
 import Analytics from '@/components/Analytics';
 import SiteTheme from '@/components/SiteTheme';
-import ChatWidget from '@/components/ChatWidget';
+// import ChatWidget from '@/components/ChatWidget';
 
 const bricolageGrotesque = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -107,7 +107,10 @@ export default function RootLayout({
         <Suspense fallback={null}>
           <Analytics />
         </Suspense>
-        <SiteTheme>{children}<ChatWidget /></SiteTheme>
+        <SiteTheme>
+          {children}
+          {/* <ChatWidget /> */}
+        </SiteTheme>
       </body>
     </html>
   );
