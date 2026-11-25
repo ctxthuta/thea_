@@ -7,6 +7,12 @@ import { getEmployeeById, getEmployeeByUtmSource, Employee } from '@/lib/employe
 import { ExternalLink, X } from 'lucide-react';
 import mixpanel from 'mixpanel-browser';
 
+function openSafeExternalUrl(url: string): void {
+  if (/^https?:\/\//i.test(url)) {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+}
+
 export default function EmployeePortfolio({ params }: { params: Promise<{ id: string }> }) {
   const searchParams = useSearchParams();
   const [employee, setEmployee] = useState<Employee | null>(null);
@@ -24,66 +30,102 @@ export default function EmployeePortfolio({ params }: { params: Promise<{ id: st
   useEffect(() => {
     if (!employeeId) return;
 
-    // Check for UTM source from business card
+    let cancelled = false;
     const utmSourceParam = searchParams.get('utm_source');
     const utmMedium = searchParams.get('utm_medium');
     const utmCampaign = searchParams.get('utm_campaign');
     setUtmSource(utmSourceParam);
 
-    // Try to get employee by UTM source first, then by ID
-    let foundEmployee = null;
-    if (utmSourceParam) {
-      foundEmployee = getEmployeeByUtmSource(utmSourceParam);
-    }
-    
-    if (!foundEmployee) {
-      foundEmployee = getEmployeeById(employeeId);
-    }
+    const resolveEmployee = async () => {
+      let foundEmployee: Employee | null = null;
+      let definitiveNotFound = false;
+      const lookupSlug = utmSourceParam || employeeId;
 
-    setEmployee(foundEmployee || null);
-    setLoading(false);
-
-    // Initialize Mixpanel and track events
-    if (foundEmployee && typeof window !== 'undefined') {
-      const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN;
-      
-      if (MIXPANEL_TOKEN) {
-        try {
-          mixpanel.init(MIXPANEL_TOKEN, {
-            autocapture: false,
-            persistence: 'localStorage',
-            ignore_dnt: false,
-            track_pageview: false,
-          });
-
-          const eventProperties = {
-            employee_id: foundEmployee.id,
-            employee_name: foundEmployee.name,
-            employee_title: foundEmployee.title,
-            utm_source: utmSourceParam,
-            utm_medium: utmMedium,
-            utm_campaign: utmCampaign,
-            is_qr_scan: utmMedium === 'business-card',
-            referrer: document.referrer || undefined,
-            page_url: window.location.href,
-            timestamp: new Date().toISOString(),
-          };
-
-          mixpanel.track('Employee Portfolio Viewed', eventProperties);
-
-          if (utmMedium === 'business-card') {
-            mixpanel.track('QR Code Scanned', {
-              ...eventProperties,
-              scan_source: 'business_card',
-              employee_id: foundEmployee.id,
-              employee_name: foundEmployee.name,
-            });
+      try {
+        const res = await fetch(`/api/public/associates/${encodeURIComponent(lookupSlug)}`);
+        if (res.ok) {
+          const data = (await res.json()) as { employee?: Employee };
+          if (data.employee) {
+            foundEmployee = data.employee;
           }
-        } catch (error) {
-          console.error('Mixpanel tracking error:', error);
+        } else if (res.status === 404) {
+          if (lookupSlug !== employeeId) {
+            const retry = await fetch(`/api/public/associates/${encodeURIComponent(employeeId)}`);
+            if (retry.ok) {
+              const data = (await retry.json()) as { employee?: Employee };
+              if (data.employee) {
+                foundEmployee = data.employee;
+              }
+            } else if (retry.status === 404) {
+              definitiveNotFound = true;
+            }
+          } else {
+            definitiveNotFound = true;
+          }
+        }
+      } catch {
+        // Fall back to static bundled associate directory when offline
+      }
+
+      if (!foundEmployee && !definitiveNotFound) {
+        if (utmSourceParam) {
+          foundEmployee = getEmployeeByUtmSource(utmSourceParam) || null;
+        }
+        if (!foundEmployee) {
+          foundEmployee = getEmployeeById(employeeId) || null;
         }
       }
-    }
+
+      if (cancelled) return;
+      setEmployee(foundEmployee);
+      setLoading(false);
+
+      if (foundEmployee && typeof window !== 'undefined') {
+        const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN;
+
+        if (MIXPANEL_TOKEN) {
+          try {
+            mixpanel.init(MIXPANEL_TOKEN, {
+              autocapture: false,
+              persistence: 'localStorage',
+              ignore_dnt: false,
+              track_pageview: false,
+            });
+
+            const eventProperties = {
+              employee_id: foundEmployee.id,
+              employee_name: foundEmployee.name,
+              employee_title: foundEmployee.title,
+              utm_source: utmSourceParam,
+              utm_medium: utmMedium,
+              utm_campaign: utmCampaign,
+              is_qr_scan: utmMedium === 'business-card',
+              referrer: document.referrer || undefined,
+              page_url: window.location.href,
+              timestamp: new Date().toISOString(),
+            };
+
+            mixpanel.track('Employee Portfolio Viewed', eventProperties);
+
+            if (utmMedium === 'business-card') {
+              mixpanel.track('QR Code Scanned', {
+                ...eventProperties,
+                scan_source: 'business_card',
+                employee_id: foundEmployee.id,
+                employee_name: foundEmployee.name,
+              });
+            }
+          } catch (error) {
+            console.error('Mixpanel tracking error:', error);
+          }
+        }
+      }
+    };
+
+    void resolveEmployee();
+    return () => {
+      cancelled = true;
+    };
   }, [employeeId, searchParams]);
 
   if (loading) {
@@ -187,7 +229,7 @@ export default function EmployeePortfolio({ params }: { params: Promise<{ id: st
                         } catch (err) {
                           console.error(err);
                         }
-                        window.open(url, '_blank');
+                        openSafeExternalUrl(url);
                       }}
                     >
                       LinkedIn
@@ -216,7 +258,7 @@ export default function EmployeePortfolio({ params }: { params: Promise<{ id: st
                         } catch (err) {
                           console.error(err);
                         }
-                        window.open(url, '_blank');
+                        openSafeExternalUrl(url);
                       }}
                     >
                       GitHub
@@ -245,7 +287,7 @@ export default function EmployeePortfolio({ params }: { params: Promise<{ id: st
                         } catch (err) {
                           console.error(err);
                         }
-                        window.open(url, '_blank');
+                        openSafeExternalUrl(url);
                       }}
                     >
                       Twitter
@@ -274,7 +316,7 @@ export default function EmployeePortfolio({ params }: { params: Promise<{ id: st
                         } catch (err) {
                           console.error(err);
                         }
-                        window.open(url, '_blank');
+                        openSafeExternalUrl(url);
                       }}
                     >
                       Website
@@ -472,7 +514,7 @@ export default function EmployeePortfolio({ params }: { params: Promise<{ id: st
                             } catch (err) {
                               console.error(err);
                             }
-                            window.open(url, '_blank');
+                            openSafeExternalUrl(url);
                           }}
                         >
                           {url}

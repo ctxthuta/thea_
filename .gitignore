@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build artifacts
+.next/
+dist/
+build/
+out/
+*.tsbuildinfo
+
+# Environment & Secrets (never commit credentials)
+.env
+.env.*
+!.env.example
+
+# Logs & OS
+*.log
+.DS_Store
+Thumbs.db
+coverage/

@@ -43,7 +43,17 @@ const services = [
   },
 ];
 
-function Section2() {
+/** @param {{ cms?: Record<string, unknown> }} [props] */
+function Section2({ cms } = {}) {
+  const eyebrow = cms?.eyebrow || 'Core Capabilities · What We Do';
+  const headline =
+    cms?.headline || 'End-to-end technology solutions tailored to your business model';
+  const intro =
+    cms?.intro ||
+    'Operating as a fully remote firm, our dedicated team of expert engineers, solution architects, and product designers delivers enterprise-quality technology accessible to growing businesses.';
+  const activeServices =
+    Array.isArray(cms?.items) && cms.items.length > 0 ? cms.items : services;
+
   return (
     <section id="services" className="relative w-full py-24 sm:py-32 overflow-hidden bg-[#1A1816]">
       {/* Ambient wine-plum glow */}
@@ -61,21 +71,21 @@ function Section2() {
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#5F1F2F]/40 bg-[#5F1F2F]/15 font-ds-mono text-xs uppercase tracking-wider text-[#f3a6b7] mb-4">
             <span className="size-1.5 rounded-full bg-[#e36a88]" />
-            <span>Core Capabilities · What We Do</span>
+            <span>{eyebrow}</span>
           </div>
 
           <h2 className="font-ds-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white max-w-3xl leading-[1.12]">
-            End-to-end technology solutions tailored to your business model
+            {headline}
           </h2>
 
           <p className="mt-4 text-base sm:text-lg text-gray-400 font-light max-w-2xl leading-relaxed">
-            Operating as a fully remote firm, our dedicated team of expert engineers, solution architects, and product designers delivers enterprise-quality technology accessible to growing businesses.
+            {intro}
           </p>
         </motion.div>
 
         {/* Services Grid with TanStack DS Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-          {services.map((service, index) => (
+          {activeServices.map((service, index) => (
             <LandingCard
               key={index}
               tag={service.tag}

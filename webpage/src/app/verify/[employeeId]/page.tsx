@@ -7,9 +7,15 @@ import { getEmployeeCardById, isCardValid, EmployeeCard } from '@/lib/employeeCa
 import { CheckCircle2, AlertCircle, XCircle, Calendar, Mail, Building2, X } from 'lucide-react';
 import mixpanel from 'mixpanel-browser';
 
+interface VerifiedEmployeeCard extends EmployeeCard {
+  verificationStatus?: 'verified' | 'expired' | 'revoked';
+  isVerified?: boolean;
+  associateType?: string;
+}
+
 export default function EmployeeVerification({ params }: { params: Promise<{ employeeId: string }> }) {
   const searchParams = useSearchParams();
-  const [employee, setEmployee] = useState<EmployeeCard | null>(null);
+  const [employee, setEmployee] = useState<VerifiedEmployeeCard | null>(null);
   const [loading, setLoading] = useState(true);
   const [employeeId, setEmployeeId] = useState<string | null>(null);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
@@ -23,9 +29,50 @@ export default function EmployeeVerification({ params }: { params: Promise<{ emp
   useEffect(() => {
     if (!employeeId) return;
 
-    const foundEmployee = getEmployeeCardById(employeeId);
-    setEmployee(foundEmployee || null);
-    setLoading(false);
+    let cancelled = false;
+    const resolveCard = async () => {
+      try {
+        const res = await fetch(`/api/public/verify/${encodeURIComponent(employeeId)}`, {
+          cache: 'no-store',
+        });
+        if (res.ok) {
+          const data = (await res.json()) as { record?: VerifiedEmployeeCard };
+          if (!cancelled && data.record) {
+            setEmployee(data.record);
+            setLoading(false);
+            return;
+          }
+        } else if (res.status === 404) {
+          if (!cancelled) {
+            setEmployee(null);
+            setLoading(false);
+            return;
+          }
+        }
+      } catch {
+        // Fallback below
+      }
+
+      const foundEmployee = getEmployeeCardById(employeeId);
+      if (!cancelled) {
+        if (foundEmployee) {
+          const valid = isCardValid(foundEmployee.cardExpirationDate);
+          setEmployee({
+            ...foundEmployee,
+            isVerified: valid,
+            verificationStatus: valid ? 'verified' : 'expired',
+          });
+        } else {
+          setEmployee(null);
+        }
+        setLoading(false);
+      }
+    };
+
+    void resolveCard();
+    return () => {
+      cancelled = true;
+    };
   }, [employeeId]);
 
   useEffect(() => {
@@ -47,15 +94,17 @@ export default function EmployeeVerification({ params }: { params: Promise<{ emp
             track_pageview: false,
           });
 
-          const cardValid = isCardValid(employee.cardExpirationDate);
+          const verificationStatus: 'verified' | 'expired' | 'revoked' =
+            employee.verificationStatus ||
+            (isCardValid(employee.cardExpirationDate) ? 'verified' : 'expired');
           const eventProperties = {
             employee_id: employee.employeeId,
             employee_name: employee.name,
             employee_title: employee.title,
             employee_department: employee.department,
             card_expiration_date: employee.cardExpirationDate,
-            is_verified: cardValid,
-            verification_status: cardValid ? 'verified' : 'expired',
+            is_verified: verificationStatus === 'verified',
+            verification_status: verificationStatus,
             utm_source: utmSource,
             utm_medium: utmMedium,
             utm_campaign: utmCampaign,
@@ -111,7 +160,11 @@ export default function EmployeeVerification({ params }: { params: Promise<{ emp
     );
   }
 
-  const cardValid = isCardValid(employee.cardExpirationDate);
+  const verificationStatus: 'verified' | 'expired' | 'revoked' =
+    employee.verificationStatus ||
+    (isCardValid(employee.cardExpirationDate) ? 'verified' : 'expired');
+  const cardValid = verificationStatus === 'verified';
+  const isRevoked = verificationStatus === 'revoked';
   const expirationDate = new Date(employee.cardExpirationDate);
   const formattedExpiration = expirationDate.toLocaleDateString('en-US', {
     year: 'numeric',
@@ -139,22 +192,34 @@ export default function EmployeeVerification({ params }: { params: Promise<{ emp
 
           {/* Verification Status Banner */}
           <div className={`mb-10 p-6 rounded-2xl ${
-            cardValid ? 'bg-[#5F1F2F] text-white' : 'bg-[#8B2F3F] text-white'
+            cardValid
+              ? 'bg-[#5F1F2F] text-white'
+              : isRevoked
+                ? 'bg-[#7F1D1D] text-white border border-rose-400/40'
+                : 'bg-[#8B2F3F] text-white'
           }`}>
             <div className="flex items-start gap-4">
               {cardValid ? (
                 <CheckCircle2 className="h-7 w-7 text-white shrink-0 mt-0.5" />
+              ) : isRevoked ? (
+                <XCircle className="h-7 w-7 text-white shrink-0 mt-0.5" />
               ) : (
                 <AlertCircle className="h-7 w-7 text-white shrink-0 mt-0.5" />
               )}
               <div>
                 <h1 className="font-ds-display text-xl font-bold text-white leading-snug">
-                  {cardValid ? 'Verified Employee' : 'Former Employee'}
+                  {cardValid
+                    ? 'Verified Associate'
+                    : isRevoked
+                      ? 'Credential Revoked'
+                      : 'Expired Credential'}
                 </h1>
                 <p className="text-sm text-white/80 mt-1 font-light leading-relaxed">
                   {cardValid
-                    ? 'This employee is currently verified with Thea Solutions.'
-                    : 'This employee card has expired.'}
+                    ? 'This individual is currently verified with Thea Solutions.'
+                    : isRevoked
+                      ? 'This verification credential has been revoked by Thea Solutions and is no longer valid.'
+                      : 'This identification card has expired.'}
                 </p>
               </div>
             </div>
@@ -212,7 +277,7 @@ export default function EmployeeVerification({ params }: { params: Promise<{ emp
               <div className="flex justify-between items-baseline py-2 border-b border-white/[0.06]">
                 <span className="font-ds-mono text-xs uppercase tracking-wider text-gray-400">Card Expiration Date</span>
                 <span className={`font-ds-mono text-sm font-semibold ${cardValid ? 'text-white' : 'text-red-400'}`}>
-                  {formattedExpiration} {!cardValid && '(Expired)'}
+                  {formattedExpiration} {isRevoked ? '(Revoked)' : !cardValid ? '(Expired)' : ''}
                 </span>
               </div>
             </div>

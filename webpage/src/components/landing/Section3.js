@@ -117,14 +117,36 @@ const phases = [
   },
 ];
 
-function Section3() {
+const ICON_MAP = {
+  compass: Compass,
+  layers: Layers,
+  terminal: Terminal,
+  shield: ShieldCheck,
+  rocket: Rocket,
+  activity: Activity,
+};
+
+/** @param {{ cms?: Record<string, unknown> }} [props] */
+function Section3({ cms } = {}) {
+  const activePhases =
+    Array.isArray(cms?.phases) && cms.phases.length > 0
+      ? cms.phases.map((p, idx) => ({
+          ...phases[idx % phases.length],
+          ...p,
+          deliverables: Array.isArray(p.deliverables) ? p.deliverables : [],
+          icon: ICON_MAP[p.iconKey] || phases[idx % phases.length].icon,
+        }))
+      : phases;
+  const sectionEyebrow = cms?.eyebrow || 'Our Delivery Process · Predictable Milestones';
+  const sectionHeadline = cms?.headline || 'A proven, predictable path from vision to production';
+
   const [activePhaseIndex, setActivePhaseIndex] = useState(0);
 
   const goToNextPhase = () => {
-    setActivePhaseIndex((prev) => (prev + 1) % phases.length);
+    setActivePhaseIndex((prev) => (prev + 1) % activePhases.length);
   };
 
-  const activePhase = phases[activePhaseIndex];
+  const activePhase = activePhases[activePhaseIndex] || activePhases[0];
   const ActiveIcon = activePhase.icon;
 
   return (
@@ -143,10 +165,10 @@ function Section3() {
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#5F1F2F]/40 bg-[#5F1F2F]/15 font-ds-mono text-xs uppercase tracking-wider text-[#f3a6b7] mb-3">
               <span className="size-1.5 rounded-full bg-[#e36a88] animate-pulse" />
-              <span>Our Delivery Process · Predictable Milestones</span>
+              <span>{sectionEyebrow}</span>
             </div>
             <h2 className="font-ds-display text-3xl xl:text-4xl font-bold tracking-tight text-white leading-tight">
-              A proven, predictable path from vision to production
+              {sectionHeadline}
             </h2>
             <p className="mt-2 text-sm text-gray-400 font-light max-w-2xl">
               Select any milestone below to review the timeline, business guarantees, and verified acceptance criteria.
@@ -157,7 +179,7 @@ function Section3() {
           <div className="flex items-center gap-3 shrink-0">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/10 bg-[#1A1816]/90 font-ds-mono text-xs text-gray-300 shadow-md">
               <span className="size-1.5 rounded-full bg-[#e36a88]" />
-              <span>Milestone <strong className="text-white font-bold">{activePhase.step}</strong> of 06</span>
+              <span>Milestone <strong className="text-white font-bold">{activePhase.step}</strong> of {String(activePhases.length).padStart(2, '0')}</span>
             </div>
           </div>
         </div>
@@ -165,7 +187,7 @@ function Section3() {
         {/* Clean Step Navigation Strip */}
         <div className="mb-6 p-1.5 rounded-2xl bg-[#1A1816]/90 border border-white/10 backdrop-blur-xl shadow-lg">
           <div className="grid grid-cols-6 gap-2">
-            {phases.map((item, idx) => {
+            {activePhases.map((item, idx) => {
               const isActive = activePhaseIndex === idx;
               const isPassed = activePhaseIndex > idx;
 
@@ -304,8 +326,8 @@ function Section3() {
                 {/* Next step continuity prompt */}
                 <div className="mt-5 pt-3.5 border-t border-white/[0.06] flex items-center justify-between">
                   <span className="text-[11px] font-ds-mono text-gray-400">
-                    {activePhaseIndex < phases.length - 1 ? (
-                      <>Next: <strong className="text-white">Phase {phases[activePhaseIndex + 1].step} ({phases[activePhaseIndex + 1].tag})</strong></>
+                    {activePhaseIndex < activePhases.length - 1 ? (
+                      <>Next: <strong className="text-white">Phase {activePhases[activePhaseIndex + 1].step} ({activePhases[activePhaseIndex + 1].tag})</strong></>
                     ) : (
                       <span className="text-emerald-400 font-semibold">Production Live & Supported</span>
                     )}
@@ -316,7 +338,7 @@ function Section3() {
                     onClick={goToNextPhase}
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#5F1F2F]/40 hover:bg-[#5F1F2F] text-xs font-ds-mono text-white border border-[#e36a88]/40 transition-all cursor-pointer"
                   >
-                    <span>{activePhaseIndex < phases.length - 1 ? 'Next Step' : 'Restart'}</span>
+                    <span>{activePhaseIndex < activePhases.length - 1 ? 'Next Step' : 'Restart'}</span>
                     <ArrowRight size={13} />
                   </button>
                 </div>
@@ -367,9 +389,9 @@ function Section3() {
 
         {/* Clean Vertical Timeline Sequence */}
         <div className="space-y-6">
-          {phases.map((item, index) => {
+          {activePhases.map((item, index) => {
             const Icon = item.icon;
-            const isLast = index === phases.length - 1;
+            const isLast = index === activePhases.length - 1;
 
             return (
               <div key={item.step} className="flex gap-4 sm:gap-5 items-stretch">

@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { fetchCmsSection } from '@/lib/hqClient';
 import { 
   CustomArrowRight, 
   CustomCheck, 
@@ -74,7 +75,26 @@ const engagementModels = [
   }
 ];
 
-export default function PricingPage() {
+interface PricingCmsPayload {
+  eyebrow?: string;
+  headline?: string;
+  intro?: string;
+  engagementModels?: typeof engagementModels;
+}
+
+export default async function PricingPage() {
+  const cms = await fetchCmsSection<PricingCmsPayload>('pricing', 60);
+  const eyebrow = cms?.eyebrow || 'Transparent Engagement · Zero Hidden Fees';
+  const headline =
+    cms?.headline || 'Predictable investment models aligned with measurable outcomes';
+  const intro =
+    cms?.intro ||
+    'Transparent milestone and retainer models tailored to your operational goals—so you invest directly in engineering velocity, measurable outcomes, and dependable long-term support.';
+  const models =
+    Array.isArray(cms?.engagementModels) && cms.engagementModels.length > 0
+      ? cms.engagementModels
+      : engagementModels;
+
   return (
     <main className="min-h-screen bg-[#1A1816] text-[#F1F1F0]">
       <Navbar />
@@ -86,15 +106,15 @@ export default function PricingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-3xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#5F1F2F]/40 bg-[#5F1F2F]/15 font-ds-mono text-xs uppercase tracking-wider text-[#f3a6b7] mb-6">
             <CustomSparkles size={13} className="text-[#e36a88]" />
-            <span>Transparent Engagement · Zero Hidden Fees</span>
+            <span>{eyebrow}</span>
           </div>
 
           <h1 className="font-ds-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.08]">
-            Predictable investment models aligned with measurable outcomes
+            {headline}
           </h1>
 
           <p className="mt-6 text-lg text-gray-300 font-light leading-relaxed">
-            Transparent milestone and retainer models tailored to your operational goals—so you invest directly in engineering velocity, measurable outcomes, and dependable long-term support.
+            {intro}
           </p>
         </div>
       </section>
@@ -104,7 +124,7 @@ export default function PricingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {engagementModels.map((model) => (
+            {models.map((model) => (
               <div 
                 key={model.name}
                 className={`relative rounded-3xl p-8 flex flex-col justify-between transition-all duration-300 ${

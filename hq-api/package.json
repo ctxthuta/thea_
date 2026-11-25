@@ -1,0 +1,26 @@
+{
+  "name": "thea-hq-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun --watch src/index.ts",
+    "dev:local": "bun src/scripts/devLocal.ts",
+    "start": "bun src/index.ts",
+    "seed": "bun src/infrastructure/db/seed.ts",
+    "migrate": "bun src/infrastructure/db/runMigrations.ts",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "hono": "^4.7.4",
+    "jose": "^6.0.10",
+    "mongodb": "^6.14.2",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "mongodb-memory-server": "^11.4.0",
+    "typescript": "^5.8.2"
+  }
+}

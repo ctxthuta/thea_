@@ -10,7 +10,37 @@ import {
   AccordionTrigger,
 } from "@/components/ui/Accordion";
 
-function Section5() {
+const DEFAULT_FAQS = [
+  {
+    question: 'What services does Thea Solutions offer?',
+    answer:
+      'We specialize in bespoke software development, enterprise-grade AI solutions, and intelligent automation engineered specifically for SMEs. Our core capabilities span custom web and mobile applications, workflow and operational automation, AI/LLM integration, cloud infrastructure, and legacy modernization.',
+  },
+  {
+    question: 'How do I know if my business needs AI and automation?',
+    answer:
+      'If your team is weighed down by manual data entry, repetitive cross-application routines, fragmented tools, or operational bottlenecks that hinder scaling, automation will yield an immediate ROI. We evaluate your workflow to identify high-leverage intervention points that eliminate friction.',
+  },
+  {
+    question: 'How do we get started with Thea Solutions?',
+    answer:
+      'Getting started is straightforward. Submit the project scoping form above or schedule an introductory consultation. Our team will review your objectives, assess existing architecture, and draft a phased roadmap with clear deliverables and milestones.',
+  },
+  {
+    question: 'How long does a typical project take?',
+    answer:
+      'Timelines depend on scope complexity: targeted automation workflows typically deploy in 2 to 4 weeks, while comprehensive enterprise software builds span 2 to 4 months delivered in transparent 2-week agile sprints with bi-weekly live demos.',
+  },
+];
+
+/** @param {{ faqsCms?: Record<string, unknown>, siteSettings?: Record<string, unknown> }} [props] */
+function Section5({ faqsCms, siteSettings } = {}) {
+  const faqItems =
+    Array.isArray(faqsCms?.items) && faqsCms.items.length > 0
+      ? faqsCms.items
+      : DEFAULT_FAQS;
+  const contactEmail = siteSettings?.contactEmail || 'sales@theasolutions.co';
+
   const [formData, setFormData] = useState({
     company: '',
     contactName: '',
@@ -110,10 +140,10 @@ function Section5() {
                       Direct Sales &amp; Inquiries
                     </span>
                     <a 
-                      href="mailto:sales@theasolutions.co" 
+                      href={`mailto:${contactEmail}`} 
                       className="block text-base font-semibold text-white hover:text-[#f3a6b7] transition-colors truncate"
                     >
-                      sales@theasolutions.co
+                      {contactEmail}
                     </a>
                   </div>
                 </div>
@@ -351,7 +381,7 @@ function Section5() {
 
               <div className="mt-6 flex items-center gap-2">
                 <a 
-                  href="mailto:sales@theasolutions.co" 
+                  href={`mailto:${contactEmail}`} 
                   className="font-ds-mono text-xs uppercase tracking-wider text-[#f3a6b7] hover:underline inline-flex items-center gap-1.5"
                 >
                   <CustomMessageSquare size={13} />
@@ -363,41 +393,12 @@ function Section5() {
             {/* Accordion Column */}
             <div className="lg:col-span-7">
               <Accordion type="single" collapsible className="w-full">
-                <AccordionItem value="item-1">
-                  <AccordionTrigger>
-                    What services does Thea Solutions offer?
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    We specialize in bespoke software development, enterprise-grade AI solutions, and intelligent automation engineered specifically for SMEs. Our core capabilities span custom web and mobile applications, workflow and operational automation, AI/LLM integration, cloud infrastructure, and legacy modernization.
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="item-2">
-                  <AccordionTrigger>
-                    How do I know if my business needs AI and automation?
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    If your team is weighed down by manual data entry, repetitive cross-application routines, fragmented tools, or operational bottlenecks that hinder scaling, automation will yield an immediate ROI. We evaluate your workflow to identify high-leverage intervention points that eliminate friction.
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="item-3">
-                  <AccordionTrigger>
-                    How do we get started with Thea Solutions?
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    Getting started is straightforward. Submit the project scoping form above or schedule an introductory consultation. Our team will review your objectives, assess existing architecture, and draft a phased roadmap with clear deliverables and milestones.
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="item-4">
-                  <AccordionTrigger>
-                    How long does a typical project take?
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    Timelines depend on scope complexity: targeted automation workflows typically deploy in 2 to 4 weeks, while comprehensive enterprise software builds span 2 to 4 months delivered in transparent 2-week agile sprints with bi-weekly live demos.
-                  </AccordionContent>
-                </AccordionItem>
+                {faqItems.map((faq, idx) => (
+                  <AccordionItem key={idx} value={`item-${idx + 1}`}>
+                    <AccordionTrigger>{faq.question}</AccordionTrigger>
+                    <AccordionContent>{faq.answer}</AccordionContent>
+                  </AccordionItem>
+                ))}
               </Accordion>
             </div>
           </motion.div>
