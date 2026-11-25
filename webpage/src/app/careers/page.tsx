@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ArrowLeft, ArrowUpRight, Mail, Briefcase, MapPin, CheckCircle2, Sparkles } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { fetchCmsSection } from '@/lib/hqClient';
 
 const jobOpenings: Array<{
   title: string;
@@ -183,7 +184,33 @@ export const metadata: Metadata = {
   },
 };
 
-export default function CareersPage() {
+interface CareersCmsPayload {
+  headline?: string;
+  intro?: string;
+  openings?: Array<{
+    title: string;
+    level: string;
+    team: string;
+    location: string;
+    type: string;
+    description: string;
+    skills: string[];
+    focus: string[];
+    isOpen?: boolean;
+  }>;
+}
+
+export default async function CareersPage() {
+  const cms = await fetchCmsSection<CareersCmsPayload>('careers', 60);
+  const headline = cms?.headline || 'Build thoughtful technology with us.';
+  const intro =
+    cms?.intro ||
+    'We bring together curious, self-directed engineers and consultants who care deeply about useful software, intelligent automation, client business outcomes, and enduring craft.';
+  const activeOpenings =
+    Array.isArray(cms?.openings) && cms.openings.length > 0
+      ? cms.openings.filter((o) => o.isOpen !== false)
+      : jobOpenings;
+
   return (
     <main className="min-h-screen bg-[#1A1816] text-[#F1F1F0] overflow-hidden">
       <Navbar />
@@ -210,11 +237,11 @@ export default function CareersPage() {
 
           {/* Heading */}
           <h1 className="font-ds-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-[-0.03em] leading-[1.08] text-white max-w-4xl">
-            Build thoughtful technology with us.
+            {headline}
           </h1>
 
           <p className="mt-6 max-w-2xl text-base sm:text-lg text-gray-400 font-light leading-relaxed">
-            We bring together curious, self-directed engineers and consultants who care deeply about useful software, intelligent automation, client business outcomes, and enduring craft.
+            {intro}
           </p>
 
           {/* Open Positions Grid Section */}
@@ -229,15 +256,15 @@ export default function CareersPage() {
                 </h2>
               </div>
               <span className="font-ds-mono text-xs uppercase tracking-wider px-3 py-1.5 rounded-full bg-white/[0.05] border border-white/10 text-gray-300 w-fit">
-                {jobOpenings.length} Positions Available
+                {activeOpenings.length} Positions Available
               </span>
             </div>
 
             {/* Job Openings Grid in TanStack DS Card Style */}
             <div className="grid gap-6 md:grid-cols-2">
-              {jobOpenings.map((job) => (
+              {activeOpenings.map((job, idx) => (
                 <article 
-                  key={job.title} 
+                  key={`${job.title}-${idx}`} 
                   className="career-job-card group relative flex flex-col justify-between rounded-2xl border border-white/10 bg-[#181816]/75 backdrop-blur-xl p-6 sm:p-7 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06),0_8px_24px_rgba(0,0,0,0.4)] hover:border-[#5F1F2F]/70 hover:-translate-y-1 hover:shadow-[0_16px_36px_-6px_rgba(95,31,47,0.3)] transition-all duration-300 overflow-hidden"
                 >
                   {/* Top hairline accent */}
