@@ -4,6 +4,8 @@ import {
   ArrowRight,
   Briefcase,
   Building2,
+  Copy,
+  ExternalLink,
   Inbox,
   Kanban,
   Plus,
@@ -116,6 +118,8 @@ export default function CrmPage() {
     country: 'MM',
     status: 'PROSPECT' as CrmAccountStatus,
     notes: '',
+    portalSlug: '',
+    portalAccessCode: '',
   });
   const [accountSaving, setAccountSaving] = useState(false);
 
@@ -297,17 +301,27 @@ export default function CrmPage() {
   const handleSaveAccount = async (event: React.FormEvent) => {
     event.preventDefault();
     setAccountSaving(true);
+    const payload = {
+      name: accountForm.name.trim(),
+      website: accountForm.website.trim() || undefined,
+      industry: accountForm.industry.trim() || undefined,
+      country: accountForm.country.trim() || undefined,
+      status: accountForm.status,
+      notes: accountForm.notes.trim() || undefined,
+      portalSlug: accountForm.portalSlug.trim().toLowerCase() || undefined,
+      portalAccessCode: accountForm.portalAccessCode.trim() || undefined,
+    };
     try {
       if (editingAccount) {
         await apiRequest(`/api/v1/crm/accounts/${editingAccount.id}`, {
           method: 'PUT',
-          body: { ...accountForm, version: editingAccount.version },
+          body: { ...payload, version: editingAccount.version },
         });
         pushToast({ variant: 'success', title: 'Account updated' });
       } else {
         await apiRequest('/api/v1/crm/accounts', {
           method: 'POST',
-          body: accountForm,
+          body: payload,
         });
         pushToast({ variant: 'success', title: 'Account created' });
       }
@@ -463,6 +477,8 @@ export default function CrmPage() {
                       country: 'MM',
                       status: 'PROSPECT',
                       notes: '',
+                      portalSlug: '',
+                      portalAccessCode: '',
                     });
                     setAccountModalOpen(true);
                   }}
@@ -756,8 +772,9 @@ export default function CrmPage() {
                   <thead>
                     <tr className="border-b border-hq-borderSubtle bg-hq-subtle font-ds-mono text-[10px] uppercase text-hq-textMuted">
                       <th className="px-4 py-2.5">Organization</th>
-                      <th className="px-4 py-2.5">Status</th>
-                      {editable && <th className="px-4 py-2.5 text-right">Action</th>}
+                      <th className="px-4 py-2.5 whitespace-nowrap">Client Portal</th>
+                      <th className="px-4 py-2.5 whitespace-nowrap">Status</th>
+                      {editable && <th className="px-4 py-2.5 text-right whitespace-nowrap">Action</th>}
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-hq-borderSubtle">
@@ -769,13 +786,53 @@ export default function CrmPage() {
                             {[acct.industry, acct.country, acct.website].filter(Boolean).join(' · ') || '--'}
                           </p>
                         </td>
-                        <td className="px-4 py-3">
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          {acct.portalSlug ? (
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-1.5">
+                                <a
+                                  href={`/client/${acct.portalSlug}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1 font-ds-mono text-[11px] text-hq-brandSoft hover:underline"
+                                >
+                                  <span>/client/{acct.portalSlug}</span>
+                                  <ExternalLink className="h-2.5 w-2.5" />
+                                </a>
+                                <button
+                                  type="button"
+                                  title="Copy Client Portal Link"
+                                  onClick={() => {
+                                    const url = `${window.location.origin}/client/${acct.portalSlug}`;
+                                    void navigator.clipboard.writeText(url);
+                                    pushToast({
+                                      variant: 'info',
+                                      title: 'Client Portal link copied',
+                                      description: url,
+                                    });
+                                  }}
+                                  className="rounded border border-hq-borderDefault p-1 text-hq-textSecondary hover:bg-hq-elevated"
+                                >
+                                  <Copy className="h-3 w-3" />
+                                </button>
+                              </div>
+                              {acct.portalAccessCode && (
+                                <p className="font-ds-mono text-[10px] text-hq-textMuted">
+                                  Code: {acct.portalAccessCode}
+                                </p>
+                              )}
+                            </div>
+                          ) : (
+                            <span className="font-ds-mono text-[11px] text-hq-textMuted">Not enabled</span>
+                          )}
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap">
                           <StatusPill tone={acct.status === 'ACTIVE_CLIENT' ? 'in' : 'neutral'}>
                             {acct.status}
                           </StatusPill>
                         </td>
                         {editable && (
-                          <td className="px-4 py-3 text-right">
+                          <td className="px-4 py-3 text-right whitespace-nowrap">
                             <button
                               type="button"
                               onClick={() => {
@@ -787,6 +844,8 @@ export default function CrmPage() {
                                   country: acct.country || 'MM',
                                   status: acct.status,
                                   notes: acct.notes || '',
+                                  portalSlug: acct.portalSlug || '',
+                                  portalAccessCode: acct.portalAccessCode || '',
                                 });
                                 setAccountModalOpen(true);
                               }}
@@ -1375,6 +1434,40 @@ export default function CrmPage() {
               />
             </div>
           </div>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 rounded-xl border border-hq-borderSubtle bg-hq-subtle p-3.5">
+            <div>
+              <label className="mb-1 block text-xs font-medium text-hq-textSecondary">
+                Client Portal Workspace ID (Slug)
+              </label>
+              <input
+                type="text"
+                value={accountForm.portalSlug}
+                onChange={(e) =>
+                  setAccountForm({
+                    ...accountForm,
+                    portalSlug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''),
+                  })
+                }
+                placeholder="meditrust-yangon"
+                className="hq-input h-9 w-full px-3 font-ds-mono text-xs"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-medium text-hq-textSecondary">
+                Client Portal Access Code
+              </label>
+              <input
+                type="text"
+                value={accountForm.portalAccessCode}
+                onChange={(e) =>
+                  setAccountForm({ ...accountForm, portalAccessCode: e.target.value })
+                }
+                placeholder="MT-2026"
+                className="hq-input h-9 w-full px-3 font-ds-mono text-xs"
+              />
+            </div>
+          </div>
+
           <div>
             <label className="mb-1 block text-xs font-medium text-hq-textSecondary">Notes</label>
             <textarea

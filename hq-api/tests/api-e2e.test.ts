@@ -407,10 +407,32 @@ describe('End-to-End Accounting, Associates, CMS, CRM & Seed Flows', () => {
     expect(converted.deal.stage).toBe('DISCOVERY');
   });
 
-  test('Idempotent seed populates all 8 CMS sections, 3 webpage associates, COA & opening ledger', async () => {
+  test('Idempotent seed removes Dr. Ohnmar Than and populates Myanmar associates, CMS, CRM, Projects & Tickets', async () => {
+    // Pre-insert legacy Dr. Ohnmar Than record to verify seed explicitly purges it
+    const preLegacy = await req('/api/v1/associates', {
+      method: 'POST',
+      token,
+      body: {
+        slug: 'dr-ohnmar-than',
+        employeeId: 'THEA-XWUE',
+        associateType: 'executive',
+        name: 'Legacy Record',
+        title: 'Legacy',
+        department: 'Finance',
+        bio: 'To be removed by seed',
+        cardExpirationDate: '2027-12-31',
+      },
+    });
+    expect(preLegacy.status).toBe(201);
+
     await runSeed();
     await runSeed();
 
+    // Legacy Dr. Ohnmar Than record is completely removed
+    expect((await req('/api/v1/public/verify/THEA-XWUE')).status).toBe(404);
+    expect((await req('/api/v1/public/associates/dr-ohnmar-than')).status).toBe(404);
+
+    // All 8 CMS sections published
     const cmsBatch = await req('/api/v1/public/cms');
     expect(cmsBatch.status).toBe(200);
     const batchBody = (await cmsBatch.json()) as { sections: Record<string, unknown> };
@@ -425,12 +447,7 @@ describe('End-to-End Accounting, Associates, CMS, CRM & Seed Flows', () => {
       'site_settings',
     ]);
 
-    const cfoVerify = await req('/api/v1/public/verify/THEA-XWUE');
-    expect(cfoVerify.status).toBe(200);
-    const cfoBody = (await cfoVerify.json()) as { name: string; isVerified: boolean };
-    expect(cfoBody.name).toBe('Dr. Ohnmar Than');
-    expect(cfoBody.isVerified).toBe(true);
-
+    // Realistic Myanmar associates exist and verify cleanly
     const thiriCard = await req('/api/v1/public/associates/thiri-chan-nyein');
     expect(thiriCard.status).toBe(200);
     expect(((await thiriCard.json()) as { employeeId: string }).employeeId).toBe('THEA-UWIS');
@@ -438,6 +455,26 @@ describe('End-to-End Accounting, Associates, CMS, CRM & Seed Flows', () => {
     const chueVerify = await req('/api/v1/public/verify/THEA-CSWE');
     expect(chueVerify.status).toBe(200);
     expect(((await chueVerify.json()) as { name: string }).name).toBe('Chue Yamin Lwin');
+
+    const kzhtVerify = await req('/api/v1/public/verify/THEA-KZHT');
+    expect(kzhtVerify.status).toBe(200);
+    expect(((await kzhtVerify.json()) as { name: string }).name).toBe('Kyaw Zin Htet');
+
+    // Verify 6 seeded projects and 14 seeded tickets
+    const projRes = await req('/api/v1/projects?limit=50', { token });
+    expect(projRes.status).toBe(200);
+    const projBody = (await projRes.json()) as { items: Array<{ code: string; phases: unknown[] }> };
+    expect(projBody.items.length).toBeGreaterThanOrEqual(6);
+
+    const tktRes = await req('/api/v1/tickets?limit=50', { token });
+    expect(tktRes.status).toBe(200);
+    const tktBody = (await tktRes.json()) as {
+      items: Array<{ ticketNumber: string }>;
+      summary: { open: number; inProgress: number; waitingClient: number; resolved: number; closed: number };
+    };
+    expect(tktBody.items.length).toBeGreaterThanOrEqual(14);
+    expect(tktBody.summary.open).toBeGreaterThan(0);
+    expect(tktBody.summary.waitingClient).toBeGreaterThan(0);
 
     // Verify delivery_pipeline iconKey values are normalized lowercase
     const dpRes = await req('/api/v1/public/cms/delivery_pipeline');
@@ -510,16 +547,16 @@ describe('End-to-End Accounting, Associates, CMS, CRM & Seed Flows', () => {
   });
 
   test('FX rate resolution by date and General Ledger running balance & reversal reconciliation', async () => {
-    // Seed two distinct dates with different THB->MMK rates
+    // Seed two distinct dates in an unseeded historical month (May 2026) with different THB->MMK rates
     const fxEarly = await req('/api/v1/accounting/fx-rates', {
       method: 'POST',
       token,
       body: {
-        date: '2026-10-10',
+        date: '2026-05-10',
         fromCurrency: 'THB',
         toCurrency: 'MMK',
         rate: '130.000000',
-        source: 'Oct Desk',
+        source: 'May Desk',
       },
     });
     expect(fxEarly.status).toBe(201);
@@ -528,17 +565,17 @@ describe('End-to-End Accounting, Associates, CMS, CRM & Seed Flows', () => {
       method: 'POST',
       token,
       body: {
-        date: '2026-10-20',
+        date: '2026-05-20',
         fromCurrency: 'THB',
         toCurrency: 'MMK',
         rate: '140.000000',
-        source: 'Oct Mid Desk',
+        source: 'May Mid Desk',
       },
     });
     expect(fxMid.status).toBe(201);
 
     // Exact date match
-    const resExact = await req('/api/v1/accounting/fx-rates/resolve?date=2026-10-10&from=THB&to=MMK', {
+    const resExact = await req('/api/v1/accounting/fx-rates/resolve?date=2026-05-10&from=THB&to=MMK', {
       token,
     });
     expect(resExact.status).toBe(200);
@@ -548,11 +585,11 @@ describe('End-to-End Accounting, Associates, CMS, CRM & Seed Flows', () => {
       isExactDateMatch: boolean;
     };
     expect(exactBody.rate).toBe('130.000000');
-    expect(exactBody.fxRateDate).toBe('2026-10-10');
+    expect(exactBody.fxRateDate).toBe('2026-05-10');
     expect(exactBody.isExactDateMatch).toBe(true);
 
-    // Prior-date fallback (2026-10-15 resolves 2026-10-10 rate)
-    const resFallback = await req('/api/v1/accounting/fx-rates/resolve?date=2026-10-15&from=THB&to=MMK', {
+    // Prior-date fallback (2026-05-15 resolves 2026-05-10 rate)
+    const resFallback = await req('/api/v1/accounting/fx-rates/resolve?date=2026-05-15&from=THB&to=MMK', {
       token,
     });
     expect(resFallback.status).toBe(200);
@@ -562,11 +599,11 @@ describe('End-to-End Accounting, Associates, CMS, CRM & Seed Flows', () => {
       isExactDateMatch: boolean;
     };
     expect(fbBody.rate).toBe('130.000000');
-    expect(fbBody.fxRateDate).toBe('2026-10-10');
+    expect(fbBody.fxRateDate).toBe('2026-05-10');
     expect(fbBody.isExactDateMatch).toBe(false);
 
     // Same-currency identity
-    const resSame = await req('/api/v1/accounting/fx-rates/resolve?date=2026-10-15&from=MMK&to=MMK', {
+    const resSame = await req('/api/v1/accounting/fx-rates/resolve?date=2026-05-15&from=MMK&to=MMK', {
       token,
     });
     expect(resSame.status).toBe(200);
@@ -574,15 +611,15 @@ describe('End-to-End Accounting, Associates, CMS, CRM & Seed Flows', () => {
     expect(sameBody.rate).toBe('1.000000');
     expect(sameBody.isExactDateMatch).toBe(true);
 
-    // Post entry before period (2026-10-12 @ 130.000000 -> 1,000 THB = 130,000 MMK)
+    // Post entry before period (2026-05-12 @ 130.000000 -> 1,000 THB = 130,000 MMK)
     const openingEntryRes = await req('/api/v1/accounting/journals', {
       method: 'POST',
       token,
       body: {
         entryType: 'INCOME',
-        entryDate: '2026-10-12',
+        entryDate: '2026-05-12',
         currency: 'THB',
-        description: 'Oct 12 consulting fee',
+        description: 'May 12 consulting fee',
         lines: [
           { accountCode: '1030', debitOrig: '1000.00', creditOrig: '0.00' },
           { accountCode: '4030', debitOrig: '0.00', creditOrig: '1000.00' },
@@ -593,17 +630,17 @@ describe('End-to-End Accounting, Associates, CMS, CRM & Seed Flows', () => {
     expect(openingEntryRes.status).toBe(201);
     const openingEntry = (await openingEntryRes.json()) as { fxRateUsed: string; fxRateDate: string };
     expect(openingEntry.fxRateUsed).toBe('130.000000');
-    expect(openingEntry.fxRateDate).toBe('2026-10-10');
+    expect(openingEntry.fxRateDate).toBe('2026-05-10');
 
-    // Post entry inside period (2026-10-21 @ 140.000000 -> 500 THB = 70,000 MMK)
+    // Post entry inside period (2026-05-21 @ 140.000000 -> 500 THB = 70,000 MMK)
     const periodEntryRes = await req('/api/v1/accounting/journals', {
       method: 'POST',
       token,
       body: {
         entryType: 'INCOME',
-        entryDate: '2026-10-21',
+        entryDate: '2026-05-21',
         currency: 'THB',
-        description: 'Oct 21 advisory fee',
+        description: 'May 21 advisory fee',
         lines: [
           { accountCode: '1030', debitOrig: '500.00', creditOrig: '0.00' },
           { accountCode: '4030', debitOrig: '0.00', creditOrig: '500.00' },
@@ -614,18 +651,18 @@ describe('End-to-End Accounting, Associates, CMS, CRM & Seed Flows', () => {
     expect(periodEntryRes.status).toBe(201);
     const periodEntry = (await periodEntryRes.json()) as { id: string; version: number };
 
-    // Reverse the Oct 21 entry on Oct 22 to verify chronological reversal reconciliation
+    // Reverse the May 21 entry on May 22 to verify chronological reversal reconciliation
     const revPeriod = await req(`/api/v1/accounting/journals/${periodEntry.id}/reverse`, {
       method: 'POST',
       token,
       headers: { 'Idempotency-Key': 'ledger-rev-001' },
-      body: { reversalDate: '2026-10-22', reason: 'Credit note issued', version: periodEntry.version },
+      body: { reversalDate: '2026-05-22', reason: 'Credit note issued', version: periodEntry.version },
     });
     expect(revPeriod.status).toBe(201);
 
     // Query General Ledger summary mode
     const glSummaryRes = await req(
-      '/api/v1/accounting/ledger?accountCode=ALL&dateFrom=2026-10-15&dateTo=2026-10-31',
+      '/api/v1/accounting/ledger?accountCode=ALL&dateFrom=2026-05-15&dateTo=2026-05-31',
       { token }
     );
     expect(glSummaryRes.status).toBe(200);
@@ -641,7 +678,7 @@ describe('End-to-End Accounting, Associates, CMS, CRM & Seed Flows', () => {
 
     // Query General Ledger detail mode for account 4030
     const glDetailRes = await req(
-      '/api/v1/accounting/ledger?accountCode=4030&dateFrom=2026-10-15&dateTo=2026-10-31&displayCurrency=MMK',
+      '/api/v1/accounting/ledger?accountCode=4030&dateFrom=2026-05-15&dateTo=2026-05-31&displayCurrency=MMK',
       { token }
     );
     expect(glDetailRes.status).toBe(200);
@@ -737,30 +774,30 @@ describe('End-to-End Accounting, Associates, CMS, CRM & Seed Flows', () => {
   });
 
   test('Historical entry-date FX immutability across all reports & FX rate lock guard', async () => {
-    // 1. Add historical FX rate on 2026-09-20 (1 THB = 135.000000 MMK)
+    // 1. Add historical FX rate on 2026-06-20 (1 THB = 135.000000 MMK)
     const fx20Res = await req('/api/v1/accounting/fx-rates', {
       method: 'POST',
       token,
       body: {
-        date: '2026-09-20',
+        date: '2026-06-20',
         fromCurrency: 'THB',
         toCurrency: 'MMK',
         rate: '135.000000',
-        source: 'Sep 20 Desk',
+        source: 'Jun 20 Desk',
       },
     });
     expect(fx20Res.status).toBe(201);
     const fx20 = (await fx20Res.json()) as { id: string };
 
-    // Post both a THB journal and an MMK journal on 2026-09-20
+    // Post both a THB journal and an MMK journal on 2026-06-20
     const thbJe = await req('/api/v1/accounting/journals', {
       method: 'POST',
       token,
       body: {
         entryType: 'INCOME',
-        entryDate: '2026-09-20',
+        entryDate: '2026-06-20',
         currency: 'THB',
-        description: 'Sep 20 THB software milestone',
+        description: 'Jun 20 THB software milestone',
         lines: [
           { accountCode: '1030', debitOrig: '10000.00', creditOrig: '0.00' },
           { accountCode: '4010', debitOrig: '0.00', creditOrig: '10000.00' },
@@ -775,9 +812,9 @@ describe('End-to-End Accounting, Associates, CMS, CRM & Seed Flows', () => {
       token,
       body: {
         entryType: 'EXPENSE',
-        entryDate: '2026-09-20',
+        entryDate: '2026-06-20',
         currency: 'MMK',
-        description: 'Sep 20 MMK office stipend',
+        description: 'Jun 20 MMK office stipend',
         lines: [
           { accountCode: '6050', debitOrig: '270000.00', creditOrig: '0.00' },
           { accountCode: '1020', debitOrig: '0.00', creditOrig: '270000.00' },
@@ -787,29 +824,29 @@ describe('End-to-End Accounting, Associates, CMS, CRM & Seed Flows', () => {
     });
     expect(mmkJe.status).toBe(201);
 
-    // Set a THB budget for 2026-09 on 4010 so both currencies exercise Budget vs. Actual
-    const budgetSep = await req('/api/v1/accounting/budgets', {
+    // Set a THB budget for 2026-06 on 4010 so both currencies exercise Budget vs. Actual
+    const budgetJun = await req('/api/v1/accounting/budgets', {
       method: 'PUT',
       token,
       body: {
         periodType: 'MONTHLY',
-        periodKey: '2026-09',
+        periodKey: '2026-06',
         accountCode: '4010',
         currency: 'THB',
         targetAmount: '25000.00',
-        notes: 'Sep software revenue target',
+        notes: 'Jun software revenue target',
       },
     });
-    expect(budgetSep.status).toBe(200);
+    expect(budgetJun.status).toBe(200);
 
     // 2. Snapshot all 5 reports in BOTH MMK and THB
     const snapshotAll = async (curr: 'MMK' | 'THB') => {
       const [tb, pnl, bs, gl, bva] = await Promise.all([
-        req(`/api/v1/accounting/reports/trial-balance?asOf=2026-09-20&displayCurrency=${curr}`, { token }).then((r) => r.json()),
-        req(`/api/v1/accounting/reports/income-statement?dateFrom=2026-09-01&dateTo=2026-09-20&displayCurrency=${curr}`, { token }).then((r) => r.json()),
-        req(`/api/v1/accounting/reports/balance-sheet?asOf=2026-09-20&displayCurrency=${curr}`, { token }).then((r) => r.json()),
-        req(`/api/v1/accounting/ledger?accountCode=4010&dateFrom=2026-09-01&dateTo=2026-09-20&displayCurrency=${curr}`, { token }).then((r) => r.json()),
-        req(`/api/v1/accounting/reports/budget-vs-actual?periodType=MONTHLY&periodKey=2026-09&displayCurrency=${curr}`, { token }).then((r) => r.json()),
+        req(`/api/v1/accounting/reports/trial-balance?asOf=2026-06-20&displayCurrency=${curr}`, { token }).then((r) => r.json()),
+        req(`/api/v1/accounting/reports/income-statement?dateFrom=2026-06-01&dateTo=2026-06-20&displayCurrency=${curr}`, { token }).then((r) => r.json()),
+        req(`/api/v1/accounting/reports/balance-sheet?asOf=2026-06-20&displayCurrency=${curr}`, { token }).then((r) => r.json()),
+        req(`/api/v1/accounting/ledger?accountCode=4010&dateFrom=2026-06-01&dateTo=2026-06-20&displayCurrency=${curr}`, { token }).then((r) => r.json()),
+        req(`/api/v1/accounting/reports/budget-vs-actual?periodType=MONTHLY&periodKey=2026-06&displayCurrency=${curr}`, { token }).then((r) => r.json()),
       ]);
       return { tb, pnl, bs, gl, bva } as {
         tb: { isBalanced: boolean; fxTranslationBasis: string };
@@ -830,23 +867,21 @@ describe('End-to-End Accounting, Associates, CMS, CRM & Seed Flows', () => {
     expect(beforeMmk.tb.fxTranslationBasis).toBe('HISTORICAL_ENTRY_DATE');
     expect(beforeThb.gl.fxTranslationBasis).toBe('HISTORICAL_ENTRY_DATE');
     expect(beforeThb.bva.fxTranslationBasis).toBe('HISTORICAL_ENTRY_DATE');
-    // Verify exact translated values on 2026-09-20 @ 135 MMK/THB:
-    // 10,000 THB = 1,350,000 MMK; 270,000 MMK = 2,000 THB
     expect(beforeMmk.pnl.revenueTotal).toBe('1350000.00');
     expect(beforeThb.pnl.revenueTotal).toBe('10000.00');
     expect(beforeMmk.pnl.opexTotal).toBe('270000.00');
     expect(beforeThb.gl.closingBalanceDisplay).toBe('10000.00');
 
-    // 3. Insert a drastically different daily FX rate on a future date (2026-09-26 @ 200.00 MMK)
+    // 3. Insert a drastically different daily FX rate on a future date (2026-06-26 @ 200.00 MMK)
     const fx26Res = await req('/api/v1/accounting/fx-rates', {
       method: 'POST',
       token,
       body: {
-        date: '2026-09-26',
+        date: '2026-06-26',
         fromCurrency: 'THB',
         toCurrency: 'MMK',
         rate: '200.000000',
-        source: 'Sep 26 Desk',
+        source: 'Jun 26 Desk',
       },
     });
     expect(fx26Res.status).toBe(201);
@@ -858,7 +893,7 @@ describe('End-to-End Accounting, Associates, CMS, CRM & Seed Flows', () => {
     expect(afterMmk).toEqual(beforeMmk);
     expect(afterThb).toEqual(beforeThb);
 
-    // 5. Editing the locked 2026-09-20 FX rate is rejected with 409 Conflict
+    // 5. Editing the locked 2026-06-20 FX rate is rejected with 409 Conflict
     const editLocked = await req(`/api/v1/accounting/fx-rates/${fx20.id}`, {
       method: 'PUT',
       token,
@@ -867,5 +902,226 @@ describe('End-to-End Accounting, Associates, CMS, CRM & Seed Flows', () => {
     expect(editLocked.status).toBe(409);
     const lockedBody = (await editLocked.json()) as { type: string };
     expect(lockedBody.type).toContain('fx-rate-locked');
+  });
+
+  test('Projects, Phases/Milestones, Internal Helpdesk & Client Portal strict tenant/token isolation', async () => {
+    // 1. Fetch seeded MediTrust and Shwe Taung accounts
+    const accountsRes = await req('/api/v1/crm/accounts?limit=50', { token });
+    expect(accountsRes.status).toBe(200);
+    const accountsBody = (await accountsRes.json()) as {
+      items: Array<{ id: string; portalSlug: string | null; portalAccessCode: string | null; version: number }>;
+    };
+    const mediTrust = accountsBody.items.find((a) => a.portalSlug === 'meditrust-yangon')!;
+    const shweTaung = accountsBody.items.find((a) => a.portalSlug === 'shwetaung-logistics')!;
+    expect(mediTrust).toBeDefined();
+    expect(shweTaung).toBeDefined();
+
+    // 2. Create a new project with phases/milestones and patch phase progress
+    const createProjRes = await req('/api/v1/projects', {
+      method: 'POST',
+      token,
+      body: {
+        name: 'MediTrust Mobile Phlebotomy Dispatch',
+        accountId: mediTrust.id,
+        status: 'ACTIVE',
+        summary: 'Home specimen collection dispatch module.',
+        currency: 'THB',
+        budgetAmount: '95000.00',
+        startDate: '2026-11-01',
+        targetEndDate: '2027-01-31',
+        phases: [
+          {
+            id: 'phleb-p1',
+            name: 'Phase 1: Discovery',
+            order: 1,
+            status: 'COMPLETED',
+            startDate: '2026-11-01',
+            targetDate: '2026-11-15',
+            progressPct: 100,
+            milestones: [
+              { title: 'Dispatch SOP Spec', deliveryDate: '2026-11-10', status: 'COMPLETED' },
+            ],
+          },
+          {
+            id: 'phleb-p2',
+            name: 'Phase 2: Mobile App Build',
+            order: 2,
+            status: 'IN_PROGRESS',
+            startDate: '2026-11-16',
+            targetDate: '2026-12-20',
+            progressPct: 40,
+            milestones: [
+              { title: 'Route Assignment Screen', deliveryDate: '2026-12-05', status: 'IN_PROGRESS' },
+            ],
+          },
+        ],
+      },
+    });
+    expect(createProjRes.status).toBe(201);
+    const createdProj = (await createProjRes.json()) as {
+      id: string;
+      code: string;
+      overallProgressPct: number;
+      version: number;
+    };
+    expect(createdProj.code).toMatch(/^PRJ-\d{4}-\d{3,}$/);
+    expect(createdProj.overallProgressPct).toBe(70);
+
+    const patchPhaseRes = await req(`/api/v1/projects/${createdProj.id}/phases/phleb-p2`, {
+      method: 'PATCH',
+      token,
+      body: { status: 'COMPLETED', progressPct: 100, version: createdProj.version },
+    });
+    expect(patchPhaseRes.status).toBe(200);
+    expect(((await patchPhaseRes.json()) as { overallProgressPct: number }).overallProgressPct).toBe(100);
+
+    // 3. Create internal ticket with BOTH an internal engineering note and a public team reply
+    const createTktRes = await req('/api/v1/tickets', {
+      method: 'POST',
+      token,
+      body: {
+        accountId: mediTrust.id,
+        projectId: createdProj.id,
+        phaseId: 'phleb-p2',
+        title: 'Phlebotomy GPS pin offset in Bahan township',
+        description: 'Pin drifts 200m near Shwedagon East Gate.',
+        category: 'BUG',
+        priority: 'HIGH',
+        status: 'WAITING_CLIENT',
+        requesterName: 'Dr. Zaw Min Htut',
+        requesterEmail: 'zawminhtut@meditrust-yangon.mm',
+      },
+    });
+    expect(createTktRes.status).toBe(201);
+    const internalTkt = (await createTktRes.json()) as { id: string; ticketNumber: string };
+    expect(internalTkt.ticketNumber).toMatch(/^TKT-\d{4}-\d{4,}$/);
+
+    const addInternalNote = await req(`/api/v1/tickets/${internalTkt.id}/comments`, {
+      method: 'POST',
+      token,
+      body: {
+        message: 'INTERNAL SECRET: Client is on old Android 9 devices; do not mention vendor bug.',
+        isInternalNote: true,
+      },
+    });
+    expect(addInternalNote.status).toBe(201);
+
+    const addPublicReply = await req(`/api/v1/tickets/${internalTkt.id}/comments`, {
+      method: 'POST',
+      token,
+      body: {
+        message: 'Could you share a screenshot of the GPS accuracy reading from the driver phone?',
+        isInternalNote: false,
+      },
+    });
+    expect(addPublicReply.status).toBe(201);
+
+    // 4. Client Portal Login (MediTrust) & Bad Access Code rejection
+    const badPortalLogin = await req('/api/v1/client-portal/login', {
+      method: 'POST',
+      body: { portalSlug: 'meditrust-yangon', accessCode: 'WRONG-CODE' },
+    });
+    expect(badPortalLogin.status).toBe(401);
+
+    const portalLogin = await req('/api/v1/client-portal/login', {
+      method: 'POST',
+      body: { portalSlug: 'meditrust-yangon', accessCode: 'MT-2026' },
+    });
+    expect(portalLogin.status).toBe(200);
+    expect(portalLogin.headers.get('set-cookie')).toContain('thea_client_session=');
+    const { token: clientToken } = (await portalLogin.json()) as { token: string };
+
+    // 5. Strict JWT Audience / Role Isolation (Client JWT rejected on internal routes; Staff JWT rejected on client routes)
+    expect((await req('/api/v1/admin/users', { token: clientToken })).status).toBe(401);
+    expect((await req('/api/v1/accounting/coa', { token: clientToken })).status).toBe(401);
+    expect((await req('/api/v1/tickets', { token: clientToken })).status).toBe(401);
+    expect((await req('/api/v1/client-portal/projects', { token })).status).toBe(401);
+
+    // 6. Client Portal projects list is strictly scoped to MediTrust and redacts budgetAmount
+    const clientProjsRes = await req('/api/v1/client-portal/projects', { token: clientToken });
+    expect(clientProjsRes.status).toBe(200);
+    const clientProjs = (await clientProjsRes.json()) as {
+      items: Array<Record<string, unknown>>;
+    };
+    expect(clientProjs.items.length).toBeGreaterThanOrEqual(3);
+    for (const p of clientProjs.items) {
+      expect(p.accountName).toBe('MediTrust Diagnostics Yangon');
+      expect(p.budgetAmount).toBeUndefined();
+    }
+
+    // 7. Client Portal ticket strictly strips isInternalNote: true comments
+    const clientTktDetail = await req(`/api/v1/client-portal/tickets/${internalTkt.id}`, {
+      token: clientToken,
+    });
+    expect(clientTktDetail.status).toBe(200);
+    const clientTktBody = (await clientTktDetail.json()) as {
+      status: string;
+      comments: Array<{ message: string; isInternalNote: boolean }>;
+    };
+    expect(clientTktBody.comments.length).toBe(1);
+    expect(clientTktBody.comments[0]?.isInternalNote).toBe(false);
+    expect(clientTktBody.comments.some((c) => c.message.includes('INTERNAL SECRET'))).toBe(false);
+
+    // 8. Client reply on WAITING_CLIENT ticket automatically reopens it to IN_PROGRESS
+    const clientReply = await req(`/api/v1/client-portal/tickets/${internalTkt.id}/comments`, {
+      method: 'POST',
+      token: clientToken,
+      body: { message: 'Screenshot uploaded — accuracy shows 180m.' },
+    });
+    expect(clientReply.status).toBe(201);
+    const repliedBody = (await clientReply.json()) as {
+      status: string;
+      comments: Array<{ authorType: string; isInternalNote: boolean }>;
+    };
+    expect(repliedBody.status).toBe('IN_PROGRESS');
+    expect(repliedBody.comments.length).toBe(2);
+    expect(repliedBody.comments[1]?.authorType).toBe('CLIENT');
+
+    // 9. Cross-tenant IDOR protection: MediTrust CANNOT read Shwe Taung's tickets or attach Shwe Taung's project
+    const shweTicketsRes = await req(`/api/v1/tickets?accountId=${shweTaung.id}`, { token });
+    const shweTickets = (await shweTicketsRes.json()) as { items: Array<{ id: string; projectId: string | null }> };
+    const shweTicketId = shweTickets.items[0]!.id;
+    const shweProjectId = shweTickets.items[0]!.projectId!;
+
+    expect(
+      (await req(`/api/v1/client-portal/tickets/${shweTicketId}`, { token: clientToken })).status
+    ).toBe(404);
+
+    const idorCreate = await req('/api/v1/client-portal/tickets', {
+      method: 'POST',
+      token: clientToken,
+      body: {
+        projectId: shweProjectId,
+        title: 'Attempted cross-tenant project link',
+        description: 'Should be blocked.',
+        category: 'SUPPORT',
+        priority: 'LOW',
+      },
+    });
+    expect(idorCreate.status).toBe(404);
+
+    // Legitimate Client Portal ticket submission succeeds
+    const validClientSubmit = await req('/api/v1/client-portal/tickets', {
+      method: 'POST',
+      token: clientToken,
+      body: {
+        projectId: createdProj.id,
+        title: 'Add weekend phlebotomy shift calendar',
+        description: 'Need Saturday morning booking slots in Bahan branch.',
+        category: 'FEATURE_REQUEST',
+        priority: 'MEDIUM',
+      },
+    });
+    expect(validClientSubmit.status).toBe(201);
+
+    // 10. Rotate portal access code via CRM endpoint
+    const rotateRes = await req(`/api/v1/crm/accounts/${mediTrust.id}/portal-access`, {
+      method: 'POST',
+      token,
+      body: { rotateAccessCode: true },
+    });
+    expect(rotateRes.status).toBe(200);
+    const rotated = (await rotateRes.json()) as { portalAccessCode: string };
+    expect(rotated.portalAccessCode).not.toBe('MT-2026');
   });
 });

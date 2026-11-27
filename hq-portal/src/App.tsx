@@ -12,7 +12,10 @@ import CmsPage from '@/pages/cms/CmsPage';
 import AssociatesPage from '@/pages/AssociatesPage';
 import FinancePage from '@/pages/finance/FinancePage';
 import CrmPage from '@/pages/CrmPage';
+import ProjectsPage from '@/pages/ProjectsPage';
+import TicketsPage from '@/pages/TicketsPage';
 import AdminPage from '@/pages/AdminPage';
+import ClientPortalPage from '@/pages/client/ClientPortalPage';
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -60,7 +63,14 @@ export default function App() {
           <CurrencyProvider>
             <BrowserRouter>
               <Routes>
+                {/* Standalone Client-Facing Portal Routes (Isolated from Internal Staff Shell) */}
+                <Route path="/client" element={<ClientPortalPage />} />
+                <Route path="/client/:slug" element={<ClientPortalPage />} />
+
+                {/* Internal Staff Authentication */}
                 <Route path="/login" element={<LoginPage />} />
+
+                {/* Internal Staff Operating Portal */}
                 <Route
                   element={
                     <RequireAuth>
@@ -98,6 +108,22 @@ export default function App() {
                     element={
                       <RequireModule module="crm">
                         <CrmPage />
+                      </RequireModule>
+                    }
+                  />
+                  <Route
+                    path="projects"
+                    element={
+                      <RequireModule module="projects">
+                        <ProjectsPage />
+                      </RequireModule>
+                    }
+                  />
+                  <Route
+                    path="tickets"
+                    element={
+                      <RequireModule module="tickets">
+                        <TicketsPage />
                       </RequireModule>
                     }
                   />

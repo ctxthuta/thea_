@@ -18,6 +18,7 @@ import {
   listDeals,
   listLeads,
   updateAccount,
+  updateAccountPortalAccess,
   updateContact,
   updateDeal,
   updateLead,
@@ -74,9 +75,18 @@ const createAccountSchema = z.strictObject({
   country: z.string().max(60).optional(),
   status: z.enum(['PROSPECT', 'ACTIVE_CLIENT', 'PAST_CLIENT', 'CHURNED']).optional(),
   notes: z.string().max(2000).optional(),
+  portalSlug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(60).nullable().optional(),
+  portalAccessCode: z.string().min(4).max(64).nullable().optional(),
 });
 
 const updateAccountSchema = createAccountSchema.partial().extend({
+  version: z.number().int().min(1).optional(),
+});
+
+const portalAccessSchema = z.strictObject({
+  portalSlug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(60).optional(),
+  portalAccessCode: z.string().min(4).max(64).optional(),
+  rotateAccessCode: z.boolean().optional(),
   version: z.number().int().min(1).optional(),
 });
 
@@ -200,6 +210,12 @@ export function createCrmRoutes(): Hono<AppEnv> {
   app.put('/accounts/:id', requirePermission('crm:write'), async (c) => {
     const body = await parseJsonBody(c, updateAccountSchema);
     const dto = await updateAccount(c.req.param('id'), body, getActorMeta(c));
+    return c.json(dto);
+  });
+
+  app.post('/accounts/:id/portal-access', requirePermission('crm:write'), async (c) => {
+    const body = await parseJsonBody(c, portalAccessSchema);
+    const dto = await updateAccountPortalAccess(c.req.param('id'), body, getActorMeta(c));
     return c.json(dto);
   });
 

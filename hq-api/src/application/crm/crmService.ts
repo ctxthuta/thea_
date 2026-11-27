@@ -1,3 +1,4 @@
+import { randomBytes } from 'node:crypto';
 import { ObjectId } from 'mongodb';
 import { AppError } from '../../domain/errors';
 import {
@@ -87,6 +88,8 @@ export interface CrmAccountDTO {
   status: CrmAccountStatus;
   ownerId: string | null;
   notes: string;
+  portalSlug: string | null;
+  portalAccessCode: string | null;
   version: number;
   createdAt: string;
   updatedAt: string;
@@ -156,6 +159,8 @@ export function serializeAccount(doc: CrmAccountDoc): CrmAccountDTO {
     status: doc.status,
     ownerId: doc.ownerId,
     notes: doc.notes,
+    portalSlug: doc.portalSlug ?? null,
+    portalAccessCode: doc.portalAccessCode ?? null,
     version: doc.version,
     createdAt: doc.createdAt.toISOString(),
     updatedAt: doc.updatedAt.toISOString(),
@@ -517,6 +522,8 @@ export async function createAccount(
     country?: string;
     status?: CrmAccountStatus;
     notes?: string;
+    portalSlug?: string | null;
+    portalAccessCode?: string | null;
   },
   actor: Omit<AuditEntryInput, 'action' | 'resourceType' | 'resourceId'>
 ): Promise<CrmAccountDTO> {
@@ -531,6 +538,8 @@ export async function createAccount(
     status: input.status ?? 'PROSPECT',
     ownerId: actor.actorId,
     notes: (input.notes ?? '').trim(),
+    portalSlug: input.portalSlug ? input.portalSlug.trim().toLowerCase() : null,
+    portalAccessCode: input.portalAccessCode ? input.portalAccessCode.trim() : null,
     version: 1,
     createdAt: now,
     updatedAt: now,
@@ -556,6 +565,8 @@ export async function updateAccount(
     country?: string;
     status?: CrmAccountStatus;
     notes?: string;
+    portalSlug?: string | null;
+    portalAccessCode?: string | null;
     version?: number;
   },
   actor: Omit<AuditEntryInput, 'action' | 'resourceType' | 'resourceId'>
@@ -575,6 +586,12 @@ export async function updateAccount(
   if (input.country !== undefined) patch.country = input.country.trim();
   if (input.status !== undefined) patch.status = input.status;
   if (input.notes !== undefined) patch.notes = input.notes.trim();
+  if (input.portalSlug !== undefined) {
+    patch.portalSlug = input.portalSlug ? input.portalSlug.trim().toLowerCase() : null;
+  }
+  if (input.portalAccessCode !== undefined) {
+    patch.portalAccessCode = input.portalAccessCode ? input.portalAccessCode.trim() : null;
+  }
 
   const filter: Record<string, unknown> = { _id: oid };
   if (input.version !== undefined) filter.version = input.version;
@@ -595,6 +612,83 @@ export async function updateAccount(
     resourceId: dto.id,
     beforeSnapshot: serializeAccount(existing) as unknown as Record<string, unknown>,
     afterSnapshot: dto as unknown as Record<string, unknown>,
+  });
+  return dto;
+}
+
+function generatePortalAccessCode(prefixHint: string): string {
+  const cleanPrefix = prefixHint
+    .replace(/[^A-Za-z0-9]/g, '')
+    .toUpperCase()
+    .slice(0, 2)
+    .padEnd(2, 'X');
+  const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const bytes = randomBytes(4);
+  let suffix = '';
+  for (let i = 0; i < 4; i++) {
+    suffix += alphabet[(bytes[i] ?? 0) % alphabet.length];
+  }
+  return `${cleanPrefix}-${new Date().getUTCFullYear()}-${suffix}`;
+}
+
+export async function updateAccountPortalAccess(
+  id: string,
+  input: {
+    portalSlug?: string;
+    portalAccessCode?: string;
+    rotateAccessCode?: boolean;
+    version?: number;
+  },
+  actor: Omit<AuditEntryInput, 'action' | 'resourceType' | 'resourceId'>
+): Promise<CrmAccountDTO> {
+  if (!ObjectId.isValid(id)) throw AppError.badRequest('Invalid account ID.');
+  const oid = new ObjectId(id);
+  const existing = await Collections.crmAccounts().findOne({ _id: oid });
+  if (!existing) throw AppError.notFound('Account not found.');
+
+  const nextSlug = input.portalSlug
+    ? input.portalSlug.trim().toLowerCase()
+    : existing.portalSlug ||
+      existing.name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        .slice(0, 48);
+
+  let nextCode = existing.portalAccessCode ?? null;
+  if (input.portalAccessCode && input.portalAccessCode.trim().length > 0) {
+    nextCode = input.portalAccessCode.trim();
+  } else if (input.rotateAccessCode || !nextCode) {
+    nextCode = generatePortalAccessCode(existing.name);
+  }
+
+  const filter: Record<string, unknown> = { _id: oid };
+  if (input.version !== undefined) filter.version = input.version;
+
+  const updated = await Collections.crmAccounts().findOneAndUpdate(
+    filter,
+    {
+      $set: {
+        portalSlug: nextSlug,
+        portalAccessCode: nextCode,
+        updatedAt: new Date(),
+      },
+      $inc: { version: 1 },
+    },
+    { returnDocument: 'after' }
+  );
+
+  if (!updated) {
+    throw AppError.conflict(`Account version conflict. Current version is ${existing.version}.`, 'version-conflict');
+  }
+
+  const dto = serializeAccount(updated);
+  await writeAuditLog({
+    ...actor,
+    action: 'CRM_ACCOUNT_PORTAL_ACCESS_UPDATED',
+    resourceType: 'crm_account',
+    resourceId: dto.id,
+    afterSnapshot: { portalSlug: dto.portalSlug, rotated: Boolean(input.rotateAccessCode) },
   });
   return dto;
 }

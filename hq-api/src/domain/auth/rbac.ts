@@ -20,6 +20,10 @@ export type Permission =
   | 'cms:write'
   | 'crm:read'
   | 'crm:write'
+  | 'projects:read'
+  | 'projects:write'
+  | 'tickets:read'
+  | 'tickets:write'
   | 'admin:users'
   | 'admin:settings'
   | 'admin:audit';
@@ -36,14 +40,50 @@ const ROLE_PERMISSIONS: Record<UserRole, readonly Permission[]> = {
     'cms:write',
     'crm:read',
     'crm:write',
+    'projects:read',
+    'projects:write',
+    'tickets:read',
+    'tickets:write',
     'admin:users',
     'admin:settings',
     'admin:audit',
   ],
-  FINANCE: ['overview:read', 'accounting:read', 'accounting:write', 'associates:read'],
-  CMS_EDITOR: ['overview:read', 'associates:read', 'associates:write', 'cms:read', 'cms:write'],
-  CRM_MANAGER: ['overview:read', 'associates:read', 'crm:read', 'crm:write'],
-  VIEWER: ['overview:read', 'accounting:read', 'associates:read', 'cms:read', 'crm:read'],
+  FINANCE: [
+    'overview:read',
+    'accounting:read',
+    'accounting:write',
+    'associates:read',
+    'projects:read',
+    'tickets:read',
+  ],
+  CMS_EDITOR: [
+    'overview:read',
+    'associates:read',
+    'associates:write',
+    'cms:read',
+    'cms:write',
+    'projects:read',
+    'tickets:read',
+  ],
+  CRM_MANAGER: [
+    'overview:read',
+    'associates:read',
+    'crm:read',
+    'crm:write',
+    'projects:read',
+    'projects:write',
+    'tickets:read',
+    'tickets:write',
+  ],
+  VIEWER: [
+    'overview:read',
+    'accounting:read',
+    'associates:read',
+    'cms:read',
+    'crm:read',
+    'projects:read',
+    'tickets:read',
+  ],
 };
 
 export function getPermissionsForRole(role: UserRole): Permission[] {

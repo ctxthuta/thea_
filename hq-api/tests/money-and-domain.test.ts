@@ -101,7 +101,7 @@ describe('Associates, RBAC & Constant-Time Security Domain', () => {
     }
     expect(() => assertValidPublicSlug('pricing')).toThrow(/reserved/i);
     expect(() => assertValidPublicSlug('verify')).toThrow(/reserved/i);
-    expect(() => assertValidPublicSlug('dr-ohnmar-than')).not.toThrow();
+    expect(() => assertValidPublicSlug('thiri-chan-nyein')).not.toThrow();
   });
 
   test('computes associate verification states accurately', () => {

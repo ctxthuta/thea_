@@ -6,6 +6,8 @@ export type PortalModule =
   | 'associates'
   | 'finance'
   | 'crm'
+  | 'projects'
+  | 'tickets'
   | 'admin';
 
 export function canAccessModule(user: AuthUser | null, module: PortalModule): boolean {
@@ -24,6 +26,21 @@ export function canAccessModule(user: AuthUser | null, module: PortalModule): bo
       return role === 'ADMIN' || role === 'FINANCE' || role === 'VIEWER';
     case 'crm':
       return role === 'ADMIN' || role === 'CRM_MANAGER' || role === 'VIEWER';
+    case 'projects':
+      return (
+        role === 'ADMIN' ||
+        role === 'CRM_MANAGER' ||
+        role === 'CMS_EDITOR' ||
+        role === 'FINANCE' ||
+        role === 'VIEWER'
+      );
+    case 'tickets':
+      return (
+        role === 'ADMIN' ||
+        role === 'CRM_MANAGER' ||
+        role === 'CMS_EDITOR' ||
+        role === 'VIEWER'
+      );
     case 'admin':
       return role === 'ADMIN' || role === 'FINANCE';
   }
@@ -66,6 +83,28 @@ export function canEditCrm(user: AuthUser | null): boolean {
     user.role === 'SUPER_ADMIN' ||
     user.role === 'ADMIN' ||
     user.role === 'CRM_MANAGER'
+  );
+}
+
+export function canEditProjects(user: AuthUser | null): boolean {
+  if (!user) return false;
+  return (
+    user.isStaticSuperAdmin ||
+    user.role === 'SUPER_ADMIN' ||
+    user.role === 'ADMIN' ||
+    user.role === 'CRM_MANAGER' ||
+    user.role === 'CMS_EDITOR'
+  );
+}
+
+export function canEditTickets(user: AuthUser | null): boolean {
+  if (!user) return false;
+  return (
+    user.isStaticSuperAdmin ||
+    user.role === 'SUPER_ADMIN' ||
+    user.role === 'ADMIN' ||
+    user.role === 'CRM_MANAGER' ||
+    user.role === 'CMS_EDITOR'
   );
 }
 

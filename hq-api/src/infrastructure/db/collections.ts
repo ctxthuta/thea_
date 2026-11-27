@@ -3,6 +3,12 @@ import { getDb } from './mongo';
 import type { CurrencyCode } from '../../domain/accounting/money';
 import type { DbUserRole, UserRole } from '../../domain/auth/rbac';
 import type { AssociateStatus, AssociateType } from '../../domain/associates/associateDomain';
+import type {
+  ProjectSlaDoc,
+  SlaCoverage,
+  SlaPlan,
+  TicketSeverity,
+} from '../../domain/sla';
 
 export interface UserDoc {
   _id: ObjectId;
@@ -292,6 +298,8 @@ export interface CrmAccountDoc {
   status: CrmAccountStatus;
   ownerId: string | null;
   notes: string;
+  portalSlug?: string | null;
+  portalAccessCode?: string | null;
   version: number;
   createdAt: Date;
   updatedAt: Date;
@@ -367,6 +375,103 @@ export interface CounterDoc {
   seq: number;
 }
 
+export type ProjectStatus = 'PLANNING' | 'ACTIVE' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED';
+export type ProjectPhaseStatus = 'UPCOMING' | 'IN_PROGRESS' | 'COMPLETED' | 'DELAYED';
+export type ProjectMilestoneStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'AT_RISK';
+
+export interface ProjectMilestoneDoc {
+  id: string;
+  title: string;
+  deliveryDate: string;
+  status: ProjectMilestoneStatus;
+  completedAt: string | null;
+  deliverableNote: string;
+}
+
+export interface ProjectPhaseDoc {
+  id: string;
+  name: string;
+  order: number;
+  status: ProjectPhaseStatus;
+  startDate: string;
+  targetDate: string;
+  progressPct: number;
+  summary: string;
+  milestones: ProjectMilestoneDoc[];
+}
+
+export interface ProjectDoc {
+  _id: ObjectId;
+  code: string;
+  name: string;
+  accountId: ObjectId;
+  dealId: ObjectId | null;
+  leadAssociateId: ObjectId | null;
+  status: ProjectStatus;
+  summary: string;
+  currency: CurrencyCode;
+  budgetAmount: Decimal128;
+  startDate: string;
+  targetEndDate: string;
+  phases: ProjectPhaseDoc[];
+  sla?: ProjectSlaDoc;
+  version: number;
+  createdBy: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export type TicketCategory =
+  | 'BUG'
+  | 'FEATURE_REQUEST'
+  | 'SUPPORT'
+  | 'INFRASTRUCTURE'
+  | 'BILLING'
+  | 'TRAINING';
+export type TicketPriority = 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT';
+export type TicketStatus = 'OPEN' | 'IN_PROGRESS' | 'WAITING_CLIENT' | 'RESOLVED' | 'CLOSED';
+export type TicketSource = 'CLIENT_PORTAL' | 'INTERNAL' | 'EMAIL';
+
+export interface TicketCommentDoc {
+  id: string;
+  authorType: 'CLIENT' | 'TEAM';
+  authorName: string;
+  authorEmail: string;
+  message: string;
+  isInternalNote: boolean;
+  createdAt: Date;
+}
+
+export interface TicketDoc {
+  _id: ObjectId;
+  ticketNumber: string;
+  accountId: ObjectId;
+  projectId: ObjectId | null;
+  phaseId: string | null;
+  title: string;
+  description: string;
+  category: TicketCategory;
+  priority: TicketPriority;
+  status: TicketStatus;
+  source: TicketSource;
+  requesterName: string;
+  requesterEmail: string;
+  assignedAssociateId: ObjectId | null;
+  severity: TicketSeverity;
+  slaPlan: SlaPlan;
+  slaTargetMinutes: number | null;
+  slaCoverage: SlaCoverage | null;
+  slaDueAt: Date | null;
+  firstRespondedAt: Date | null;
+  engineeringHours: number;
+  resolvedAt: Date | null;
+  comments: TicketCommentDoc[];
+  version: number;
+  createdBy: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export const Collections = {
   users: (): Collection<UserDoc> => getDb().collection<UserDoc>('users'),
   systemSettings: (): Collection<SystemSettingsDoc> =>
@@ -388,4 +493,6 @@ export const Collections = {
   idempotencyKeys: (): Collection<IdempotencyKeyDoc> =>
     getDb().collection<IdempotencyKeyDoc>('idempotency_keys'),
   counters: (): Collection<CounterDoc> => getDb().collection<CounterDoc>('counters'),
+  projects: (): Collection<ProjectDoc> => getDb().collection<ProjectDoc>('projects'),
+  tickets: (): Collection<TicketDoc> => getDb().collection<TicketDoc>('tickets'),
 };

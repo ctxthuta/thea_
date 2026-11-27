@@ -501,6 +501,8 @@ export interface CrmAccountDTO {
   status: CrmAccountStatus;
   ownerId?: string | null;
   notes?: string;
+  portalSlug?: string | null;
+  portalAccessCode?: string | null;
   version: number;
   createdAt: string;
   updatedAt: string;
@@ -650,3 +652,145 @@ export interface ProblemDetail {
   requestId?: string;
   errors?: Array<{ field?: string; message: string }>;
 }
+
+export type ProjectStatus = 'PLANNING' | 'ACTIVE' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED';
+export type ProjectHealth = 'ON_TRACK' | 'AT_RISK' | 'DELAYED';
+export type PhaseStatus = 'UPCOMING' | 'IN_PROGRESS' | 'COMPLETED' | 'DELAYED';
+export type MilestoneStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'AT_RISK';
+
+export interface ProjectMilestoneDTO {
+  id: string;
+  title: string;
+  deliveryDate: string;
+  completedAt?: string | null;
+  status: MilestoneStatus;
+  deliverableNote?: string;
+}
+
+export interface ProjectPhaseDTO {
+  id: string;
+  order: number;
+  name: string;
+  summary?: string;
+  status: PhaseStatus;
+  startDate: string;
+  targetDate: string;
+  progressPct: number;
+  milestones: ProjectMilestoneDTO[];
+}
+
+export interface ProjectDTO {
+  id: string;
+  code: string;
+  name: string;
+  accountId: string;
+  accountName: string;
+  accountPortalSlug: string | null;
+  dealId?: string | null;
+  leadAssociateId: string | null;
+  leadAssociateName: string | null;
+  status: ProjectStatus;
+  summary: string;
+  currency: CurrencyCode;
+  budgetAmount: string;
+  startDate: string;
+  targetEndDate: string;
+  overallProgressPct: number;
+  openTicketCount: number;
+  phases: ProjectPhaseDTO[];
+  version: number;
+  createdBy?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type TicketStatus =
+  | 'OPEN'
+  | 'IN_PROGRESS'
+  | 'WAITING_CLIENT'
+  | 'RESOLVED'
+  | 'CLOSED';
+
+export type TicketPriority = 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT';
+
+export type TicketCategory =
+  | 'BUG'
+  | 'FEATURE_REQUEST'
+  | 'SUPPORT'
+  | 'INFRASTRUCTURE'
+  | 'BILLING'
+  | 'TRAINING';
+
+export interface TicketCommentDTO {
+  id: string;
+  authorType: 'CLIENT' | 'TEAM';
+  authorName: string;
+  authorEmail: string;
+  message: string;
+  isInternalNote: boolean;
+  createdAt: string;
+}
+
+export interface TicketDTO {
+  id: string;
+  ticketNumber: string;
+  accountId: string;
+  accountName: string;
+  projectId: string | null;
+  projectCode: string | null;
+  projectName: string | null;
+  phaseId: string | null;
+  title: string;
+  description: string;
+  category: TicketCategory;
+  priority: TicketPriority;
+  status: TicketStatus;
+  source?: 'CLIENT_PORTAL' | 'INTERNAL' | 'EMAIL';
+  requesterName: string;
+  requesterEmail: string;
+  assignedAssociateId: string | null;
+  assignedAssociateName: string | null;
+  slaDueAt: string | null;
+  resolvedAt: string | null;
+  comments: TicketCommentDTO[];
+  version: number;
+  createdBy?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface TicketSummaryDTO {
+  open: number;
+  inProgress: number;
+  waitingClient: number;
+  resolved: number;
+  closed: number;
+  urgentOpen: number;
+}
+
+export interface ClientPortalSessionDTO {
+  accountId: string;
+  portalSlug: string;
+  accountName: string;
+  industry?: string;
+  requesterName: string;
+  requesterEmail: string;
+}
+
+export interface ClientProjectDTO {
+  id: string;
+  code: string;
+  name: string;
+  accountName: string;
+  leadAssociateName: string | null;
+  status: ProjectStatus;
+  summary: string;
+  startDate: string;
+  targetEndDate: string;
+  overallProgressPct: number;
+  openTicketCount: number;
+  phases: ProjectPhaseDTO[];
+  updatedAt: string;
+}
+
+export type ClientTicketDTO = TicketDTO;

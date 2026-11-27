@@ -5,9 +5,12 @@ import {
   ChevronLeft,
   ChevronRight,
   Crown,
+  ExternalLink,
   FileCode2,
+  FolderKanban,
   Landmark,
   LayoutDashboard,
+  LifeBuoy,
   LogOut,
   Menu,
   Moon,
@@ -36,6 +39,8 @@ const NAV_ENTRIES: NavEntry[] = [
   { to: '/associates', label: 'Associates', group: 'Workspace', module: 'associates', icon: Users },
   { to: '/finance', label: 'Finance Suite', group: 'Operations', module: 'finance', icon: Landmark },
   { to: '/crm', label: 'CRM & Leads', group: 'Operations', module: 'crm', icon: Briefcase },
+  { to: '/projects', label: 'Projects & Delivery', group: 'Operations', module: 'projects', icon: FolderKanban },
+  { to: '/tickets', label: 'Support Tickets', group: 'Operations', module: 'tickets', icon: LifeBuoy },
   { to: '/admin', label: 'Administration', group: 'Governance', module: 'admin', icon: ShieldCheck },
 ];
 
@@ -45,6 +50,8 @@ const ROUTE_LABELS: Record<string, string> = {
   '/associates': 'Associates & Digital Identity',
   '/finance': 'Finance Suite',
   '/crm': 'CRM & Revenue Pipeline',
+  '/projects': 'Projects & Delivery Milestones',
+  '/tickets': 'Support Tickets',
   '/admin': 'Administration',
 };
 
@@ -149,7 +156,20 @@ export default function AppShell() {
   );
 
   const renderUserCard = (isMobile = false) => (
-    <div className="shrink-0 border-t border-hq-borderSubtle p-3 bg-hq-surface">
+    <div className="shrink-0 border-t border-hq-borderSubtle p-3 bg-hq-surface space-y-2.5">
+      <a
+        href="/client"
+        target="_blank"
+        rel="noopener noreferrer"
+        title="Preview Client-Facing Portal"
+        className={`flex items-center gap-2 rounded-lg border border-hq-borderSubtle bg-hq-subtle px-2.5 py-2 text-xs font-medium text-hq-textSecondary hover:border-hq-brand/40 hover:text-hq-textPrimary transition-colors ${
+          collapsed && !isMobile ? 'justify-center px-0' : 'justify-between'
+        }`}
+      >
+        {(!collapsed || isMobile) && <span className="truncate">Client Portal</span>}
+        <ExternalLink className="h-3.5 w-3.5 shrink-0 text-hq-brandSoft" />
+      </a>
+
       <div className={`flex items-center gap-2.5 ${collapsed && !isMobile ? 'justify-center' : ''}`}>
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-hq-brand text-xs font-semibold text-white">
           {initials}

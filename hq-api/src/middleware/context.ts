@@ -12,11 +12,20 @@ export interface AuthUser {
   permissions: Permission[];
 }
 
+export interface ClientPortalUser {
+  accountId: string;
+  portalSlug: string;
+  accountName: string;
+  requesterName: string;
+  requesterEmail: string;
+}
+
 export interface AppVariables {
   requestId: string;
   clientIp: string;
   userAgent: string;
   authUser?: AuthUser;
+  clientPortalUser?: ClientPortalUser;
   rawBodyText?: string;
 }
 

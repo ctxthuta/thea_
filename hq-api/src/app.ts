@@ -19,6 +19,9 @@ import { createAssociatesRoutes } from './routes/associates';
 import { createCmsRoutes } from './routes/cms';
 import { createCrmRoutes } from './routes/crm';
 import { createAdminRoutes } from './routes/admin';
+import { createProjectsRoutes } from './routes/projects';
+import { createTicketsRoutes } from './routes/tickets';
+import { createClientPortalRoutes } from './routes/clientPortal';
 
 const startedAtMs = Date.now();
 
@@ -52,6 +55,9 @@ export function createApp(): Hono<AppEnv> {
   app.route('/api/v1/associates', createAssociatesRoutes());
   app.route('/api/v1/cms', createCmsRoutes());
   app.route('/api/v1/crm', createCrmRoutes());
+  app.route('/api/v1/projects', createProjectsRoutes());
+  app.route('/api/v1/tickets', createTicketsRoutes());
+  app.route('/api/v1/client-portal', createClientPortalRoutes());
   app.route('/api/v1/admin', createAdminRoutes());
 
   // Unknown /api/* routes return RFC 7807 404
